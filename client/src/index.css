@@ -1,0 +1,75 @@
+:root {
+  --talent-bg-base-size: 55px;
+  --talent-bg-upgrade-size: 70px;
+  --talent-base-size: 47px;
+  --talent-bg-primary-color: #21445c;
+  --talent-bg-secondary-color: #59819b;
+
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.talent-layer-1{
+  opacity: 0;
+  position: relative;
+}
+
+.talent-layer-1::after, .talent-layer-1::before {  
+  content: "";
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  position: absolute;
+  width: 65px;
+  height: calc(65px * 1.2);
+  background-image: conic-gradient(from var(--angle), transparent 0%, #f8d375 25%, transparent 50%, #f8d375 75%, transparent 100%);
+  top: 33px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  /* padding: 3px; */
+  animation: 3s spin linear infinite;
+}
+
+.talent-layer-1::before {
+  filter: blur(1.5rem);
+  opacity: 0.5;
+}
+
+.talent-layer-1.show {
+  opacity: 1;
+}
+
+.talent {
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  cursor: pointer;
+}
+
+.talent-layer-2 {
+  width: var(--talent-bg-base-size);
+  height: calc(var(--talent-bg-base-size) * 1.2);
+}
+
+.talent-core {
+  transform: scale(1.2);
+}
+
+.talent-layer-3 {
+  width: var(--talent-base-size);
+  height: calc(var(--talent-base-size) * 1.15);
+}
+
+img {
+  width: 100%;
+}
+
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
