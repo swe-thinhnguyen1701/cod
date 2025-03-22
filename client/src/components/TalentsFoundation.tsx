@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { HStack, VStack } from "@chakra-ui/react";
+import { Box, HStack, VStack } from "@chakra-ui/react";
 import Talent from "./Talent";
 
 const talents = [
@@ -73,40 +73,36 @@ const TalentsFoundation = () => {
                 talentContainerRef.current &&
                 !talentContainerRef.current.contains(event.target as Node)
             ) {
-                // Clicked outside the talent container, deselect the talent
-                
                 setSelectedTalent(null);
             }
-
-            console.log(talentContainerRef);
-            console.log(talentContainerRef.current?.contains(event.target as Node));
-            
         };
 
-        // Add event listener for clicks
         document.addEventListener("mousedown", handleClickOutside);
 
-        // Cleanup the event listener
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
 
     return (
-        <VStack ref={talentContainerRef}>
+        <VStack>
             {talents.map((row, rowIdx) => (
                 <HStack key={rowIdx} gap={8}>
                     {row.map((talent, talentIdx) => (
-                        <Talent
+                        <Box
+                            id={talent.id.toString()}
                             key={talent.id}
-                            maxLevel={talent.maxLevel}
-                            isActive={true}
-                            isSelected={
-                                selectedTalent?.rowIndex === rowIdx &&
-                                selectedTalent?.talentIndex === talentIdx
-                            }
-                            onClick={() => handleTalentClick(rowIdx, talentIdx)}
-                        />
+                            ref={talentContainerRef}
+                            onClick={() => handleTalentClick(rowIdx, talentIdx)}>
+                            <Talent
+                                maxLevel={talent.maxLevel}
+                                isActive={true}
+                                isSelected={
+                                    selectedTalent?.rowIndex === rowIdx &&
+                                    selectedTalent?.talentIndex === talentIdx
+                                }
+                            />
+                        </Box>
                     ))}
                 </HStack>
             ))}

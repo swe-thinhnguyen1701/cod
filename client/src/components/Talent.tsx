@@ -6,17 +6,15 @@ interface Props {
     maxLevel: number;
     isSelected: boolean;
     isActive: boolean;
-    onClick?: () => void;
 }
 
-const Talent = ({ maxLevel, isSelected, isActive, onClick }: Props) => {
+const Talent = ({ maxLevel, isSelected, isActive }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
     const [currentLevel, setCurrentLevel] = useState(0);
 
     const handleClick = (event: React.MouseEvent) => {
         setIsScaled(true);
         setTimeout(() => setIsScaled(false), 100);
-        onClick?.();
 
 
         if (!isActive) return;
