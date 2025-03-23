@@ -1,12 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import Talent from "./Talent";
+import TalentDescription from "./TalentDescription";
 
 const talents = [
     [{
         id: 1,
         name: "Overall Attack",
-        description: ["Increases the ATK of your LEgions's unit by ", " ."],
+        description: ["Increases the ATK of your Legions's unit by ", " ."],
         value: ["0.4%", "0.8%", "1.2%"],
         preview: "ATK bonus",
         level: 0,
@@ -50,57 +51,61 @@ const talents = [
         name: "Bane of Darkness",
         description: ["Your Legion deals ", " more Peacekeeping damage."],
         value: ["1%", "2%", "3%"],
-        preview: "Damage dealt during Peacekeepinig bonus",
+        preview: "Damage dealt during Peacekeeping bonus",
         level: 0,
         maxLevel: 3,
     }],
 ]
 
 const FoundationTalents = () => {
-    // Initialize a state to track the selected talent
     const [selectedTalent, setSelectedTalent] = useState<{ rowIndex: number; talentIndex: number } | null>(null);
 
-    const talentContainerRef = useRef<HTMLDivElement>(null);
-
-    // Function to handle talent selection
     const handleTalentClick = (rowIndex: number, talentIndex: number) => {
         setSelectedTalent({ rowIndex, talentIndex });
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                talentContainerRef.current &&
-                !talentContainerRef.current.contains(event.target as Node)
-            ) {
-                setSelectedTalent(null);
-            }
-        };
+    const handleContainerClick = (event: React.MouseEvent) => {
+        const target = event.target as HTMLElement;
+        if (target.closest(".talent-box")) return;
 
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+        setSelectedTalent(null);
+    };
 
     return (
-        <VStack ref={talentContainerRef}>
+        <VStack position="relative" onClick={handleContainerClick}>
             {talents.map((row, rowIdx) => (
                 <HStack key={rowIdx} gap={8}>
                     {row.map((talent, talentIdx) => (
-                        <Box
-                            id={talent.id.toString()}
-                            key={talent.id}
-                            onClick={() => handleTalentClick(rowIdx, talentIdx)}>
-                            <Talent
-                                maxLevel={talent.maxLevel}
-                                isActive={true}
-                                isSelected={
-                                    selectedTalent?.rowIndex === rowIdx &&
-                                    selectedTalent?.talentIndex === talentIdx
-                                }
-                            />
+                        <Box key={talent.id}>
+                            <Box
+                                id={talent.id.toString()}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    handleTalentClick(rowIdx, talentIdx)
+                                }}
+                                className="talent-box"
+                            >
+                                <Talent
+                                    maxLevel={talent.maxLevel}
+                                    isActive={true}
+                                    isSelected={
+                                        selectedTalent?.rowIndex === rowIdx &&
+                                        selectedTalent?.talentIndex === talentIdx
+                                    }
+                                />
+                            </Box>
+                            <Box
+                                bg="yellow.200"
+                                borderRadius="10px"
+                                position={"absolute"}
+                                zIndex={2}
+                                width="72vw"
+                                maxWidth="320px"
+                                left={{ base: "0", sm: "-45px" }}
+                                display={selectedTalent?.rowIndex === rowIdx &&
+                                    selectedTalent?.talentIndex === talentIdx ? "inline" : "none"} >
+                                <TalentDescription talent={talent} />
+                            </Box>
                         </Box>
                     ))}
                 </HStack>

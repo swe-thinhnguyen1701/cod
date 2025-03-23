@@ -28,7 +28,7 @@ const Talent = ({ maxLevel, isSelected, isActive }: Props) => {
     return (
         <>
             {!isActive ?
-                <Box className="talent-container" display="flex" flexDir="column" alignItems="center">
+                <Box className="talent-container" display="flex" flexDir="column" alignItems="center" cursor="pointer">
                     <Box
                         className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}
                         transform={isScaled ? "scale(0)" : "scale(1)"}
@@ -49,7 +49,7 @@ const Talent = ({ maxLevel, isSelected, isActive }: Props) => {
                         {currentLevel} / {maxLevel}
                     </Text>
                 </Box> :
-                <Box className="talent-container" display="flex" flexDir="column" alignItems="center" >
+                <Box className="talent-container" display="flex" flexDir="column" alignItems="center" cursor="pointer">
                     <Box
                         className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}
                         transform={isScaled ? "scale(0.1)" : "scale(1)"}
