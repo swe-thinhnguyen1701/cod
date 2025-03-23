@@ -1,5 +1,5 @@
 import { HStack } from '@chakra-ui/react'
-import TalentsFoundation from './components/TalentsFoundation'
+import FoundationTalents from './components/FoudationTalents'
 
 function App() {
 
@@ -7,7 +7,7 @@ function App() {
     <>
       <HStack width="100%" justifyContent="center" mt={10}>
         {/* <Talent isSelected={false} isActive={true} /> */}
-        <TalentsFoundation />
+        <FoundationTalents />
       </HStack>
     </>
   )

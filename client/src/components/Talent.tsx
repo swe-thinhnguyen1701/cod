@@ -16,9 +16,8 @@ const Talent = ({ maxLevel, isSelected, isActive }: Props) => {
         setIsScaled(true);
         setTimeout(() => setIsScaled(false), 100);
 
-
         if (!isActive) return;
-
+        
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
             setCurrentLevel(currentLevel - 1);
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < 3) {
@@ -30,7 +29,11 @@ const Talent = ({ maxLevel, isSelected, isActive }: Props) => {
         <>
             {!isActive ?
                 <Box className="talent-container" display="flex" flexDir="column" alignItems="center">
-                    <Box className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}></Box>
+                    <Box
+                        className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}
+                        transform={isScaled ? "scale(0)" : "scale(1)"}
+                    >
+                    </Box>
                     <VStack
                         className="talent talent-layer-2"
                         justifyContent="center"
