@@ -1,18 +1,7 @@
 import { ReactNode, useReducer } from "react";
 import TalentContext from "./talentContext";
 import TALENT_MAP from "./fetchTalent";
-
-export interface Talent {
-    id: number;
-    name: string;
-    description: string[];
-    value: string[];
-    preview: string;
-    level: number;
-    maxLevel: number;
-    role: number;
-    group: number;
-}
+import Talent from "../../entities/TalentEntity"
 
 export interface TalentPointsAction {
     type: "ADD_POINT" | "REMOVE_POINT";
@@ -21,7 +10,7 @@ export interface TalentPointsAction {
 }
 
 interface State {
-    talentLevel: number[][];
+    prerequisite: number[][];
     remainingPoints: number;
     selectedTalent: Talent | null;
 }
@@ -37,15 +26,15 @@ const PREREQUISITE: number[][] = Array(3).fill(null).map(() => Array(9).fill(0))
 const TOTAL_POINTS = 59;
 
 
-const setTalentPoints = (state: State, row: number, col: number, step: number) => {
+const setTalentPoints = (state: State, row: number, col: number, step: number):State => {
     if (row === -1 || col === -1 || state.remainingPoints < 1) return state;
 
-    const newTalentLevel = state.talentLevel.map(row => [...row]);
-    newTalentLevel[row][col]++;
-    
+    const newTalentLevel = state.prerequisite.map(row => [...row]);
+    newTalentLevel[row][col] += step;
+
     const originalTalent = state.selectedTalent;
 
-    if(!originalTalent) return;
+    if (!originalTalent) return state;
 
     const updateSelectedTalent = {
         ...originalTalent,
@@ -54,15 +43,17 @@ const setTalentPoints = (state: State, row: number, col: number, step: number) =
     TALENT_MAP.set(updateSelectedTalent.id, updateSelectedTalent);
 
     console.log("Adding point to:", row, col, "Current level:", state.selectedTalent?.level);
+    // console.log(originalTalent.level + step);
+    // console.log(newTalentLevel);
 
     return {
-        talentLevel: newTalentLevel,
+        prerequisite: newTalentLevel,
         remainingPoints: state.remainingPoints - step,
         selectedTalent: updateSelectedTalent
     };
 };
 
-const TalentReducer = (state: { talentLevel: number[][]; remainingPoints: number; selectedTalent: Talent | null }, action: TalentAction): State => {
+const TalentReducer = (state: { prerequisite: number[][]; remainingPoints: number; selectedTalent: Talent | null }, action: TalentAction): State => {
     switch (action.type) {
         case "ADD_POINT":
             return {
@@ -90,7 +81,7 @@ interface Props {
 
 const TalentProvider = ({ children }: Props) => {
     const [state, dispatch] = useReducer(TalentReducer, {
-        talentLevel: PREREQUISITE,
+        prerequisite: PREREQUISITE,
         remainingPoints: TOTAL_POINTS,
         selectedTalent: null
     });
