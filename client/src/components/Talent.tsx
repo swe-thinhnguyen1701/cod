@@ -2,17 +2,24 @@ import { useState } from "react";
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import icon from "../assets/helmet-1.ico";
 import useTalent from "../state-management/talents/useTalent";
+import TALENT_MAP from "../state-management/talents/fetchTalent";
+import activateTalent from "../services/activateTalent";
+import TalentEnitity from "../entities/TalentEntity";
 
 interface Props {
-    maxLevel: number;
-    isSelected: boolean;
-    isActive: boolean;
+    talentId: number
 }
 
-const Talent = ({ maxLevel, isSelected, isActive }: Props) => {
+const Talent = ({ talentId }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
-    const [currentLevel, setCurrentLevel] = useState(0);
-    const {selectedTalent, dispatch} = useTalent();
+    const { prerequisite, selectedTalent, dispatch } = useTalent();
+    const talent = TALENT_MAP.get(talentId) as TalentEnitity;
+    const [currentLevel, setCurrentLevel] = useState(talent.level);
+
+    const isSelected = selectedTalent?.id === talentId;
+    const isActive = activateTalent(talent.group, talent.position, prerequisite);
+    // console.log(prerequisite[0][0]);
+    
 
     const handleClick = (event: React.MouseEvent) => {
         setIsScaled(true);
@@ -21,65 +28,51 @@ const Talent = ({ maxLevel, isSelected, isActive }: Props) => {
         if (!isActive) return;
 
         const maxLevel = selectedTalent ? selectedTalent.maxLevel : 3;
-        
+
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
             setCurrentLevel(currentLevel - 1);
-            dispatch({type: "REMOVE_POINT", row: selectedTalent?.role ?? -1, col: selectedTalent?.group ?? -1})
+            dispatch({ type: "REMOVE_POINT", row: selectedTalent?.group ?? -1, col: selectedTalent?.position ?? -1 })
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
             setCurrentLevel(currentLevel + 1);
-            dispatch({type: "ADD_POINT", row: selectedTalent?.role ?? -1, col: selectedTalent?.group ?? -1})
+            dispatch({ type: "ADD_POINT", row: selectedTalent?.group ?? -1, col: selectedTalent?.position ?? -1 })
         }
     }
 
     return (
         <>
-            {!isActive ?
-                <Box className="talent-container" display="flex" flexDir="column" alignItems="center" cursor="pointer">
-                    <Box
-                        className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}
-                        transform={isScaled ? "scale(0)" : "scale(1)"}
-                    >
-                    </Box>
+            <Box className="talent-container" display="flex" flexDir="column" alignItems="center" cursor="pointer">
+                <Box
+                    className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}
+                    transform={isScaled ? "scale(0.1)" : "scale(1)"}
+                >
+                </Box>
+                <VStack
+                    className="talent talent-layer-2"
+                    justifyContent="center"
+                    bg={
+                        !isActive
+                            ? "#59819b"
+                            : currentLevel < 1 ? "#a19b8a" : "white"
+                    }
+                    onClick={handleClick}
+                    transform={isScaled ? "scale(0.9)" : "scale(1)"}
+                    transition="transform 0.2s">
                     <VStack
-                        className="talent talent-layer-2"
+                        className="talent talent-layer-3"
                         justifyContent="center"
-                        bg="#59819b"
-                        onClick={handleClick}
-                        transform={isScaled ? "scale(0.9)" : "scale(1)"}
-                        transition="transform 0.2s">
-                        <VStack className="talent talent-layer-3" justifyContent="center" bg="#21445c">
-                            <Image src={icon} opacity={currentLevel < 1 ? "0.25" : "1"} />
-                        </VStack>
-                    </VStack>
-                    <Text opacity="0">
-                        {currentLevel} / {maxLevel}
-                    </Text>
-                </Box> :
-                <Box className="talent-container" display="flex" flexDir="column" alignItems="center" cursor="pointer">
-                    <Box
-                        className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}
-                        transform={isScaled ? "scale(0.1)" : "scale(1)"}
+                        bg={
+                            !isActive
+                                ? "#21445c"
+                                : currentLevel < 1 ? "#645531" : "#877344"
+                        }
                     >
-                    </Box>
-                    <VStack
-                        className="talent talent-layer-2"
-                        justifyContent="center"
-                        bg={currentLevel < 1 ? "#a19b8a" : "white"}
-                        onClick={handleClick}
-                        transform={isScaled ? "scale(0.9)" : "scale(1)"}
-                        transition="transform 0.2s">
-                        <VStack
-                            className="talent talent-layer-3"
-                            justifyContent="center"
-                            bg={currentLevel < 1 ? "#645531" : "#877344"}
-                        >
-                            <Image src={icon} opacity={currentLevel < 1 ? "0.25" : "1"} />
-                        </VStack>
+                        <Image src={icon} opacity={currentLevel < 1 ? "0.25" : "1"} />
                     </VStack>
-                    <Text>
-                        {currentLevel}/{maxLevel}
-                    </Text>
-                </Box>}
+                </VStack>
+                <Text fontWeight="bold">
+                    {currentLevel}/{talent.maxLevel}
+                </Text>
+            </Box>
         </>
     )
 }

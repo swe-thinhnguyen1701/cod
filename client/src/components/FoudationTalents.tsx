@@ -54,14 +54,7 @@ const FoundationTalents = () => {
                                 }}
                                 className="talent-box"
                             >
-                                <Talent
-                                    maxLevel={talent.maxLevel}
-                                    isActive={true}
-                                    isSelected={
-                                        selectedTalent?.rowIndex === rowIdx &&
-                                        selectedTalent?.talentIndex === talentIdx
-                                    }
-                                />
+                                <Talent talentId={talent.id}/>
                             </Box>
                             <Box
                                 bg="yellow.200"
