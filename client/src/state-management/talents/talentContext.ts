@@ -1,10 +1,11 @@
 import React, { Dispatch } from "react";
-import { Talent, TalentAction } from "./TalentProvider";
+import { TalentAction } from "./TalentProvider";
+import TalentEntity from "../../entities/TalentEntity";
 
 interface TalentContextType {
-  talentLevel: number[][];
+  prerequisite: number[][];
   remainingPoints: number;
-  selectedTalent: Talent | null;
+  selectedTalent: TalentEntity | null;
   dispatch: Dispatch<TalentAction>;
 }
 

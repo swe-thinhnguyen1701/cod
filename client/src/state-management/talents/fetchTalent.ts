@@ -1,4 +1,4 @@
-import { Talent } from "./TalentProvider";
+import TalentEnitity from "../../entities/TalentEntity";
 
 export const TALENTS = [
     [{
@@ -9,8 +9,8 @@ export const TALENTS = [
         preview: "ATK bonus",
         level: 0,
         maxLevel: 3,
-        role: 0,
-        group: 0
+        group: 0,
+        position: 0
     }],
     [{
         id: 2,
@@ -20,8 +20,8 @@ export const TALENTS = [
         preview: "March Speed bonus",
         level: 0,
         maxLevel: 3,
-        role: 0,
-        group: 1
+        group: 0,
+        position: 1
     }, {
         id: 3,
         name: "Overall Defense",
@@ -30,8 +30,8 @@ export const TALENTS = [
         preview: "DEF bonus",
         level: 0,
         maxLevel: 3,
-        role: 0,
-        group: 1
+        group: 0,
+        position: 1
     }],
     [{
         id: 4,
@@ -41,8 +41,8 @@ export const TALENTS = [
         preview: "Gather Speed bonus",
         level: 0,
         maxLevel: 3,
-        role: 0,
-        group: 2
+        group: 0,
+        position: 2
     }, {
         id: 5,
         name: "Overall Health",
@@ -51,8 +51,8 @@ export const TALENTS = [
         preview: "HP bonus",
         level: 0,
         maxLevel: 3,
-        role: 0,
-        group: 2
+        group: 0,
+        position: 2
     }, {
         id: 6,
         name: "Bane of Darkness",
@@ -61,12 +61,12 @@ export const TALENTS = [
         preview: "Damage dealt during Peacekeeping bonus",
         level: 0,
         maxLevel: 3,
-        role: 0,
-        group: 2
+        group: 0,
+        position: 2
     }],
 ];
 
-const TALENT_MAP = new Map<number, Talent>();
+const TALENT_MAP = new Map<number, TalentEnitity>();
 for(let i = 0; i < TALENTS.length; i++) {
     for(let j = 0; j < TALENTS[i].length; j++) {
         TALENT_MAP.set(TALENTS[i][j].id, TALENTS[i][j]);
