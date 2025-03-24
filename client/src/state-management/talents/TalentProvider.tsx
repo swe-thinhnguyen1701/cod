@@ -37,7 +37,7 @@ const PREREQUISITE: number[][] = Array(3).fill(null).map(() => Array(9).fill(0))
 const TOTAL_POINTS = 59;
 
 
-const addPoint = (state: State, row: number, col: number) => {
+const setTalentPoints = (state: State, row: number, col: number, step: number) => {
     if (row === -1 || col === -1 || state.remainingPoints < 1) return state;
 
     const newTalentLevel = state.talentLevel.map(row => [...row]);
@@ -49,7 +49,7 @@ const addPoint = (state: State, row: number, col: number) => {
 
     const updateSelectedTalent = {
         ...originalTalent,
-        level: originalTalent.level + 1
+        level: originalTalent.level + step
     }
     TALENT_MAP.set(updateSelectedTalent.id, updateSelectedTalent);
 
@@ -57,20 +57,8 @@ const addPoint = (state: State, row: number, col: number) => {
 
     return {
         talentLevel: newTalentLevel,
-        remainingPoints: state.remainingPoints - 1,
+        remainingPoints: state.remainingPoints - step,
         selectedTalent: updateSelectedTalent
-    };
-};
-
-const removePoint = (state: { talentLevel: number[][]; remainingPoints: number }, row: number, col: number) => {
-    if (row === -1 || col === -1 || state.remainingPoints < 1) return state;
-
-    const newTalentLevel = state.talentLevel.map(row => [...row]);
-    newTalentLevel[row][col]--;
-
-    return {
-        talentLevel: newTalentLevel,
-        remainingPoints: state.remainingPoints + 1
     };
 };
 
@@ -79,12 +67,12 @@ const TalentReducer = (state: { talentLevel: number[][]; remainingPoints: number
         case "ADD_POINT":
             return {
                 ...state,
-                ...addPoint(state, action.row, action.col)
+                ...setTalentPoints(state, action.row, action.col, 1)
             };
         case "REMOVE_POINT":
             return {
                 ...state,
-                ...removePoint(state, action.row, action.col)
+                ...setTalentPoints(state, action.row, action.col, -1)
             };
         case "SELECTED_TALENT":
             return {
