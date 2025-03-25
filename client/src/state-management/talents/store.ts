@@ -56,25 +56,22 @@ const useTalentStore = create<TalentStore>((set) => ({
               updateTrackingTalent.delete(i);
             }
           }
+          const removeList: number[] = [];
+          updateTrackingTalent.get(group)?.forEach((id) => {
+            const updateTalent = updateTalentMap.get(id) as TalentEnitity;
+            if (updateTalent.position > position) {
+              refundPoints += updateTalent.level;
+              updatePrerequisite[updateTalent.group][updateTalent.position] -=
+                updateTalent.level;
+              updateTalent.level = 0;
+              updateTalentMap.set(id, updateTalent);
+              removeList.push(id);
+            }
+          });
 
-          if (group === 0) {
-            const removeList: number[] = [];
-            updateTrackingTalent.get(0)?.forEach((id) => {
-              const updateTalent = updateTalentMap.get(id) as TalentEnitity;
-              if (updateTalent.position > position) {
-                refundPoints += updateTalent.level;
-                updatePrerequisite[updateTalent.group][updateTalent.position] -=
-                  updateTalent.level;
-                updateTalent.level = 0;
-                updateTalentMap.set(id, updateTalent);
-                removeList.push(id);
-              }
-            });
-
-            removeList.forEach((id) => {
-              updateTrackingTalent.get(0)?.delete(id);
-            });
-          }
+          removeList.forEach((id) => {
+            updateTrackingTalent.get(0)?.delete(id);
+          });
         }
       }
 
@@ -120,7 +117,7 @@ const useTalentStore = create<TalentStore>((set) => ({
         selectedTalent: updateSelectedTalent,
         talentMap: updateTalentMap,
         trackingTalent: updateTrackingTalent,
-      }
+      };
     });
   },
   selectTalent: (id: number) => {
