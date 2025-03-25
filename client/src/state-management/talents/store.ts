@@ -76,7 +76,6 @@ const useTalentStore = create<TalentStore>((set) => ({
       }
 
       return {
-        ...store,
         prerequisite: updatePrerequisite,
         remainingPoints: store.remainingPoints - step + refundPoints,
         selectedTalent: updateSelectedTalent,
@@ -113,10 +112,11 @@ const useTalentStore = create<TalentStore>((set) => ({
       updateTrackingTalent.get(group)?.delete(neiborTalent.id);
 
       const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
+      const updateRemainingPoints = updatePrerequisite[group][position] === 1 ? store.remainingPoints : store.remainingPoints - 1;
       updatePrerequisite[group][position] = 1;
 
       return {
-        ...store,
+        remainingPoints: updateRemainingPoints,
         prerequisite: updatePrerequisite,
         selectedTalent: updateSelectedTalent,
         talentMap: updateTalentMap,
