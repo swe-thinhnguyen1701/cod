@@ -18,6 +18,8 @@ const Talent = ({ talentId }: Props) => {
     const isSelected = selectedTalent?.id === talentId;
     const isActive = activateTalent(talent.group, talent.position, prerequisite);
 
+    console.log(JSON.stringify(prerequisite));
+
     const handleClick = (event: React.MouseEvent) => {
         setIsScaled(true);
         setTimeout(() => setIsScaled(false), 100);

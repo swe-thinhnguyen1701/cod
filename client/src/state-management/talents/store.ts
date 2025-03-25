@@ -112,8 +112,12 @@ const useTalentStore = create<TalentStore>((set) => ({
       updateTrackingTalent.get(group)?.add(updateSelectedTalent.id);
       updateTrackingTalent.get(group)?.delete(neiborTalent.id);
 
+      const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
+      updatePrerequisite[group][position] = 1;
+
       return {
         ...store,
+        prerequisite: updatePrerequisite,
         selectedTalent: updateSelectedTalent,
         talentMap: updateTalentMap,
         trackingTalent: updateTrackingTalent,
