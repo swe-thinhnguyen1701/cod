@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import icon from "../assets/helmet-1.ico";
-import useTalent from "../state-management/talents/useTalent";
-import TALENT_MAP from "../state-management/talents/fetchTalent";
+// import useTalent from "../state-management/talents/useTalent";
+// import TALENT_MAP from "../state-management/talents/fetchTalent";
 import activateTalent from "../services/activateTalent";
 import TalentEnitity from "../entities/TalentEntity";
+import useTalentStore from "../state-management/talents/store";
 
 interface Props {
     talentId: number
@@ -12,8 +13,9 @@ interface Props {
 
 const Talent = ({ talentId }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
-    const { prerequisite, selectedTalent, dispatch } = useTalent();
-    const talent = TALENT_MAP.get(talentId) as TalentEnitity;
+    // const { prerequisite, selectedTalent, dispatch } = useTalent();
+    const {selectedTalent, prerequisite, talentMap, modifyTalentPoints} = useTalentStore();
+    const talent = talentMap.get(talentId) as TalentEnitity;
     const currentLevel = talent.level;
 
     const isSelected = selectedTalent?.id === talentId;
@@ -27,12 +29,14 @@ const Talent = ({ talentId }: Props) => {
 
         if (!isActive) return;
 
-        const maxLevel = talent ? talent.maxLevel : 3;
+        const maxLevel = talent.maxLevel;
 
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
-            dispatch({ type: "REMOVE_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
+            modifyTalentPoints(talent.group, talent.position, -1);
+            // dispatch({ type: "REMOVE_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
-            dispatch({ type: "ADD_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
+            modifyTalentPoints(talent.group, talent.position, 1);
+            // dispatch({ type: "ADD_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
         }
     }
 

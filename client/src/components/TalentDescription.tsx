@@ -1,8 +1,10 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
 import useTalent from "../state-management/talents/useTalent";
+import useTalentStore from "../state-management/talents/store";
 
 const TalentDescription = () => {
-    const { selectedTalent } = useTalent();
+    // const { selectedTalent } = useTalent();
+    const { selectedTalent } = useTalentStore();
 
     if (!selectedTalent) return;
 

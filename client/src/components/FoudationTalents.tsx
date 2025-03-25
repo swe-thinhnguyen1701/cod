@@ -4,14 +4,17 @@ import Talent from "./Talent";
 import TalentDescription from "./TalentDescription";
 import useTalent from "../state-management/talents/useTalent";
 import { TALENTS } from "../state-management/talents/fetchTalent"
+import useTalentStore from "../state-management/talents/store";
 
 const FoundationTalents = () => {
     const [selectedTalent, setSelectedTalent] = useState<{ rowIndex: number; talentIndex: number } | null>(null);
     const talentContainerRef = useRef<HTMLDivElement>(null);
-    const { dispatch } = useTalent();
+    // const { dispatch } = useTalent();
+    const {selectTalent} = useTalentStore();
 
     const handleTalentClick = (rowIndex: number, talentIndex: number) => {
-        dispatch({ type: "SELECTED_TALENT", id: TALENTS[rowIndex][talentIndex].id })
+        // dispatch({ type: "SELECTED_TALENT", id: TALENTS[rowIndex][talentIndex].id })
+        selectTalent(TALENTS[rowIndex][talentIndex].id);
         setSelectedTalent({ rowIndex, talentIndex });
     };
 
