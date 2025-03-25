@@ -1,19 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import { Box, HStack, VStack } from "@chakra-ui/react";
-import Talent from "./Talent";
-import TalentDescription from "./TalentDescription";
-import useTalent from "../state-management/talents/useTalent";
 import { TALENTS } from "../state-management/talents/fetchTalent"
 import useTalentStore from "../state-management/talents/store";
+
+import { useState, useRef, useEffect } from "react";
+import { Box, HStack, VStack } from "@chakra-ui/react";
+
+import Talent from "./Talent";
+import TalentDescription from "./TalentDescription";
 
 const FoundationTalents = () => {
     const [selectedTalent, setSelectedTalent] = useState<{ rowIndex: number; talentIndex: number } | null>(null);
     const talentContainerRef = useRef<HTMLDivElement>(null);
-    // const { dispatch } = useTalent();
     const {selectTalent} = useTalentStore();
 
     const handleTalentClick = (rowIndex: number, talentIndex: number) => {
-        // dispatch({ type: "SELECTED_TALENT", id: TALENTS[rowIndex][talentIndex].id })
         selectTalent(TALENTS[rowIndex][talentIndex].id);
         setSelectedTalent({ rowIndex, talentIndex });
     };
@@ -22,6 +21,7 @@ const FoundationTalents = () => {
         const target = event.target as HTMLElement;
         if (target.closest(".talent-box")) return;
 
+        selectTalent(-1);
         setSelectedTalent(null);
     };
 
@@ -31,6 +31,7 @@ const FoundationTalents = () => {
                 talentContainerRef.current &&
                 !talentContainerRef.current.contains(event.target as Node)
             ) {
+                selectTalent(-1);
                 setSelectedTalent(null);
             }
         };

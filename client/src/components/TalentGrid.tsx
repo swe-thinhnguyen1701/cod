@@ -1,6 +1,4 @@
 import useTalentStore from "../state-management/talents/store";
-import useTalent from "../state-management/talents/useTalent";
-
 
 const TalentGrid = () => {
     // const {remainingPoints} = useTalent()

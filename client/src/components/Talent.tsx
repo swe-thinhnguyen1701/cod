@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import icon from "../assets/helmet-1.ico";
-// import useTalent from "../state-management/talents/useTalent";
-// import TALENT_MAP from "../state-management/talents/fetchTalent";
 import activateTalent from "../services/activateTalent";
 import TalentEnitity from "../entities/TalentEntity";
 import useTalentStore from "../state-management/talents/store";
@@ -13,15 +11,12 @@ interface Props {
 
 const Talent = ({ talentId }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
-    // const { prerequisite, selectedTalent, dispatch } = useTalent();
     const {selectedTalent, prerequisite, talentMap, modifyTalentPoints} = useTalentStore();
     const talent = talentMap.get(talentId) as TalentEnitity;
     const currentLevel = talent.level;
 
     const isSelected = selectedTalent?.id === talentId;
     const isActive = activateTalent(talent.group, talent.position, prerequisite);
-    // console.log(prerequisite[0][0]);
-    
 
     const handleClick = (event: React.MouseEvent) => {
         setIsScaled(true);
@@ -33,16 +28,14 @@ const Talent = ({ talentId }: Props) => {
 
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
             modifyTalentPoints(talent.group, talent.position, -1);
-            // dispatch({ type: "REMOVE_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
             modifyTalentPoints(talent.group, talent.position, 1);
-            // dispatch({ type: "ADD_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
         }
     }
 
     return (
         <>
-            <Box className="talent-container" display="flex" flexDir="column" alignItems="center" cursor="pointer">
+            <Box className={`talent-container ${talent.isPrimaryCore ? "talent-primary" : talent.isSecondaryCore ? "talent-secondary" : ""}`} display="flex" flexDir="column" alignItems="center" cursor="pointer">
                 <Box
                     className={`${isSelected ? "talent-layer-1 show" : "talent-layer-1"}`}
                     transform={isScaled ? "scale(0.1)" : "scale(1)"}

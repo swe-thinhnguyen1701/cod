@@ -42,7 +42,7 @@ const useTalentStore = create<TalentStore>((set) => ({
           updateTrackingTalent.set(group, new Set([updateSelectedTalent.id]));
       } else {
         if (isUpdate(group, position, updatePrerequisite)) {
-          for (let i = 2; i < 19; i++) {
+          for (let i = group + 1; i < 19; i++) {
             if (updateTrackingTalent.has(i)) {
               updateTrackingTalent.get(i)?.forEach((id) => {
                 const updateTalent = updateTalentMap.get(id) as TalentEnitity;

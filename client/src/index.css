@@ -13,6 +13,11 @@
   inherits: false;
 }
 
+.talent-container.talent-primary{
+  transform: scale(1.5);
+  margin: 30px;
+}
+
 .talent-layer-1{
   opacity: 0;
   position: relative;
