@@ -1,6 +1,4 @@
 const activateTalent = (group: number, position: number, prerequisite: number[][]): boolean => {
-    // console.log(`[group: ${group},position: ${position}]`);
-    // console.log(prerequisite[group][0]);
     
     if(group === 0)
         return position === 0 ? true : prerequisite[0][position - 1] >= 3;

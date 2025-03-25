@@ -111,7 +111,7 @@ export const TALENTS = [
         level: 0,
         maxLevel: 5,
         group: 2,
-        position: 2,
+        position: 1,
         isPrimaryCore: false,
         isSecondaryCore: false
     }, {
@@ -123,7 +123,7 @@ export const TALENTS = [
         level: 0,
         maxLevel: 5,
         group: 2,
-        position: 2,
+        position: 1,
         isPrimaryCore: false,
         isSecondaryCore: false
     }, {
@@ -135,9 +135,71 @@ export const TALENTS = [
         level: 0,
         maxLevel: 5,
         group: 2,
+        position: 1,
+        isPrimaryCore: false,
+        isSecondaryCore: false
+    }],
+    [{
+        id: 12,
+        name: "Logistics Master",
+        description: ["Increases your Legion's Gather Speed by ", " ."],
+        buffValue: ["0%", "3%", "6%", "9%"],
+        preview: "Gather Speed bonus",
+        level: 0,
+        maxLevel: 5,
+        group: 2,
         position: 2,
         isPrimaryCore: false,
         isSecondaryCore: false
+    }, {
+        id: 13,
+        name: "Overall Health",
+        description: ["Increases the HP of your Legions's unit by ", " ."],
+        buffValue: ["0%", "0.4%", "0.8%", "1.2%."],
+        preview: "HP bonus",
+        level: 0,
+        maxLevel: 5,
+        group: 2,
+        position: 2,
+        isPrimaryCore: false,
+        isSecondaryCore: false
+    }, {
+        id: 14,
+        name: "Bane of Darkness",
+        description: ["Your Legion deals ", " more Peacekeeping damage."],
+        buffValue: ["0%", "1%", "2%", "3%"],
+        preview: "Damage dealt during Peacekeeping bonus",
+        level: 0,
+        maxLevel: 5,
+        group: 2,
+        position: 2,
+        isPrimaryCore: false,
+        isSecondaryCore: false
+    }],
+    [{
+        id: 15,
+        name: "Overall Speed",
+        description: ["Increases the March Speed of your Legions's unit by ", " ."],
+        buffValue: ["0%", "2%", "4%", "6%"],
+        preview: "March Speed bonus",
+        level: 0,
+        maxLevel: 1,
+        group: 2,
+        position: 3,
+        isPrimaryCore: false,
+        isSecondaryCore: true
+    }, {
+        id: 16,
+        name: "Overall Defense",
+        description: ["Increases the DEF of your Legions's unit by ", " ."],
+        buffValue: ["0%", "0.4%", "0.8%", "1.2%"],
+        preview: "DEF bonus",
+        level: 0,
+        maxLevel: 1,
+        group: 2,
+        position: 3,
+        isPrimaryCore: false,
+        isSecondaryCore: true
     }]
 ];
 

@@ -11,7 +11,7 @@ interface Props {
 
 const Talent = ({ talentId }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
-    const {selectedTalent, prerequisite, talentMap, modifyTalentPoints} = useTalentStore();
+    const {selectedTalent, prerequisite, talentMap, modifyTalentPoints, modifySpecialTalentPoints} = useTalentStore();
     const talent = talentMap.get(talentId) as TalentEnitity;
     const currentLevel = talent.level;
 
@@ -29,6 +29,10 @@ const Talent = ({ talentId }: Props) => {
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
             modifyTalentPoints(talent.group, talent.position, -1);
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
+            if(talent.group > 1 && (talent.position === 3 || talent.position === 7)) {
+                modifySpecialTalentPoints(talent.group, talent.position);
+                return;
+            }
             modifyTalentPoints(talent.group, talent.position, 1);
         }
     }

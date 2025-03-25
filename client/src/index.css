@@ -15,7 +15,12 @@
 
 .talent-container.talent-primary{
   transform: scale(1.5);
-  margin: 30px;
+  margin: 30px 0;
+}
+
+.talent-container.talent-secondary {
+  transform: scale(1.2);
+  margin: 20px 10px;
 }
 
 .talent-layer-1{

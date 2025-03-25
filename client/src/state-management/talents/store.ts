@@ -9,6 +9,7 @@ interface TalentStore {
   talentMap: Map<number, TalentEnitity>;
   trackingTalent: Map<number, Set<number>>;
   modifyTalentPoints: (group: number, position: number, step: number) => void;
+  modifySpecialTalentPoints: (group: number, position: number) => void;
   selectTalent: (id: number) => void;
 }
 
@@ -18,7 +19,7 @@ const useTalentStore = create<TalentStore>((set) => ({
     .fill(null)
     .map(() => Array(8).fill(0)),
   selectedTalent: null,
-  talentMap: TALENT_MAP,
+  talentMap: new Map(TALENT_MAP),
   trackingTalent: new Map<number, Set<number>>(),
   modifyTalentPoints: (group: number, position: number, step: number) => {
     set((store) => {
@@ -87,6 +88,41 @@ const useTalentStore = create<TalentStore>((set) => ({
       };
     });
   },
+  modifySpecialTalentPoints: (group: number, position: number) => {
+    set((store) => {
+      const updateSelectedTalent = store.selectedTalent as TalentEnitity;
+      updateSelectedTalent.level = 1;
+
+      const updateTalentMap = new Map(store.talentMap);
+      let neiborTalent: TalentEnitity;
+      if (
+        updateTalentMap.has(updateSelectedTalent.id - 1) &&
+        updateTalentMap.get(updateSelectedTalent.id - 1)?.position === position
+      ) {
+        neiborTalent = updateTalentMap.get(
+          updateSelectedTalent.id - 1
+        ) as TalentEnitity;
+      } else {
+        neiborTalent = updateTalentMap.get(
+          updateSelectedTalent.id + 1
+        ) as TalentEnitity;
+      }
+      neiborTalent.level = 0;
+      updateTalentMap.set(neiborTalent.id, neiborTalent);
+      updateTalentMap.set(updateSelectedTalent.id, updateSelectedTalent);
+
+      const updateTrackingTalent = store.trackingTalent;
+      updateTrackingTalent.get(group)?.add(updateSelectedTalent.id);
+      updateTrackingTalent.get(group)?.delete(neiborTalent.id);
+
+      return {
+        ...store,
+        selectedTalent: updateSelectedTalent,
+        talentMap: updateTalentMap,
+        trackingTalent: updateTrackingTalent,
+      }
+    });
+  },
   selectTalent: (id: number) => {
     set((store) => ({
       ...store,
@@ -100,8 +136,6 @@ const isUpdate = (
   position: number,
   newPrerequisite: number[][]
 ): boolean => {
-  // console.log(`Checking update for group ${group} and position ${position}`);
-
   if (group === 0)
     return position === 0 ? true : newPrerequisite[group][position] < 3;
   if (group === 1) return true;
