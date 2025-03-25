@@ -9,7 +9,7 @@ interface Props {
     talentId: number
 }
 
-const Talent = ({ talentId }: Props) => {
+const TalentCore = ({ talentId }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
     const { selectedTalent, prerequisite, talentMap, modifyTalentPoints, modifySpecialTalentPoints } = useTalentStore();
     const talent = talentMap.get(talentId) as TalentEnitity;
@@ -88,4 +88,4 @@ const Talent = ({ talentId }: Props) => {
     )
 }
 
-export default Talent;
+export default TalentCore;

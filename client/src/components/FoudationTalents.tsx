@@ -4,7 +4,7 @@ import useTalentStore from "../state-management/talents/store";
 import { useState, useRef, useEffect } from "react";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 
-import Talent from "./Talent";
+import TalentCore from "./TalentCore";
 import TalentDescription from "./TalentDescription";
 
 const FoundationTalents = () => {
@@ -57,7 +57,7 @@ const FoundationTalents = () => {
                                 }}
                                 className="talent-box"
                             >
-                                <Talent talentId={talent.id}/>
+                                <TalentCore talentId={talent.id}/>
                             </Box>
                             <Box
                                 bg="yellow.200"
