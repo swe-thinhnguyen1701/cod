@@ -8,8 +8,7 @@ import { TALENTS } from "../state-management/talents/fetchTalent"
 const FoundationTalents = () => {
     const [selectedTalent, setSelectedTalent] = useState<{ rowIndex: number; talentIndex: number } | null>(null);
     const talentContainerRef = useRef<HTMLDivElement>(null);
-    const { remainingPoints, dispatch } = useTalent();
-    console.log(remainingPoints);
+    const { dispatch } = useTalent();
 
     const handleTalentClick = (rowIndex: number, talentIndex: number) => {
         dispatch({ type: "SELECTED_TALENT", id: TALENTS[rowIndex][talentIndex].id })

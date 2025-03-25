@@ -14,7 +14,7 @@ const Talent = ({ talentId }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
     const { prerequisite, selectedTalent, dispatch } = useTalent();
     const talent = TALENT_MAP.get(talentId) as TalentEnitity;
-    const [currentLevel, setCurrentLevel] = useState(talent.level);
+    const currentLevel = talent.level;
 
     const isSelected = selectedTalent?.id === talentId;
     const isActive = activateTalent(talent.group, talent.position, prerequisite);
@@ -27,14 +27,12 @@ const Talent = ({ talentId }: Props) => {
 
         if (!isActive) return;
 
-        const maxLevel = selectedTalent ? selectedTalent.maxLevel : 3;
+        const maxLevel = talent ? talent.maxLevel : 3;
 
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
-            setCurrentLevel(currentLevel - 1);
-            dispatch({ type: "REMOVE_POINT", row: selectedTalent?.group ?? -1, col: selectedTalent?.position ?? -1 })
+            dispatch({ type: "REMOVE_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
-            setCurrentLevel(currentLevel + 1);
-            dispatch({ type: "ADD_POINT", row: selectedTalent?.group ?? -1, col: selectedTalent?.position ?? -1 })
+            dispatch({ type: "ADD_POINT", group: talent?.group ?? -1, position: talent?.position ?? -1 })
         }
     }
 
