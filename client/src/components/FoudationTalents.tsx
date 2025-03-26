@@ -1,4 +1,4 @@
-import { TALENTS } from "../state-management/talents/fetchTalent"
+import { FOUNDATION_TALENT_CORES } from "../state-management/talents/fetchTalent"
 import useTalentStore from "../state-management/talents/store";
 
 import { useState, useRef, useEffect } from "react";
@@ -13,7 +13,10 @@ const FoundationTalents = () => {
     const {selectTalent} = useTalentStore();
 
     const handleTalentClick = (rowIndex: number, talentIndex: number) => {
-        selectTalent(TALENTS[rowIndex][talentIndex].id);
+        // console.log(`rowIndex: ${rowIndex}, talentIndex: ${talentIndex}`);
+        // console.log(FOUNDATION_TALENT_CORES[rowIndex][talentIndex].id);
+        
+        selectTalent(FOUNDATION_TALENT_CORES[rowIndex][talentIndex].id);
         setSelectedTalent({ rowIndex, talentIndex });
     };
 
@@ -45,7 +48,7 @@ const FoundationTalents = () => {
 
     return (
         <VStack position="relative" onClick={handleContainerClick} ref={talentContainerRef}>
-            {TALENTS.map((row, rowIdx) => (
+            {FOUNDATION_TALENT_CORES.map((row, rowIdx) => (
                 <HStack key={rowIdx} gap={8}>
                     {row.map((talent, talentIdx) => (
                         <Box key={talent.id}>

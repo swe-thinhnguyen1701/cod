@@ -1,33 +1,38 @@
 import { create } from "zustand";
 import TalentEnitity from "../../entities/TalentEntity";
 import TALENT_MAP from "./fetchTalent";
+import { Talent } from "./fetchTalent";
 
 interface TalentStore {
   remainingPoints: number;
   prerequisite: number[][];
-  selectedTalent: TalentEnitity | null;
-  talentMap: Map<number, TalentEnitity>;
+  selectedTalent: Talent | null;
+  talentMap: Map<number, Talent>;
   trackingTalent: Map<number, Set<number>>;
-  modifyTalentPoints: (group: number, position: number, step: number) => void;
-  modifySpecialTalentPoints: (group: number, position: number) => void;
+  modifyTalentPoints: (step: number) => void;
+  modifySpecialTalentPoints: () => void;
   selectTalent: (id: number) => void;
 }
 
 const useTalentStore = create<TalentStore>((set) => ({
   remainingPoints: 59,
-  prerequisite: Array(19)
+  prerequisite: Array(5)
     .fill(null)
     .map(() => Array(8).fill(0)),
   selectedTalent: null,
   talentMap: new Map(TALENT_MAP),
   trackingTalent: new Map<number, Set<number>>(),
-  modifyTalentPoints: (group: number, position: number, step: number) => {
+  modifyTalentPoints: (step: number) => {
     set((store) => {
+      const group = store.selectedTalent ? store.selectedTalent.group : -1;
+      const position = store.selectedTalent? store.selectedTalent.position : -1;
+      if(group === -1 || position === -1) return store;
+      
       const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
       updatePrerequisite[group][position] += step;
 
-      const updateSelectedTalent = store.selectedTalent as TalentEnitity;
-      updateSelectedTalent.level += step;
+      const updateSelectedTalent = store.selectedTalent as Talent;
+      updateSelectedTalent.currentLevel += step;
 
       const updateTalentMap = new Map(store.talentMap);
       updateTalentMap.set(updateSelectedTalent.id, updateSelectedTalent);
@@ -46,11 +51,11 @@ const useTalentStore = create<TalentStore>((set) => ({
           for (let i = group + 1; i < 19; i++) {
             if (updateTrackingTalent.has(i)) {
               updateTrackingTalent.get(i)?.forEach((id) => {
-                const updateTalent = updateTalentMap.get(id) as TalentEnitity;
-                refundPoints += updateTalent.level;
+                const updateTalent = updateTalentMap.get(id) as Talent;
+                refundPoints += updateTalent.currentLevel;
                 updatePrerequisite[updateTalent.group][updateTalent.position] -=
-                  updateTalent.level;
-                updateTalent.level = 0;
+                  updateTalent.currentLevel;
+                updateTalent.currentLevel = 0;
                 updateTalentMap.set(id, updateTalent);
               });
               updateTrackingTalent.delete(i);
@@ -58,12 +63,12 @@ const useTalentStore = create<TalentStore>((set) => ({
           }
           const removeList: number[] = [];
           updateTrackingTalent.get(group)?.forEach((id) => {
-            const updateTalent = updateTalentMap.get(id) as TalentEnitity;
+            const updateTalent = updateTalentMap.get(id) as Talent;
             if (updateTalent.position > position) {
-              refundPoints += updateTalent.level;
+              refundPoints += updateTalent.currentLevel;
               updatePrerequisite[updateTalent.group][updateTalent.position] -=
-                updateTalent.level;
-              updateTalent.level = 0;
+                updateTalent.currentLevel;
+              updateTalent.currentLevel = 0;
               updateTalentMap.set(id, updateTalent);
               removeList.push(id);
             }
@@ -84,26 +89,32 @@ const useTalentStore = create<TalentStore>((set) => ({
       };
     });
   },
-  modifySpecialTalentPoints: (group: number, position: number) => {
+  modifySpecialTalentPoints: () => {
     set((store) => {
-      const updateSelectedTalent = store.selectedTalent as TalentEnitity;
-      updateSelectedTalent.level = 1;
+      const group = store.selectedTalent?.group;
+      const position = store.selectedTalent?.position;
+
+      if (!group || !position)
+        return store;
+
+      const updateSelectedTalent = store.selectedTalent as Talent;
+      updateSelectedTalent.currentLevel = 1;
 
       const updateTalentMap = new Map(store.talentMap);
-      let neiborTalent: TalentEnitity;
+      let neiborTalent: Talent;
       if (
         updateTalentMap.has(updateSelectedTalent.id - 1) &&
         updateTalentMap.get(updateSelectedTalent.id - 1)?.position === position
       ) {
         neiborTalent = updateTalentMap.get(
           updateSelectedTalent.id - 1
-        ) as TalentEnitity;
+        ) as Talent;
       } else {
         neiborTalent = updateTalentMap.get(
           updateSelectedTalent.id + 1
-        ) as TalentEnitity;
+        ) as Talent;
       }
-      neiborTalent.level = 0;
+      neiborTalent.currentLevel = 0;
       updateTalentMap.set(neiborTalent.id, neiborTalent);
       updateTalentMap.set(updateSelectedTalent.id, updateSelectedTalent);
 
@@ -127,7 +138,7 @@ const useTalentStore = create<TalentStore>((set) => ({
   selectTalent: (id: number) => {
     set((store) => ({
       ...store,
-      selectedTalent: store.talentMap.get(id) as TalentEnitity,
+      selectedTalent: store.talentMap.get(id) as Talent,
     }));
   },
 }));

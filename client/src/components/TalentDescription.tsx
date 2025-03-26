@@ -1,5 +1,20 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
 import useTalentStore from "../state-management/talents/store";
+import TalentEnitity from "../entities/TalentEntity";
+
+const sample: TalentEnitity = {
+    id: 25,
+    name: "Bane of Darkness",
+    description: ["Your Legion deals ", " more Peacekeeping damage."],
+    buffValue: ["0%", "1%", "2%", "3%"],
+    preview: "Damage dealt during Peacekeeping bonus",
+    level: 0,
+    maxLevel: 5,
+    group: 2,
+    position: 6,
+    isPrimaryCore: false,
+    isSecondaryCore: false
+}
 
 const TalentDescription = () => {
     const { selectedTalent } = useTalentStore();
@@ -27,19 +42,19 @@ const TalentDescription = () => {
     return (
         <Box padding={4}>
             <Heading as="h3" size="md" textAlign="center">
-                <Text>{selectedTalent?.name}</Text>
+                <Text>Overall Attack</Text>
             </Heading>
             {selectedTalent.isPrimaryCore || selectedTalent.isSecondaryCore
-                ? <Box>{formatDescription(selectedTalent.description[0])}</Box>
+                ? <Box>{formatDescription(sample.description[0])}</Box>
                 : <Box>
                     <Box mb={4}>
-                        {selectedTalent?.description[0]}
+                        {sample?.description[0]}
                         <Text as="span" fontWeight="bold" color="green">
-                            {selectedTalent?.buffValue[selectedTalent.level]}
+                            {sample.buffValue[sample.level]}
                         </Text>
-                        {selectedTalent?.description[1]}
+                        {sample.description[1]}
                         <Text as="span" fontWeight="bold" color="red">
-                            {selectedTalent.debuffValue && [selectedTalent.level]}
+                            {sample.debuffValue && [sample.level]}
                         </Text>
                     </Box>
                     <Box>
@@ -47,13 +62,13 @@ const TalentDescription = () => {
                             Upgrade Preview
                         </Text>
                         <Text>
-                            {selectedTalent?.preview} <br />
-                            {selectedTalent?.buffValue.map((buffValue, index) => {
+                            {sample.preview} <br />
+                            {sample.buffValue.map((buffValue, index) => {
                                 if (index === 0) return;
                                 return (
                                     <Box key={index} as="span">
                                         {index !== 1 && " / "}
-                                        <Text as="span" fontWeight={selectedTalent.level === index ? "bold" : "normal"}>
+                                        <Text as="span" fontWeight={sample.level === index ? "bold" : "normal"}>
                                             {buffValue}
                                         </Text>
                                     </Box>

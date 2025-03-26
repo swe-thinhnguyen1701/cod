@@ -4,6 +4,7 @@ import icon from "../assets/helmet-1.ico";
 import activateTalent from "../services/activateTalent";
 import TalentEnitity from "../entities/TalentEntity";
 import useTalentStore from "../state-management/talents/store";
+import {Talent} from "../state-management/talents/fetchTalent"
 
 interface Props {
     talentId: number
@@ -12,13 +13,13 @@ interface Props {
 const TalentCore = ({ talentId }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
     const { selectedTalent, prerequisite, talentMap, modifyTalentPoints, modifySpecialTalentPoints } = useTalentStore();
-    const talent = talentMap.get(talentId) as TalentEnitity;
-    const currentLevel = talent.level;
-
+    const talent = talentMap.get(talentId) as Talent;
+    const currentLevel = talent.currentLevel;
+    
     const isSelected = selectedTalent?.id === talentId;
     const isActive = activateTalent(talent.group, talent.position, prerequisite);
 
-    console.log(JSON.stringify(prerequisite));
+    // console.log(JSON.stringify(prerequisite));
 
     const handleClick = (event: React.MouseEvent) => {
         setIsScaled(true);
@@ -29,13 +30,13 @@ const TalentCore = ({ talentId }: Props) => {
         const maxLevel = talent.maxLevel;
 
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
-            modifyTalentPoints(talent.group, talent.position, -1);
+            modifyTalentPoints(-1);
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
             if (talent.group > 1 && (talent.position === 3 || talent.position === 7)) {
-                modifySpecialTalentPoints(talent.group, talent.position);
+                modifySpecialTalentPoints();
                 return;
             }
-            modifyTalentPoints(talent.group, talent.position, 1);
+            modifyTalentPoints(1);
         }
     }
 
