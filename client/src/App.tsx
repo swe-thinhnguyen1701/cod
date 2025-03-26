@@ -1,5 +1,6 @@
 import { HStack } from '@chakra-ui/react'
 import HeroTalents from './components/HeroTalents';
+import RoleBadge from './components/RoleBadge';
 
 function App() {
 
@@ -7,7 +8,8 @@ function App() {
     <>
       <HStack width="100%" justifyContent="center" mt={10}>
         {/* <Talent isSelected={false} isActive={true} /> */}
-          <HeroTalents />
+          {/* <HeroTalents /> */}
+          <RoleBadge />
       </HStack>
     </>
   )

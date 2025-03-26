@@ -7,7 +7,21 @@ import TalentDescription from "./TalentDescription";
 
 const STRUCTURE = [[4, 12], [12, 20], [20, 28]];
 
-const TalentBox = ({ rowIdx, talentIdx, talent, selectedTalent, handleTalentClick }: { rowIdx: number; talentIdx: number; talent: { id: number }; selectedTalent: { rowIndex: number; talentIndex: number } | null; handleTalentClick: (rowIndex: number, talentIndex: number) => void }) => (
+interface TalentBoxProps {
+    rowIdx: number;
+    talentIdx: number;
+    talent: { id: number };
+    selectedTalent: { rowIndex: number; talentIndex: number } | null;
+    handleTalentClick: (rowIndex: number, talentIndex: number) => void
+}
+
+interface TalentRow {
+    rowIdx: number;
+    selectedTalent: { rowIndex: number; talentIndex: number } | null;
+    handleTalentClick: (rowIndex: number, talentIndex: number) => void
+}
+
+const TalentBox = ({ rowIdx, talentIdx, talent, selectedTalent, handleTalentClick }: TalentBoxProps) => (
     <Box key={talent.id}>
         <Box
             id={talent.id.toString()}
@@ -35,7 +49,7 @@ const TalentBox = ({ rowIdx, talentIdx, talent, selectedTalent, handleTalentClic
     </Box>
 );
 
-const TalentRow = ({ rowIdx, selectedTalent, handleTalentClick }: { rowIdx: number; selectedTalent: { rowIndex: number; talentIndex: number } | null; handleTalentClick: (rowIndex: number, talentIndex: number) => void }) => {
+const TalentRow = ({ rowIdx, selectedTalent, handleTalentClick }: TalentRow) => {
     return (
         <HStack key={rowIdx} gap={8}>
             {FOUNDATION_TALENT_CORES[rowIdx].map((talent, talentIdx) => (
