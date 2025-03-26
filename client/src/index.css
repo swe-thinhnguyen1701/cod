@@ -78,3 +78,10 @@ img {
   }
 }
 
+.hover-scale-up{
+  transition: transform 0.3s;
+}
+
+.hover-scale-up:hover{
+  transform: scale(1.2);
+}

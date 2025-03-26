@@ -7,15 +7,17 @@ const ROLE_BG_COLORS = ["#200000", "#3a1c0d", "#0d2f3a"];
 const BG_COLORS = ["rgb(133, 23, 23)", "rgb(172, 94, 4)", "rgb(8, 141, 178)"];
 const ROLE_ICON_SIZE = "33px";
 
-const idx = 0;
+interface Props {
+    idx: number;
+}
 
-const RoleBadge = () => {
+const RoleBadge = ({ idx }: Props) => {
     return (
         <>
             <Box
                 bg={`linear-gradient(90deg, ${BG_COLORS[idx]} 0%, rgba(0,0,0,1) 70%)`}
                 borderRadius="4px"
-                width="80px"
+                width={{base: "80px", md: "100px"}}
                 position="relative"
                 pl={7}
                 paddingTop="3px"
@@ -35,7 +37,7 @@ const RoleBadge = () => {
                     <Image transform="scale(2.2)" className="role-icon-image" src={sampleImg} height={ROLE_ICON_SIZE} />
                 </Box>
                 <Text fontWeight="bold" fontSize={{ base: "xs", md: "sm" }}>{ROLES[idx]}</Text>
-                
+
             </Box>
         </>
     )
