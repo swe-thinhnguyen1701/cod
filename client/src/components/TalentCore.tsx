@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import icon from "../assets/helmet-1.ico";
 import activateTalent from "../services/activateTalent";
-import TalentEnitity from "../entities/TalentEntity";
 import useTalentStore from "../state-management/talents/store";
 import {Talent} from "../state-management/talents/fetchTalent"
 
@@ -19,11 +18,9 @@ const TalentCore = ({ talentId }: Props) => {
     const isSelected = selectedTalent?.id === talentId;
     const isActive = activateTalent(talent.group, talent.position, prerequisite);
 
-    // console.log(JSON.stringify(prerequisite));
-
     const handleClick = (event: React.MouseEvent) => {
         setIsScaled(true);
-        setTimeout(() => setIsScaled(false), 100);
+        setTimeout(() => setIsScaled(false), 230);
 
         if (!isActive) return;
 

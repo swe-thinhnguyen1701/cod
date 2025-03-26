@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import TalentEnitity from "../../entities/TalentEntity";
 import TALENT_MAP from "./fetchTalent";
 import { Talent } from "./fetchTalent";
 
