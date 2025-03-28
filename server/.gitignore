@@ -4,7 +4,8 @@ node_modules/
 
 db/heroes.js
 db/roles.js
-db/hero_roles.js
-db/role_combinations.js
-db/talent_cores.js
-db/role_talent_cores.js
+db/heroRoles.js
+db/roleCombinations.js
+db/talentCores.js
+db/roleTalentCore.js
+db/mainTalentCores.js

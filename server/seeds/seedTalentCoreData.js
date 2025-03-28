@@ -1,5 +1,5 @@
 const { TalentCore } = require("../models");
-const talentCoreData = require("../db/talent_cores");
+const talentCoreData = require("../db/talentCores");
 
 const seedTalentCores = async () => {
     try {
