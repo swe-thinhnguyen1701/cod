@@ -4,10 +4,25 @@ import { useState, useRef, useEffect } from "react";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import TalentCore from "./TalentCore";
 import TalentDescription from "./TalentDescription";
+import TalentGroupButton from "./TalentGroupButton";
 
 const STRUCTURE = [[4, 12], [12, 20], [20, 28]];
 
-const TalentBox = ({ rowIdx, talentIdx, talent, selectedTalent, handleTalentClick }: { rowIdx: number; talentIdx: number; talent: { id: number }; selectedTalent: { rowIndex: number; talentIndex: number } | null; handleTalentClick: (rowIndex: number, talentIndex: number) => void }) => (
+interface TalentBoxProps {
+    rowIdx: number;
+    talentIdx: number;
+    talent: { id: number };
+    selectedTalent: { rowIndex: number; talentIndex: number } | null;
+    handleTalentClick: (rowIndex: number, talentIndex: number) => void
+}
+
+interface TalentRow {
+    rowIdx: number;
+    selectedTalent: { rowIndex: number; talentIndex: number } | null;
+    handleTalentClick: (rowIndex: number, talentIndex: number) => void
+}
+
+const TalentBox = ({ rowIdx, talentIdx, talent, selectedTalent, handleTalentClick }: TalentBoxProps) => (
     <Box key={talent.id}>
         <Box
             id={talent.id.toString()}
@@ -35,7 +50,7 @@ const TalentBox = ({ rowIdx, talentIdx, talent, selectedTalent, handleTalentClic
     </Box>
 );
 
-const TalentRow = ({ rowIdx, selectedTalent, handleTalentClick }: { rowIdx: number; selectedTalent: { rowIndex: number; talentIndex: number } | null; handleTalentClick: (rowIndex: number, talentIndex: number) => void }) => {
+const TalentRow = ({ rowIdx, selectedTalent, handleTalentClick }: TalentRow) => {
     return (
         <HStack key={rowIdx} gap={8}>
             {FOUNDATION_TALENT_CORES[rowIdx].map((talent, talentIdx) => (
@@ -54,8 +69,9 @@ const TalentRow = ({ rowIdx, selectedTalent, handleTalentClick }: { rowIdx: numb
 
 const TalentGrid = () => {
     const [selectedTalent, setSelectedTalent] = useState<{ rowIndex: number; talentIndex: number } | null>(null);
+    const [isBigScreen, setIsBigScreen] = useState(window.innerWidth >= 1024);
     const talentContainerRef = useRef<HTMLDivElement>(null);
-    const { selectTalent } = useTalentStore();
+    const { selectTalent, selectedGroup } = useTalentStore();
 
     const handleTalentClick = (rowIndex: number, talentIndex: number) => {
         selectTalent(FOUNDATION_TALENT_CORES[rowIndex][talentIndex].id);
@@ -77,8 +93,17 @@ const TalentGrid = () => {
             }
         };
 
+        const updateScreenSize = () => {
+            setIsBigScreen(window.innerWidth >= 1024); // Adjust breakpoint as needed
+        };
+
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        window.addEventListener("resize", updateScreenSize);
+        updateScreenSize();
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            window.removeEventListener("resize", updateScreenSize);
+        };
     }, []);
 
     return (
@@ -91,7 +116,7 @@ const TalentGrid = () => {
                 )}
             </VStack>
 
-            <VStack position="relative">
+            <VStack position="relative" mt={10} mb={7}>
                 {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
                     rowIdx === 3 ? (
                         <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />
@@ -99,9 +124,16 @@ const TalentGrid = () => {
                 )}
             </VStack>
 
+            <Box
+                width="100%"
+                maxWidth={{ base: "300px", sm: "400px", md: "450px" }}
+                display={!isBigScreen ? "block" : "none"}>
+                <TalentGroupButton />
+            </Box>
+
             <HStack gap={{ base: 0, lg: "100px" }}>
                 {STRUCTURE.map(([start, end], index) => (
-                    <VStack position="relative" key={index}>
+                    <VStack position="relative" key={index} display={selectedGroup === index + 2 || isBigScreen ? "flex" : "none"}>
                         {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
                             rowIdx >= start && rowIdx < end ? (
                                 <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />

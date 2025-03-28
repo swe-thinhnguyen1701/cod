@@ -8,9 +8,11 @@ interface TalentStore {
   selectedTalent: Talent | null;
   talentMap: Map<number, Talent>;
   trackingTalent: Map<number, Set<number>>;
+  selectedGroup: number;
   modifyTalentPoints: (step: number) => void;
   modifySpecialTalentPoints: () => void;
   selectTalent: (id: number) => void;
+  selectGroup: (group: number) => void;
 }
 
 const useTalentStore = create<TalentStore>((set) => ({
@@ -21,6 +23,7 @@ const useTalentStore = create<TalentStore>((set) => ({
   selectedTalent: null,
   talentMap: new Map(TALENT_MAP),
   trackingTalent: new Map<number, Set<number>>(),
+  selectedGroup: 2,
   modifyTalentPoints: (step: number) => {
     set((store) => {
       const group = store.selectedTalent ? store.selectedTalent.group : -1;
@@ -140,6 +143,12 @@ const useTalentStore = create<TalentStore>((set) => ({
       selectedTalent: store.talentMap.get(id) as Talent,
     }));
   },
+  selectGroup: (group: number) => {
+    set((store) => ({
+      ...store,
+      selectedGroup: group,
+    }));
+  }
 }));
 
 const isUpdate = (

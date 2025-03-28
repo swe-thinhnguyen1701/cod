@@ -1,10 +1,6 @@
 :root {
   --talent-bg-base-size: 55px;
-  --talent-bg-upgrade-size: 70px;
   --talent-base-size: 47px;
-  --talent-bg-primary-color: #21445c;
-  --talent-bg-secondary-color: #59819b;
-
 }
 
 @property --angle {
@@ -39,7 +35,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: -1;
-  /* padding: 3px; */
   animation: 3s spin linear infinite;
 }
 
@@ -81,4 +76,12 @@ img {
   to {
     --angle: 360deg;
   }
+}
+
+.hover-scale-up{
+  transition: transform 0.3s;
+}
+
+.hover-scale-up:hover{
+  transform: scale(1.2);
 }
