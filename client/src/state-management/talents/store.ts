@@ -26,10 +26,13 @@ const useTalentStore = create<TalentStore>((set) => ({
   selectedGroup: 2,
   modifyTalentPoints: (step: number) => {
     set((store) => {
+
+      if (store.remainingPoints === 0 || store.remainingPoints > 59) return store;
+
       const group = store.selectedTalent ? store.selectedTalent.group : -1;
-      const position = store.selectedTalent? store.selectedTalent.position : -1;
-      if(group === -1 || position === -1) return store;
-      
+      const position = store.selectedTalent ? store.selectedTalent.position : -1;
+      if (group === -1 || position === -1) return store;
+
       const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
       updatePrerequisite[group][position] += step;
 
@@ -93,6 +96,8 @@ const useTalentStore = create<TalentStore>((set) => ({
   },
   modifySpecialTalentPoints: () => {
     set((store) => {
+      if (store.remainingPoints === 0) return store;
+
       const group = store.selectedTalent?.group;
       const position = store.selectedTalent?.position;
 

@@ -36,7 +36,7 @@ const RoleBadge = ({ idx }: Props) => {
                     left="-13px">
                     <Image transform="scale(2.2)" className="role-icon-image" src={sampleImg} height={ROLE_ICON_SIZE} />
                 </Box>
-                <Text fontWeight="bold" fontSize={{ base: "xs", md: "sm" }}>{ROLES[idx]}</Text>
+                <Text fontWeight="bold" fontSize={{ base: "xs", md: "sm" }} color="#fff">{ROLES[idx]}</Text>
 
             </Box>
         </>
