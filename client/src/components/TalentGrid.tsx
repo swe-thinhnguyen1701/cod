@@ -6,6 +6,7 @@ import TalentCore from "./TalentCore";
 import TalentDescription from "./TalentDescription";
 import TalentGroupButton from "./TalentGroupButton";
 
+
 const STRUCTURE = [[4, 12], [12, 20], [20, 28]];
 
 interface TalentBoxProps {
@@ -107,42 +108,44 @@ const TalentGrid = () => {
     }, []);
 
     return (
-        <VStack onClick={handleContainerClick} ref={talentContainerRef}>
-            <VStack position="relative">
-                {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
-                    rowIdx <= 2 ? (
-                        <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />
-                    ) : null
-                )}
+        <>
+            <VStack onClick={handleContainerClick} ref={talentContainerRef}>
+                <VStack position="relative">
+                    {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
+                        rowIdx <= 2 ? (
+                            <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />
+                        ) : null
+                    )}
+                </VStack>
+
+                <VStack position="relative" mt={10} mb={7}>
+                    {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
+                        rowIdx === 3 ? (
+                            <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />
+                        ) : null
+                    )}
+                </VStack>
+
+                <Box
+                    width="100%"
+                    maxWidth={{ base: "300px", sm: "400px", md: "450px" }}
+                    display={!isBigScreen ? "block" : "none"}>
+                    <TalentGroupButton />
+                </Box>
+
+                <HStack gap={{ base: 0, lg: "100px" }}>
+                    {STRUCTURE.map(([start, end], index) => (
+                        <VStack position="relative" key={index} display={selectedGroup === index + 2 || isBigScreen ? "flex" : "none"}>
+                            {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
+                                rowIdx >= start && rowIdx < end ? (
+                                    <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />
+                                ) : null
+                            )}
+                        </VStack>
+                    ))}
+                </HStack>
             </VStack>
-
-            <VStack position="relative" mt={10} mb={7}>
-                {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
-                    rowIdx === 3 ? (
-                        <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />
-                    ) : null
-                )}
-            </VStack>
-
-            <Box
-                width="100%"
-                maxWidth={{ base: "300px", sm: "400px", md: "450px" }}
-                display={!isBigScreen ? "block" : "none"}>
-                <TalentGroupButton />
-            </Box>
-
-            <HStack gap={{ base: 0, lg: "100px" }}>
-                {STRUCTURE.map(([start, end], index) => (
-                    <VStack position="relative" key={index} display={selectedGroup === index + 2 || isBigScreen ? "flex" : "none"}>
-                        {FOUNDATION_TALENT_CORES.map((_, rowIdx) =>
-                            rowIdx >= start && rowIdx < end ? (
-                                <TalentRow key={rowIdx} rowIdx={rowIdx} selectedTalent={selectedTalent} handleTalentClick={handleTalentClick} />
-                            ) : null
-                        )}
-                    </VStack>
-                ))}
-            </HStack>
-        </VStack>
+        </>
     );
 };
 
