@@ -9,6 +9,7 @@ const typeDefs = `
     type Role {
         id: ID!
         name: String
+        image: String
         description: String
     }
 

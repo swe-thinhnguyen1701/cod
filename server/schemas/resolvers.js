@@ -6,7 +6,9 @@ const resolvers = {
     Query: {
         getAllHeroes: async () => {
             try {
-                const allHeroes = await Hero.findAll();
+                const allHeroes = await Hero.findAll({
+                    order: [["name", "ASC"]]
+                });
                 return allHeroes;
             } catch (error) {
                 console.error("Error fetching heroes:", error);
@@ -60,8 +62,6 @@ const resolvers = {
                 }
                 roleTalentCores.push(talentCores);
             }
-
-            console.log(roleTalentCores);
 
             return roleTalentCores;
         }
