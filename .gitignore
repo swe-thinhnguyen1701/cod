@@ -1,0 +1,11 @@
+node_modules/
+
+.env
+
+server/db/heroes.js
+server/db/roles.js
+server/db/heroRoles.js
+server/db/roleCombinations.js
+server/db/talentCores.js
+server/db/roleTalentCore.js
+server/db/mainTalentCores.js

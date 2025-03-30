@@ -1,0 +1,20 @@
+{
+  "name": "cod",
+  "version": "1.0.0",
+  "description": "CoD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run start",
+    "client": "cd client && npm run dev",
+    "seed": "cd server && npm run seeds"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
