@@ -18,10 +18,8 @@ const seedHeroRoles = async () => {
         }
 
         console.log("Hero-role relationships seeded successfully.");
-        process.exit(0);
     } catch (error) {
         console.error("Error seeding hero-role relationships:", error);
-        process.exit(1);
     }
 };
 
