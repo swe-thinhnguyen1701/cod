@@ -3,8 +3,15 @@ const heroData = require("../db/heroes");
 
 const seedHeros = async () => {
     try {
+        const modifyHeroData = heroData.map(hero => {
+            const heroAvatar = `${hero.avatar}${hero.name}-avatar.webp`;
+            return {
+                ...hero,
+                avatar: heroAvatar
+            }
+        });
         console.log("🌱 Seeding heroes...");
-        const heroes = await Hero.bulkCreate(heroData, {returning: true});
+        const heroes = await Hero.bulkCreate(modifyHeroData, {returning: true});
         console.log("✅ Seeding complete!");
         return heroes;
     } catch(error) {
