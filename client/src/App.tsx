@@ -1,16 +1,21 @@
-import { Box } from '@chakra-ui/react'
-import HeroTalents from './components/HeroTalents';
+import { ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from "@apollo/client";
+import { Outlet } from "react-router-dom";
+
+const httpLink = createHttpLink({
+  uri: "/graphql"
+});
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+});
 
 function App() {
 
   return (
-    <>
-      <Box width="100%" mt={10}>
-        {/* <Talent isSelected={false} isActive={true} /> */}
-          <HeroTalents />
-          {/* <RoleBadge /> */}
-      </Box>
-    </>
+    <ApolloProvider client={client}>
+      <Outlet />
+    </ApolloProvider>
   )
 }
 
