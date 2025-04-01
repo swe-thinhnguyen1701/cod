@@ -10,7 +10,7 @@ export const GET_ALL_HEROES = gql`
     }
 `
 
-export const GET_HERO_BY_ID = `
+export const GET_HERO_BY_ID = gql`
     query getHeroById($id: ID!) {
         getHeroById(id: $id) {
             id
@@ -20,7 +20,7 @@ export const GET_HERO_BY_ID = `
     }
 `
 
-export const GET_ROLES_FROM_HERO = `
+export const GET_ROLES_FROM_HERO = gql`
     query getRolesFromHero($heroId: ID!) {
         getRolesFromHero(heroId: $heroId) {
             id
@@ -31,10 +31,10 @@ export const GET_ROLES_FROM_HERO = `
     }
 `
 
-export const GET_TALENT_CORE_FROM_HERO = `
+export const GET_TALENT_CORES_FROM_HERO = gql`
     query getTalentCoresFromHero($heroId: ID!) {
         getTalentCoresFromHero(heroId: $heroId) {
-            id: ID!
+            id
             name
             description
             buff_att
