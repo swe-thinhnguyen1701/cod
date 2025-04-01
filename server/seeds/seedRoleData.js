@@ -2,7 +2,7 @@ const { Role } = require("../models");
 const roleData = require("../db/roles");
 
 const seedRoles = async () => {
-    const roleUrlLink = `https:\\d3bhl6gkk81cq1.cloudfront.net/hero-roles/`
+    const roleUrlLink = `https://d3bhl6gkk81cq1.cloudfront.net/hero-roles/`
 
     try {
         const modifyRoleData = roleData.map(role => {

@@ -2,7 +2,7 @@ const { TalentCore } = require("../models");
 const talentCoreData = require("../db/talentCores");
 
 const seedTalentCores = async () => {
-    const talentCoreUrlLink = `https:\\d3bhl6gkk81cq1.cloudfront.net/talent-cores/`
+    const talentCoreUrlLink = `https://d3bhl6gkk81cq1.cloudfront.net/talent-cores/`
     
     try {
         const modifyTalentCoreData = talentCoreData.map(talentCore => {
