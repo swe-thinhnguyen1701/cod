@@ -250,49 +250,45 @@ const isUpdatable = (
   return prerequisite[group][position] < 5;
 };
 
+const initTalentGrid = (): number[][] => {
+  const arr = Array(5)
+    .fill(null)
+    .map(() => Array(8).fill(0));
+
+  // 2: 3: 7 + 4(0)
+  // 2: 7: 7 + 4(1)
+  // 3: 3: 7 + 4(2)
+  // 3: 7: 7 + 4(3)
+  // 4: 3: 7 + 4(4)
+  // 4: 7: 7 + 4(5)
+  let step = 0;
+  for (let i = 2; i < 5; i++) {
+    for (let j = 0; j < 2; j++) {
+      const col = j === 0 ? 3 : 7;
+      arr[i][col] = 7 + 4 * step;
+      step++;
+    }
+  }
+
+  return arr;
+};
+
 const isPositionExisted = (
   group: number,
   position: number,
   talentList: TalentEntity[][],
   talentMap: Map<string, TalentEntity>
 ): boolean => {
-  if (group === 2 && position === 3)
-    return (
-      talentMap.get(talentList[7][0].key)?.current_level === 0 &&
-      talentMap.get(talentList[7][1].key)?.current_level === 0
-    );
+  const arr = initTalentGrid();
 
-  if (group === 2 && position === 7)
-    return (
-      talentMap.get(talentList[11][0].key)?.current_level === 0 &&
-      talentMap.get(talentList[11][1].key)?.current_level === 0
-    );
+  for (let i = 0; i < 2; i++) {
+    const row = arr[group][position];
 
-  if (group === 3 && position === 3)
-    return (
-      talentMap.get(talentList[15][0].key)?.current_level === 0 &&
-      talentMap.get(talentList[15][1].key)?.current_level === 0
-    );
+    if (talentMap.get(talentList[row][i].key)?.current_level !== 0)
+      return false;
+  }
 
-  if (group === 3 && position === 7)
-    return (
-      talentMap.get(talentList[19][0].key)?.current_level === 0 &&
-      talentMap.get(talentList[19][1].key)?.current_level === 0
-    );
-
-  if (group === 4 && position === 3)
-    return (
-      talentMap.get(talentList[23][0].key)?.current_level === 0 &&
-      talentMap.get(talentList[23][1].key)?.current_level === 0
-    );
-
-  if (group === 4 && position === 7)
-    return (
-      talentMap.get(talentList[27][0].key)?.current_level === 0 &&
-      talentMap.get(talentList[27][1].key)?.current_level === 0
-    );
-
-  return false;
+  return true;
 };
 
 const getNeighborTalent = (
@@ -301,34 +297,10 @@ const getNeighborTalent = (
   key: string,
   talentList: TalentEntity[][]
 ): TalentEntity => {
-  if (group === 2 && position === 3)
-    return talentList[7][0].key === key
-      ? { ...talentList[7][1] }
-      : { ...talentList[7][0] };
+  const arr = initTalentGrid();
+  const row = arr[group][position];
 
-  if (group === 2 && position === 7)
-    return talentList[11][0].key === key
-      ? { ...talentList[11][1] }
-      : { ...talentList[11][0] };
-
-  if (group === 3 && position === 3)
-    return talentList[15][0].key === key
-      ? { ...talentList[15][1] }
-      : { ...talentList[15][0] };
-
-  if (group === 3 && position === 7)
-    return talentList[19][0].key === key
-      ? { ...talentList[19][1] }
-      : { ...talentList[19][0] };
-
-  if (group === 4 && position === 3)
-    return talentList[23][0].key === key
-      ? { ...talentList[23][1] }
-      : { ...talentList[23][0] };
-
-  return talentList[27][0].key === key
-    ? { ...talentList[27][1] }
-    : { ...talentList[27][0] };
+  return talentList[row][0].key === key ? {...talentList[row][1]} : {...talentList[row][0]}
 };
 
 const useTalentStore = create<TalentStore>((set) => ({
@@ -344,7 +316,6 @@ const useTalentStore = create<TalentStore>((set) => ({
     const talentList = setTalentList(rawTalentList);
     const talentMap = setTalentMap(talentList);
     const resetPrerequisite = resetPrerequisiteHelper();
-    // console.log(talentMap);
     set({
       remainingPoints: 59,
       prerequisite: resetPrerequisite,
