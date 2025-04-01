@@ -1,20 +1,30 @@
-import { Badge, Box, Text } from "@chakra-ui/react";
+import { Badge, Box, Spinner, Text } from "@chakra-ui/react";
 import useTalentStore from "../state-management/talents/store";
 import TalentGrid from './TalentGrid'
 import HeroSelection from "./HeroSelection";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_HEROES } from "../utils/queries";
 
 const HeroTalents = () => {
-    const { remainingPoints } = useTalentStore();
+    const { loading, error, data } = useQuery(GET_ALL_HEROES);
+    
+    const { remainingPoints, isHeroSelected } = useTalentStore();
+
+    if(loading)
+        return <Spinner />
+
+    // console.log("is hero === -1", selectedHero);
+
     return (
         <>
             <Box position="relative">
                 <Box mb={4}>
-                    <HeroSelection />
+                    <HeroSelection heroes={data.getAllHeroes}/>
                 </Box>
                 <Badge padding={2} position="fixed" right={2} colorScheme={remainingPoints > 10 ? "green" : remainingPoints > 0 ? "yellow" : "red"} zIndex="3">
                     <Text fontWeight="bold" fontSize="20px">{remainingPoints}</Text>
                 </Badge>
-                <TalentGrid />
+                {isHeroSelected && <TalentGrid />}
             </Box>
         </>
     )

@@ -1,20 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Image, HStack, Text, Menu, MenuButton, MenuItem, Button, MenuList } from "@chakra-ui/react";
-import sampleHero from "../assets/Syndrion.png"
+import { useQuery } from "@apollo/client";
+import { GET_TALENT_CORES_FROM_HERO } from "../utils/queries";
+import useTalentStore from "../state-management/talents/store";
+import TalentEntity from "../entities/TalentEntity";
 
-const heroes = Array.from({ length: 50 }, (_, i) => ({
-    name: `Hero ${i + 1}`,
-    image: sampleHero,
-}));
+interface Hero {
+    id: number;
+    name: string;
+    avatar: string;
+}
 
-const HeroSelection = () => {
-    const [selectedName, setSelectedName] = useState("Select Hero");
-    const [selectedImage, setSelectedImage] = useState<any>(null);
+interface Props {
+    heroes: Hero[];
+}
 
-    const handleClick = (name: string, image: any) => {
-        setSelectedName(name);
-        setSelectedImage(image);
-   
+// BUG: farming heroes does not get a right talent cores.
+
+const HeroSelection = ({ heroes }: Props) => {
+    const { initialize, reset } = useTalentStore();
+    const [selectedHero, setSelectedHero] = useState<Hero | null>(null);
+
+    const { data } = useQuery(GET_TALENT_CORES_FROM_HERO, {
+        variables: { heroId: selectedHero?.id },
+        skip: !selectedHero
+    });
+
+    useEffect(() => {
+        if (data?.getTalentCoresFromHero) {
+            // console.log("Initializing talent cores:", data.getTalentCoresFromHero);
+            initialize(data.getTalentCoresFromHero);
+        }
+    }, [data]);
+
+    const handleClick = (hero: Hero | null) => {
+        if (!hero) {
+            // console.log("Resetting talent selection...");
+            setSelectedHero(null);
+            reset();
+            return;
+        }
+        // console.log("Selected hero:", hero);
+        setSelectedHero(hero);
     }
 
     return (
@@ -22,15 +49,23 @@ const HeroSelection = () => {
             <Menu>
                 <MenuButton as={Button} height="35px">
                     <HStack>
-                        {selectedImage && <Image src={selectedImage} alt="hero" width="30px" height="30px" />}
-                        <Text>{selectedName}</Text>
+                        {selectedHero && (
+                            <Image
+                                src={selectedHero.avatar}
+                                alt="hero"
+                                width="30px"
+                                height="30px"
+                            />
+                        )}
+                        <Text>{selectedHero ? selectedHero.name : "Select Hero"}</Text>
                     </HStack>
                 </MenuButton>
                 <MenuList maxH="300px" overflowY="auto">
-                   {heroes.map((hero) => (
-                        <MenuItem key={hero.name} onClick={() => handleClick(hero.name, hero.image)}>
+                    <MenuItem onClick={() => handleClick(null)}>Select Hero</MenuItem>
+                    {heroes.map((hero) => (
+                        <MenuItem key={hero.name} onClick={() => handleClick(hero)}>
                             <HStack>
-                                <Image src={hero.image} alt="hero" width={"30px"} height={"30px"}/>
+                                <Image src={hero.avatar} alt="hero" width={"30px"} height={"30px"} />
                                 <Text>{hero.name}</Text>
                             </HStack>
                         </MenuItem>

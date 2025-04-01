@@ -1,39 +1,51 @@
 import { useState } from "react";
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
-import icon from "../assets/helmet-1.ico";
 import activateTalent from "../services/activateTalent";
 import useTalentStore from "../state-management/talents/store";
-import {Talent} from "../state-management/talents/fetchTalent"
+import TalentEntity from "../entities/TalentEntity";
 
 interface Props {
-    talentId: number
+    talentKey: string
 }
 
-const TalentCore = ({ talentId }: Props) => {
+const TalentCore = ({ talentKey }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
-    const { selectedTalent, prerequisite, talentMap, modifyTalentPoints, modifySpecialTalentPoints } = useTalentStore();
-    const talent = talentMap.get(talentId) as Talent;
-    const currentLevel = talent.currentLevel;
-    
-    const isSelected = selectedTalent?.id === talentId;
+    const { selectedTalent, prerequisite, talentMap, addPoint, reducePoint, addPointToSpecialTalent} = useTalentStore();
+
+    const talent = talentMap?.get(talentKey) as TalentEntity;
+
+    if (!talent) {
+        // console.log("Cannot find talent core id");
+        // console.log("TALENT MAP:", talentMap);
+        return null;
+    }
+
+    // console.log("PREREQUISITE", prerequisite);
+
+    const currentLevel = talent.current_level;
+
+    const isSelected = selectedTalent?.key === talentKey;
     const isActive = activateTalent(talent.group, talent.position, prerequisite);
 
     const handleClick = (event: React.MouseEvent) => {
         setIsScaled(true);
-        setTimeout(() => setIsScaled(false), 230);
+        setTimeout(() => setIsScaled(false), 180);
 
         if (!isActive) return;
 
-        const maxLevel = talent.maxLevel;
+        const maxLevel = talent.max_level;
 
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
-            modifyTalentPoints(-1);
+            // modifyTalentPoints(-1);
+            reducePoint();
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
             if (talent.group > 1 && (talent.position === 3 || talent.position === 7)) {
-                modifySpecialTalentPoints();
+                // modifySpecialTalentPoints();
+                addPointToSpecialTalent();
                 return;
             }
-            modifyTalentPoints(1);
+            // modifyTalentPoints(1);
+            addPoint();
         }
     }
 
@@ -42,8 +54,8 @@ const TalentCore = ({ talentId }: Props) => {
             <Box display="flex" flexDir="column" alignItems="center">
                 <Box
                     className="talent-container"
-                    transform={talent.isPrimaryCore ? "scale(1.5)" : talent.isSecondaryCore ? "scale(1.2)" : "scale(1)"}
-                    margin={talent.isPrimaryCore ? 5 : talent.isSecondaryCore ? 2 : 0}
+                    transform={talent.is_primary_core ? "scale(1.5)" : talent.is_secondary_core ? "scale(1.2)" : "scale(1)"}
+                    margin={talent.is_primary_core ? 5 : talent.is_secondary_core ? 2 : 0}
                     display="flex"
                     flexDir="column"
                     alignItems="center"
@@ -72,14 +84,15 @@ const TalentCore = ({ talentId }: Props) => {
                                     ? "#21445c"
                                     : currentLevel < 1 ? "#645531" : "#877344"
                             }
+                            padding="5px 3px"
                         >
-                            <Image src={icon} opacity={currentLevel < 1 ? "0.25" : "1"} />
+                            <Image height="100%" src={talent.image} opacity={currentLevel < 1 ? "0.25" : "1"} />
                         </VStack>
                     </VStack>
 
                 </Box>
                 <Text fontWeight="bold">
-                    {currentLevel}/{talent.maxLevel}
+                    {currentLevel}/{talent.max_level}
                 </Text>
             </Box>
         </>
