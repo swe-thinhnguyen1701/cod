@@ -1,4 +1,4 @@
-import { Badge, Box, Spinner, Text } from "@chakra-ui/react";
+import { Badge, Box, Heading, Spinner, Text } from "@chakra-ui/react";
 import useTalentStore from "../state-management/talents/store";
 import TalentGrid from './TalentGrid'
 import HeroSelection from "./HeroSelection";
@@ -13,7 +13,8 @@ const HeroTalents = () => {
     if(loading)
         return <Spinner />
 
-    // console.log("is hero === -1", selectedHero);
+    if(error)
+        return <Heading as="h2">Something went wrong!</Heading>
 
     return (
         <>

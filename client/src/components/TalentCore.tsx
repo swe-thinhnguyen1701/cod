@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import activateTalent from "../services/activateTalent";
 import useTalentStore from "../state-management/talents/store";
@@ -8,23 +8,22 @@ interface Props {
     talentKey: string
 }
 
-const TalentCore = ({ talentKey }: Props) => {
+const TalentCore = memo(({ talentKey }: Props) => {
     const [isScaled, setIsScaled] = useState(false);
-    const { selectedTalent, prerequisite, talentMap, addPoint, reducePoint, addPointToSpecialTalent} = useTalentStore();
 
-    const talent = talentMap?.get(talentKey) as TalentEntity;
+    const talent = useTalentStore(state => state.talentMap?.get(talentKey) as TalentEntity);
+    const selectedTalentKey = useTalentStore(state => state.selectedTalent?.key);
+    const prerequisite = useTalentStore(state => state.prerequisite);
+    const addPoint = useTalentStore(state => state.addPoint);
+    const reducePoint = useTalentStore(state => state.reducePoint);
+    const addPointToSpecialTalent = useTalentStore(state => state.addPointToSpecialTalent);
 
     if (!talent) {
-        // console.log("Cannot find talent core id");
-        // console.log("TALENT MAP:", talentMap);
         return null;
     }
 
-    // console.log("PREREQUISITE", prerequisite);
-
     const currentLevel = talent.current_level;
-
-    const isSelected = selectedTalent?.key === talentKey;
+    const isSelected = selectedTalentKey === talentKey;
     const isActive = activateTalent(talent.group, talent.position, prerequisite);
 
     const handleClick = (event: React.MouseEvent) => {
@@ -36,15 +35,12 @@ const TalentCore = ({ talentKey }: Props) => {
         const maxLevel = talent.max_level;
 
         if (event.altKey && isSelected && event.button === 0 && currentLevel > 0) {
-            // modifyTalentPoints(-1);
             reducePoint();
         } else if (!event.altKey && isSelected && event.button === 0 && currentLevel < maxLevel) {
             if (talent.group > 1 && (talent.position === 3 || talent.position === 7)) {
-                // modifySpecialTalentPoints();
                 addPointToSpecialTalent();
                 return;
             }
-            // modifyTalentPoints(1);
             addPoint();
         }
     }
@@ -97,6 +93,6 @@ const TalentCore = ({ talentKey }: Props) => {
             </Box>
         </>
     )
-}
+});
 
 export default TalentCore;

@@ -3,7 +3,6 @@ import { Image, HStack, Text, Menu, MenuButton, MenuItem, Button, MenuList } fro
 import { useQuery } from "@apollo/client";
 import { GET_TALENT_CORES_FROM_HERO } from "../utils/queries";
 import useTalentStore from "../state-management/talents/store";
-import TalentEntity from "../entities/TalentEntity";
 
 interface Hero {
     id: number;
@@ -28,19 +27,16 @@ const HeroSelection = ({ heroes }: Props) => {
 
     useEffect(() => {
         if (data?.getTalentCoresFromHero) {
-            // console.log("Initializing talent cores:", data.getTalentCoresFromHero);
             initialize(data.getTalentCoresFromHero);
         }
     }, [data]);
 
     const handleClick = (hero: Hero | null) => {
         if (!hero) {
-            // console.log("Resetting talent selection...");
             setSelectedHero(null);
             reset();
             return;
         }
-        // console.log("Selected hero:", hero);
         setSelectedHero(hero);
     }
 
