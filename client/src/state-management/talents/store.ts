@@ -1,171 +1,711 @@
 import { create } from "zustand";
-import TALENT_MAP from "./fetchTalent";
-import { Talent } from "./fetchTalent";
+// import TALENT_MAP from "./fetchTalent";
+// import { TalentEntity } from "./fetchTalent";
+import TalentEntity from "../../entities/TalentEntity";
 
+// interface TalentStore {
+//   remainingPoints: number;
+//   prerequisite: number[][];
+//   selectedTalent: TalentEntity | null;
+//   talentMap: Map<number, TalentEntity>;
+//   trackingTalent: Map<number, Set<number>>;
+//   selectedGroup: number;
+//   selectedHero: number;
+//   talentList: TalentEntity[][] | null;
+
+//   modifyTalentPoints: (step: number) => void;
+//   modifySpecialTalentPoints: () => void;
+//   setSelectTalent: (id: number) => void;
+//   setSelectGroup: (group: number) => void;
+//   setSelectHero: (talentList: TalentEntity[][], heroId: number) => void;
+// }
+
+interface ModifyTalentPoint {
+  prerequisite: number[][];
+  talentMap: Map<string, TalentEntity>;
+  selectedTalent: TalentEntity;
+  trackingTalent: Map<number, Set<string>>;
+}
+
+interface AdvanceModifyTalentPoint {
+  prerequisite: number[][];
+  talentMap: Map<string, TalentEntity>;
+  trackingTalent: Map<number, Set<string>>;
+  refundPoints: number
+}
+
+/**
+ * remainingPoints: total points allow user to use.
+ * prerequisite: a list keeps track to determine whether the next Talent Core is activated.
+ * talentList: a list of talent cores being used to display on browser.
+ * talentMap: a map of talent cores being used to keep track updating of a talent core.
+ * trackingTalent: a map keeps tracking when user removes points from a specific talent core.
+ * isHeroSelected: id of the hero being selected.
+ * selectedTalent: the talent core being selected.
+ * 
+ * initialize():
+ * WHEN a method is selected,
+ * THEN it initializes the talent map, the talent list, and hero id.
+ * THEN it resets remainingPoints back to 59, and refresh trackingTalent.
+ */
 interface TalentStore {
   remainingPoints: number;
   prerequisite: number[][];
-  selectedTalent: Talent | null;
-  talentMap: Map<number, Talent>;
-  trackingTalent: Map<number, Set<number>>;
-  selectedGroup: number;
-  modifyTalentPoints: (step: number) => void;
-  modifySpecialTalentPoints: () => void;
-  selectTalent: (id: number) => void;
-  selectGroup: (group: number) => void;
+  talentList: TalentEntity[][] | null;
+  talentMap: Map<string, TalentEntity> | null;
+  trackingTalent: Map<number, Set<string>>;
+  isHeroSelected: boolean,
+  selectedTalent: TalentEntity | null;
+
+  initialize: (rawTalentList: TalentEntity[][]) => void;
+  addPoint: () => void;
+  addPointToSpecialTalent: () => void;
+  reducePoint: () => void;
+  setSelectedTalent: (talentKey: string | null) => void;
+  reset: () => void;
 }
 
-const useTalentStore = create<TalentStore>((set) => ({
-  remainingPoints: 59,
-  prerequisite: Array(5)
-    .fill(null)
-    .map(() => Array(8).fill(0)),
-  selectedTalent: null,
-  talentMap: new Map(TALENT_MAP),
-  trackingTalent: new Map<number, Set<number>>(),
-  selectedGroup: 2,
-  modifyTalentPoints: (step: number) => {
-    set((store) => {
+/**
+ * helper method to generate a talent list which is used for frontend layout
+ * 
+ * @param rawTalentList that fetched from backend
+ * @returns a modified talent list
+ */
+const setTalentList = (rawTalentList: TalentEntity[][]): TalentEntity[][] => {
+  const talentList: TalentEntity[][] = [];
 
-      if (store.remainingPoints === 0 || store.remainingPoints > 59) return store;
+  // console.log(rawTalentList);
 
-      const group = store.selectedTalent ? store.selectedTalent.group : -1;
-      const position = store.selectedTalent ? store.selectedTalent.position : -1;
-      if (group === -1 || position === -1) return store;
+  let arr: TalentEntity[] = [];
+  let idx = 0;
 
-      const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
-      updatePrerequisite[group][position] += step;
-
-      const updateSelectedTalent = store.selectedTalent as Talent;
-      updateSelectedTalent.currentLevel += step;
-
-      const updateTalentMap = new Map(store.talentMap);
-      updateTalentMap.set(updateSelectedTalent.id, updateSelectedTalent);
-
-      const updateTrackingTalent = store.trackingTalent;
-
-      let refundPoints = 0;
-
-      if (step > 0) {
-        if (updateTrackingTalent.has(group))
-          updateTrackingTalent.get(group)?.add(updateSelectedTalent.id);
-        else
-          updateTrackingTalent.set(group, new Set([updateSelectedTalent.id]));
-      } else {
-        if (isUpdate(group, position, updatePrerequisite)) {
-          for (let i = group + 1; i < 19; i++) {
-            if (updateTrackingTalent.has(i)) {
-              updateTrackingTalent.get(i)?.forEach((id) => {
-                const updateTalent = updateTalentMap.get(id) as Talent;
-                refundPoints += updateTalent.currentLevel;
-                updatePrerequisite[updateTalent.group][updateTalent.position] -=
-                  updateTalent.currentLevel;
-                updateTalent.currentLevel = 0;
-                updateTalentMap.set(id, updateTalent);
-              });
-              updateTrackingTalent.delete(i);
-            }
-          }
-          const removeList: number[] = [];
-          updateTrackingTalent.get(group)?.forEach((id) => {
-            const updateTalent = updateTalentMap.get(id) as Talent;
-            if (updateTalent.position > position) {
-              refundPoints += updateTalent.currentLevel;
-              updatePrerequisite[updateTalent.group][updateTalent.position] -=
-                updateTalent.currentLevel;
-              updateTalent.currentLevel = 0;
-              updateTalentMap.set(id, updateTalent);
-              removeList.push(id);
-            }
-          });
-
-          removeList.forEach((id) => {
-            updateTrackingTalent.get(0)?.delete(id);
-          });
-        }
+  for (let i = 0; i < 3; i++) {
+    for (let position = 0; position < i + 1; position++) {
+      const talent = {
+        ...rawTalentList[0][idx],
+        max_level: 3,
+        current_level: 0,
+        group: 0,
+        position: i,
+        key: keyGenerator()
       }
+      idx++;
+      arr.push(talent);
+    }
 
-      return {
-        prerequisite: updatePrerequisite,
-        remainingPoints: store.remainingPoints - step + refundPoints,
-        selectedTalent: updateSelectedTalent,
-        talentMap: updateTalentMap,
-        trackingTalent: updateTrackingTalent,
-      };
-    });
-  },
-  modifySpecialTalentPoints: () => {
-    set((store) => {
-      if (store.remainingPoints === 0) return store;
-
-      const group = store.selectedTalent?.group;
-      const position = store.selectedTalent?.position;
-
-      if (!group || !position)
-        return store;
-
-      const updateSelectedTalent = store.selectedTalent as Talent;
-      updateSelectedTalent.currentLevel = 1;
-
-      const updateTalentMap = new Map(store.talentMap);
-      let neiborTalent: Talent;
-      if (
-        updateTalentMap.has(updateSelectedTalent.id - 1) &&
-        updateTalentMap.get(updateSelectedTalent.id - 1)?.position === position
-      ) {
-        neiborTalent = updateTalentMap.get(
-          updateSelectedTalent.id - 1
-        ) as Talent;
-      } else {
-        neiborTalent = updateTalentMap.get(
-          updateSelectedTalent.id + 1
-        ) as Talent;
-      }
-      neiborTalent.currentLevel = 0;
-      updateTalentMap.set(neiborTalent.id, neiborTalent);
-      updateTalentMap.set(updateSelectedTalent.id, updateSelectedTalent);
-
-      const updateTrackingTalent = store.trackingTalent;
-      updateTrackingTalent.get(group)?.add(updateSelectedTalent.id);
-      updateTrackingTalent.get(group)?.delete(neiborTalent.id);
-
-      const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
-      const updateRemainingPoints = updatePrerequisite[group][position] === 1 ? store.remainingPoints : store.remainingPoints - 1;
-      updatePrerequisite[group][position] = 1;
-
-      return {
-        remainingPoints: updateRemainingPoints,
-        prerequisite: updatePrerequisite,
-        selectedTalent: updateSelectedTalent,
-        talentMap: updateTalentMap,
-        trackingTalent: updateTrackingTalent,
-      };
-    });
-  },
-  selectTalent: (id: number) => {
-    set((store) => ({
-      ...store,
-      selectedTalent: store.talentMap.get(id) as Talent,
-    }));
-  },
-  selectGroup: (group: number) => {
-    set((store) => ({
-      ...store,
-      selectedGroup: group,
-    }));
+    talentList.push(arr);
+    arr = [];
   }
-}));
 
-const isUpdate = (
-  group: number,
-  position: number,
-  newPrerequisite: number[][]
-): boolean => {
+  arr.push({
+    ...rawTalentList[1][0],
+    current_level: 0,
+    group: 1,
+    position: 0,
+    key: keyGenerator()
+  });
+  talentList.push(arr);
+  arr = [];
+
+  for (let group = 2; group < 5; group++) {
+    idx = 0;
+    for (let position = 0; position < 8; position++) {
+      const length = idx === 0 ? 1 : idx === 7 || idx === 18 ? 2 : 3;
+      for (let j = 0; j < length; j++) {
+        const talent = {
+          ...rawTalentList[group][idx],
+          current_level: 0,
+          group: group,
+          position: position,
+          key: keyGenerator()
+        }
+
+        idx++;
+        arr.push(talent);
+      }
+
+      talentList.push(arr);
+      arr = [];
+    }
+  }
+
+  return talentList;
+}
+
+const setTalentMap = (modifiedTalentList: TalentEntity[][]): Map<string, TalentEntity> => {
+  const talentMap = new Map<string, TalentEntity>();
+
+  for (let i = 0; i < modifiedTalentList.length; i++) {
+    for (let j = 0; j < modifiedTalentList[i].length; j++) {
+      talentMap.set(modifiedTalentList[i][j].key, modifiedTalentList[i][j]);
+    }
+  }
+
+  return talentMap;
+}
+
+const resetPrerequisiteHelper = (): number[][] => {
+  const arr = Array(5).fill(null).map(() => Array(8).fill(0));
+
+  return arr;
+}
+
+const modifyTalentPointHelper = (point: number, data: ModifyTalentPoint): ModifyTalentPoint => {
+  const { selectedTalent, talentMap, prerequisite, trackingTalent } = data;
+
+  const updatedPrerequisite = prerequisite.map((row, rowIdx) =>
+    rowIdx === selectedTalent.group
+      ? row.map((val, colIdx) => (colIdx === selectedTalent.position ? val + point : val))
+      : row
+  );
+
+  const updatedSelectedTalent = {
+    ...selectedTalent,
+    current_level: selectedTalent.current_level + point
+  };
+
+  const updatedTalentMap = new Map(talentMap);
+  updatedTalentMap.set(updatedSelectedTalent.key, updatedSelectedTalent);
+
+  const updateTrackingTalent = new Map(trackingTalent);
+  if (updateTrackingTalent.has(selectedTalent.group))
+    updateTrackingTalent.get(selectedTalent.group)?.add(selectedTalent.key);
+  else
+    updateTrackingTalent.set(selectedTalent.group, new Set([selectedTalent.key]));
+
+  return {
+    prerequisite: updatedPrerequisite,
+    talentMap: updatedTalentMap,
+    selectedTalent: updatedSelectedTalent,
+    trackingTalent: updateTrackingTalent
+  }
+}
+
+const advanceModifyTalentPointHelper = (group: number, position: number, data: ModifyTalentPoint): AdvanceModifyTalentPoint => {
+  const updateTrackingTalent = new Map(data.trackingTalent);
+  const updatePrerequisite = JSON.parse(JSON.stringify(data.prerequisite));
+  const updateTalentMap = new Map(data.talentMap);
+
+  let refundPoints = 0;
+  if (isUpdatable(group, position, updatePrerequisite)) {
+    for (let i = group + 1; i < 5; i++) {
+      if (updateTrackingTalent.has(i)) {
+        updateTrackingTalent.get(i)?.forEach(key => {
+          const talent = updateTalentMap.get(key) as TalentEntity;
+
+          refundPoints += talent.current_level;
+          updatePrerequisite[talent.group][talent.position] -= talent.current_level;
+          talent.current_level = 0;
+
+          updateTalentMap.set(key, talent);
+        });
+
+        updateTrackingTalent.delete(i);
+      }
+    }
+  }
+
+  const removeList: string[] = [];
+  updateTrackingTalent.get(group)?.forEach(key => {
+    const talent = updateTalentMap.get(key) as TalentEntity;
+    if (talent.position > position) {
+      refundPoints += talent.current_level;
+      updatePrerequisite[talent.group][talent.position] -= talent.current_level;
+      talent.current_level = 0;
+      updateTalentMap.set(key, talent);
+      removeList.push(key);
+    }
+  });
+
+  removeList.forEach(key => updateTrackingTalent.get(group)?.delete(key));
+
+  return {
+    prerequisite: updatePrerequisite,
+    trackingTalent: updateTrackingTalent,
+    talentMap: updateTalentMap,
+    refundPoints: refundPoints
+  }
+}
+
+const keyGenerator = (): string => {
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let key = "";
+
+  for (let i = 0; i < 6; i++) {
+    key += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  return key;
+}
+
+const isUpdatable = (group: number, position: number, newPrerequisite: number[][]): boolean => {
   if (group === 0)
     return position === 0 ? true : newPrerequisite[group][position] < 3;
   if (group === 1) return true;
   if (position === 3) return true;
   return newPrerequisite[group][position] < 5;
 };
+
+const isPositionExisted = (group: number, position: number, talentList: TalentEntity[][], talentMap: Map<string, TalentEntity>): boolean => {
+  if (group === 2 && position === 3)
+    return talentMap.get(talentList[7][0].key)?.current_level === 0 && talentMap.get(talentList[7][1].key)?.current_level === 0;
+
+  if (group === 2 && position === 7)
+    return talentMap.get(talentList[11][0].key)?.current_level === 0 && talentMap.get(talentList[11][1].key)?.current_level === 0;
+
+  if (group === 3 && position === 3)
+    return talentMap.get(talentList[15][0].key)?.current_level === 0 && talentMap.get(talentList[15][1].key)?.current_level === 0;
+
+  if (group === 3 && position === 7)
+    return talentMap.get(talentList[19][0].key)?.current_level === 0 && talentMap.get(talentList[19][1].key)?.current_level === 0;
+
+  if (group === 4 && position === 3)
+    return talentMap.get(talentList[23][0].key)?.current_level === 0 && talentMap.get(talentList[23][1].key)?.current_level === 0;
+
+  if (group === 4 && position === 7)
+    talentMap.get(talentList[27][0].key)?.current_level === 0 && talentMap.get(talentList[27][1].key)?.current_level === 0;
+
+  return false;
+}
+
+const getNeighborTalent = (group: number, position: number, key: string, talentList: TalentEntity[][]): TalentEntity => {
+  if (group === 2 && position === 3)
+    return talentList[7][0].key === key ? { ...talentList[7][1] } : { ...talentList[7][0] };
+
+  if (group === 2 && position === 7)
+    return talentList[11][0].key === key ? { ...talentList[11][1] } : { ...talentList[11][0] };
+
+  if (group === 3 && position === 3)
+    return talentList[15][0].key === key ? { ...talentList[15][1] } : { ...talentList[15][0] };
+
+  if (group === 3 && position === 7)
+    return talentList[19][0].key === key ? { ...talentList[19][1] } : { ...talentList[19][0] };
+
+  if (group === 4 && position === 3)
+    return talentList[23][0].key === key ? { ...talentList[23][1] } : { ...talentList[23][0] };
+
+  return talentList[27][0].key === key ? { ...talentList[27][1] } : { ...talentList[27][0] };
+}
+
+const useTalentStore = create<TalentStore>((set) => ({
+  remainingPoints: 59,
+  prerequisite: resetPrerequisiteHelper(),
+  talentList: null,
+  talentMap: null,
+  trackingTalent: new Map(),
+  isHeroSelected: false,
+  selectedTalent: null,
+
+  initialize: (rawTalentList: TalentEntity[][]) => {
+    const talentList = setTalentList(rawTalentList);
+    const talentMap = setTalentMap(talentList);
+    const resetPrerequisite = resetPrerequisiteHelper();
+    // console.log(talentMap);
+    set({
+      remainingPoints: 59,
+      prerequisite: resetPrerequisite,
+      talentList,
+      talentMap,
+      trackingTalent: new Map(),
+      isHeroSelected: true,
+      selectedTalent: null,
+    });
+  },
+  addPoint: () => {
+    set((store) => {
+      if (store.remainingPoints < 1 || !store.selectedTalent || !store.talentMap)
+        return store;
+
+      const data: ModifyTalentPoint = {
+        prerequisite: store.prerequisite,
+        talentMap: store.talentMap,
+        selectedTalent: store.selectedTalent,
+        trackingTalent: store.trackingTalent
+      }
+
+      const updateData = modifyTalentPointHelper(1, data);
+
+      return {
+        ...store,
+        remainingPoints: store.remainingPoints - 1,
+        prerequisite: updateData.prerequisite,
+        talentMap: updateData.talentMap,
+        trackingTalent: updateData.trackingTalent,
+        selectedTalent: updateData.selectedTalent
+      }
+    })
+  },
+  reducePoint: () => {
+    set((store) => {
+      if (!store.talentMap || !store.selectedTalent || store.selectedTalent.current_level === 0 || store.remainingPoints > 59)
+        return store;
+
+      const data: ModifyTalentPoint = {
+        prerequisite: store.prerequisite,
+        talentMap: store.talentMap,
+        selectedTalent: store.selectedTalent,
+        trackingTalent: store.trackingTalent
+      }
+
+      const updateData = modifyTalentPointHelper(-1, data);
+      const group = updateData.selectedTalent.group;
+      const position = updateData.selectedTalent.position;
+      const advanceUpdateData = advanceModifyTalentPointHelper(group, position, updateData);
+
+      // const modifyTrackingTalent = updateData.trackingTalent;
+      // const modifyPrerequisite = updateData.prerequisite;
+      // const modifyTalentMap = updateData.talentMap;
+
+      // let refundPoints = 0;
+      // if (isUpdatable(group, position, updateData.prerequisite)) {
+      //   for (let i = group + 1; i < 4; i++) {
+      //     if (modifyTrackingTalent.has(i)) {
+      //       modifyTrackingTalent.get(i)?.forEach(key => {
+      //         const talent = modifyTalentMap.get(key) as TalentEntity;
+
+      //         refundPoints += talent.current_level;
+      //         modifyPrerequisite[talent.group][talent.position] -= talent.current_level;
+      //         talent.current_level = 0;
+
+      //         modifyTalentMap.set(key, talent);
+      //       });
+
+      //       modifyTrackingTalent.delete(i);
+      //     }
+      //   }
+      // }
+
+      // const removeList: string[] = [];
+      // modifyTrackingTalent.get(group)?.forEach(key => {
+      //   const talent = modifyTalentMap.get(key) as TalentEntity;
+      //   if (talent.position > position) {
+      //     refundPoints += talent.current_level;
+      //     modifyPrerequisite[talent.group][talent.position] -= talent.current_level;
+      //     talent.current_level = 0;
+      //     modifyTalentMap.set(key, talent);
+      //     removeList.push(key);
+      //   }
+      // });
+
+      // removeList.forEach(key => modifyTrackingTalent.get(group)?.delete(key));
+
+      return {
+        ...store,
+        remainingPoints: store.remainingPoints + 1 + advanceUpdateData.refundPoints,
+        prerequisite: advanceUpdateData.prerequisite,
+        talentMap: advanceUpdateData.talentMap,
+        trackingTalent: advanceUpdateData.trackingTalent,
+        selectedTalent: updateData.selectedTalent
+      }
+    })
+  },
+  addPointToSpecialTalent: () => {
+    set((store) => {
+      if (store.remainingPoints === 0 || !store.selectedTalent || !store.talentList || !store.talentMap)
+        return store;
+
+      const group = store.selectedTalent.group;
+      const position = store.selectedTalent.position;
+      if (isPositionExisted(group, position, store.talentList, store.talentMap)) {
+        const data: ModifyTalentPoint = {
+          prerequisite: store.prerequisite,
+          talentMap: store.talentMap,
+          trackingTalent: store.trackingTalent,
+          selectedTalent: store.selectedTalent
+        }
+
+        const updateData = modifyTalentPointHelper(1, data);
+
+        return {
+          ...store,
+          remainingPoints: store.remainingPoints - 1,
+          prerequisite: updateData.prerequisite,
+          talentMap: updateData.talentMap,
+          trackingTalent: updateData.trackingTalent,
+          selectedTalent: updateData.selectedTalent
+        }
+      }
+
+      // STEP 1: selectedTalen.current_level = 1;
+      const updateSelectedTalent = store.selectedTalent;
+      updateSelectedTalent.current_level = 1;
+
+      // STEP 2: update in the talentMap
+      const updateTalentMap = new Map(store.talentMap);
+      updateTalentMap.set(updateSelectedTalent.key, updateSelectedTalent);
+
+      // STEP 3: add selectedTalent into the tracking talent
+      const updateTrackingTalent = new Map(store.trackingTalent);
+      updateTrackingTalent.get(updateSelectedTalent.group)?.add(updateSelectedTalent.key);
+
+      // STEP 4: find neighbor talent
+      const neiborTalent = getNeighborTalent(group, position, store.selectedTalent.key, store.talentList);
+
+      // STEP 5: reset its current_level = 0
+      neiborTalent.current_level = 0;
+
+      // STEP 6: update in the talentMap
+      updateTalentMap.set(neiborTalent.key, neiborTalent);
+
+      // STEP 7: remove neighbor talent from tracking talent.
+      updateTrackingTalent.get(group)?.delete(neiborTalent.key);
+
+      return {
+        ...store,
+        talentMap: updateTalentMap,
+        trackingTalent: updateTrackingTalent,
+        selectedTalent: updateSelectedTalent
+      }
+    })
+  },
+  setSelectedTalent: (talentKey) => {
+    set((store) => {
+      if (!talentKey)
+        return {
+          ...store,
+          selectedTalent: null
+        }
+
+      return {
+        ...store,
+        selectedTalent: store.talentMap?.get(talentKey)
+      }
+    })
+  },
+  reset: () => {
+    set({
+      remainingPoints: 59,
+      prerequisite: resetPrerequisiteHelper(),
+      talentList: null,
+      talentMap: null,
+      trackingTalent: new Map(),
+      isHeroSelected: false,
+      selectedTalent: null,
+    })
+  }
+}));
+
+
+
+// const useTalentStore = create<TalentStore>((set) => ({
+//   remainingPoints: 59,
+//   prerequisite: Array(5)
+//     .fill(null)
+//     .map(() => Array(8).fill(0)),
+//   selectedTalent: null,
+//   talentMap: new Map<number, TalentEntity>(),
+//   trackingTalent: new Map<number, Set<number>>(),
+//   selectedGroup: 2,
+//   selectedHero: -1,
+//   talentList: null,
+//   modifyTalentPoints: (step: number) => {
+//     set((store) => {
+
+//       if (store.remainingPoints === 0 || store.remainingPoints > 59) return store;
+
+//       const group = store.selectedTalent ? store.selectedTalent.group : -1;
+//       const position = store.selectedTalent ? store.selectedTalent.position : -1;
+//       if (group === -1 || position === -1) return store;
+
+//       const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
+//       updatePrerequisite[group][position] += step;
+
+//       const updateSelectedTalent = store.selectedTalent as TalentEntity;
+//       updateSelectedTalent.current_level += step;
+
+//       const updateTalentMap = new Map(store.talentMap);
+//       updateTalentMap.set(parseInt(updateSelectedTalent.id), updateSelectedTalent);
+
+//       const updateTrackingTalent = store.trackingTalent;
+
+//       let refundPoints = 0;
+
+//       if (step > 0) {
+//         if (updateTrackingTalent.has(group))
+//           updateTrackingTalent.get(group)?.add(parseInt(updateSelectedTalent.id));
+//         else
+//           updateTrackingTalent.set(group, new Set([parseInt(updateSelectedTalent.id)]));
+//       } else {
+//         if (isUpdate(group, position, updatePrerequisite)) {
+//           for (let i = group + 1; i < 19; i++) {
+//             if (updateTrackingTalent.has(i)) {
+//               updateTrackingTalent.get(i)?.forEach((id) => {
+//                 const updateTalent = updateTalentMap.get(id) as TalentEntity;
+//                 refundPoints += updateTalent.current_level;
+//                 updatePrerequisite[updateTalent.group][updateTalent.position] -=
+//                   updateTalent.current_level;
+//                 updateTalent.current_level = 0;
+//                 updateTalentMap.set(id, updateTalent);
+//               });
+//               updateTrackingTalent.delete(i);
+//             }
+//           }
+//           const removeList: number[] = [];
+//           updateTrackingTalent.get(group)?.forEach((id) => {
+//             const updateTalent = updateTalentMap.get(id) as TalentEntity;
+//             if (updateTalent.position > position) {
+//               refundPoints += updateTalent.current_level;
+//               updatePrerequisite[updateTalent.group][updateTalent.position] -=
+//                 updateTalent.current_level;
+//               updateTalent.current_level = 0;
+//               updateTalentMap.set(id, updateTalent);
+//               removeList.push(id);
+//             }
+//           });
+
+//           removeList.forEach((id) => {
+//             updateTrackingTalent.get(0)?.delete(id);
+//           });
+//         }
+//       }
+
+//       return {
+//         prerequisite: updatePrerequisite,
+//         remainingPoints: store.remainingPoints - step + refundPoints,
+//         selectedTalent: updateSelectedTalent,
+//         talentMap: updateTalentMap,
+//         trackingTalent: updateTrackingTalent,
+//       };
+//     });
+//   },
+//   modifySpecialTalentPoints: () => {
+//     set((store) => {
+//       if (store.remainingPoints === 0) return store;
+
+//       const group = store.selectedTalent?.group;
+//       const position = store.selectedTalent?.position;
+
+//       if (!group || !position)
+//         return store;
+
+//       const updateSelectedTalent = store.selectedTalent as TalentEntity;
+//       updateSelectedTalent.current_level = 1;
+
+//       const updateTalentMap = new Map(store.talentMap);
+//       let neiborTalent: TalentEntity;
+//       if (
+//         updateTalentMap.has(parseInt(updateSelectedTalent.id) - 1) &&
+//         updateTalentMap.get(parseInt(updateSelectedTalent.id) - 1)?.position === position
+//       ) {
+//         neiborTalent = updateTalentMap.get(
+//           parseInt(updateSelectedTalent.id) - 1
+//         ) as TalentEntity;
+//       } else {
+//         neiborTalent = updateTalentMap.get(
+//           parseInt(updateSelectedTalent.id) + 1
+//         ) as TalentEntity;
+//       }
+//       neiborTalent.current_level = 0;
+//       updateTalentMap.set(parseInt(neiborTalent.id), neiborTalent);
+//       updateTalentMap.set(parseInt(updateSelectedTalent.id), updateSelectedTalent);
+
+//       const updateTrackingTalent = store.trackingTalent;
+//       updateTrackingTalent.get(group)?.add(parseInt(updateSelectedTalent.id));
+//       updateTrackingTalent.get(group)?.delete(parseInt(neiborTalent.id));
+
+//       const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
+//       const updateRemainingPoints = updatePrerequisite[group][position] === 1 ? store.remainingPoints : store.remainingPoints - 1;
+//       updatePrerequisite[group][position] = 1;
+
+//       return {
+//         remainingPoints: updateRemainingPoints,
+//         prerequisite: updatePrerequisite,
+//         selectedTalent: updateSelectedTalent,
+//         talentMap: updateTalentMap,
+//         trackingTalent: updateTrackingTalent,
+//       };
+//     });
+//   },
+//   setSelectTalent: (id: number) => {
+//     set((store) => ({
+//       ...store,
+//       selectedTalent: store.talentMap.get(id) as TalentEntity,
+//     }));
+//   },
+//   setSelectGroup: (group: number) => {
+//     set((store) => ({
+//       ...store,
+//       selectedGroup: group,
+//     }));
+//   },
+//   setSelectHero: (talentList: TalentEntity[][], heroId: number) => {
+//     set((store) => {
+//       let modifyTalentMap = store.talentMap;
+//       modifyTalentMap = setTalentMapHelper(talentList);
+
+//       return {
+//         ...store,
+//         selectedHero: heroId,
+//         talentMap: modifyTalentMap,
+//         talentList: talentList,
+//         trackingTalent: new Map<number, Set<number>>(),
+//       }
+//     });
+//   },
+// }));
+
+// const isUpdate = (
+//   group: number,
+//   position: number,
+//   newPrerequisite: number[][]
+// ): boolean => {
+//   if (group === 0)
+//     return position === 0 ? true : newPrerequisite[group][position] < 3;
+//   if (group === 1) return true;
+//   if (position === 3) return true;
+//   return newPrerequisite[group][position] < 5;
+// };
+
+// const setTalentMapHelper = (talentCoreList: TalentEntity[][]): Map<number, TalentEntity> => {
+//   const map = new Map<number, TalentEntity>();
+
+//   let group = 0, idx = 0;
+//   for (let i = 0; i < 3; i++) {
+//     for (let j = 0; j < i + 1; j++) {
+//       const talentCore = {
+//         ...talentCoreList[group][idx],
+//         current_level: 0,
+//         group: group,
+//         position: i
+//       }
+
+//       map.set(parseInt(talentCore.id), talentCore);
+//       idx++;
+//     }
+//   }
+
+//   group = 2;
+//   while (group < 5) {
+//     idx = 0;
+//     for (let position = 0; position < 8; position++) {
+//       const length = idx === 0 ? 1 : idx == 7 || idx == 18 ? 2 : 3;
+//       for (let j = 0; j < length; j++) {
+//         const talentCore = {
+//           ...talentCoreList[group][idx],
+//           current_level: 0,
+//           group: group,
+//           position: position
+//         }
+
+//         map.set(parseInt(talentCore.id), talentCore)
+//         idx++;
+//       }
+//     }
+
+//     group++;
+//   }
+
+//   const talentCore = {
+//     ...talentCoreList[1][0],
+//     current_level: 0,
+//     group: 1,
+//     position: 0
+//   }
+//   map.set(parseInt(talentCore.id), talentCore);
+
+//   // console.log("TYPE OF: ", typeof talentCore.id);
+
+//   return map;
+// }
 
 export default useTalentStore;
