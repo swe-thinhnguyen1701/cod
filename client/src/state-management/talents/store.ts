@@ -23,11 +23,6 @@ interface AdvanceModifyTalentPoint {
  * trackingTalent: a map keeps tracking when user removes points from a specific talent core.
  * isHeroSelected: id of the hero being selected.
  * selectedTalent: the talent core being selected.
- *
- * initialize():
- * WHEN a method is selected,
- * THEN it initializes the talent map, the talent list, and hero id.
- * THEN it resets remainingPoints back to 59, and refresh trackingTalent.
  */
 interface TalentStore {
   remainingPoints: number;
@@ -43,14 +38,22 @@ interface TalentStore {
   addPointToSpecialTalent: () => void;
   reducePoint: () => void;
   setSelectedTalent: (talentKey: string | null) => void;
+  isQualified: (talentKey: string) => boolean;
+  isRollback: (talentKey: string) => boolean;
+  setRollbackTalentCore: (talentKey: string) => void;
   reset: () => void;
 }
 
+let rollbackMap = new Map<string, TalentEntity>();
+
 /**
- * helper method to generate a talent list which is used for frontend layout
+ * Generates a structured talent list used for frontend layout and identifying neighboring special talent cores.
  *
- * @param rawTalentList that fetched from backend
- * @returns a modified talent list
+ * This method processes raw talent data fetched from the backend, assigns properties such as max level, current
+ * level, group, position, and a unique key, then organizes them into a structured list.
+ *
+ * @param rawTalentList - A 2D array of TalentEntity objects fetched from the backend.
+ * @returns A modified 2D array of TalentEntity objects structured for frontend use.
  */
 const setTalentList = (rawTalentList: TalentEntity[][]): TalentEntity[][] => {
   const talentList: TalentEntity[][] = [];
@@ -93,12 +96,14 @@ const setTalentList = (rawTalentList: TalentEntity[][]): TalentEntity[][] => {
     for (let position = 0; position < 8; position++) {
       const length = idx === 0 ? 1 : idx === 7 || idx === 18 ? 2 : 3;
       for (let j = 0; j < length; j++) {
+        // const flag = rawTalentList[group][idx].extra_prerequisite;
         const talent = {
           ...rawTalentList[group][idx],
           current_level: 0,
           group: group,
           position: position,
           key: keyGenerator(),
+          prerequisite_talent_key: null,
         };
 
         idx++;
@@ -113,6 +118,17 @@ const setTalentList = (rawTalentList: TalentEntity[][]): TalentEntity[][] => {
   return talentList;
 };
 
+/**
+ * Generates a talent map from the given talent list to facilitate updating talent cores  when adding or removing
+ * points, ensuring consistent data on the frontend.
+ *
+ * This method creates a map where each key corresponds to the unique key of a talent core,  and the value is
+ * the corresponding TalentEntity object.
+ *
+ * @param modifiedTalentList - A 2D array of TalentEntity objects representing the modified talent list.
+ * @returns A Map where the key is the unique identifier of a talent core (talent key), and the value is the
+ *          corresponding TalentEntity object.
+ */
 const setTalentMap = (
   modifiedTalentList: TalentEntity[][]
 ): Map<string, TalentEntity> => {
@@ -120,6 +136,12 @@ const setTalentMap = (
 
   for (let i = 0; i < modifiedTalentList.length; i++) {
     for (let j = 0; j < modifiedTalentList[i].length; j++) {
+      if (modifiedTalentList[i][j].extra_prerequisite) {
+        modifiedTalentList[i][j] = {
+          ...modifiedTalentList[i][j],
+          prerequisite_talent_key: modifiedTalentList[i - 1][j].key,
+        };
+      }
       talentMap.set(modifiedTalentList[i][j].key, modifiedTalentList[i][j]);
     }
   }
@@ -179,53 +201,74 @@ const advanceModifyTalentPointHelper = (
   position: number,
   data: ModifyTalentPoint
 ): AdvanceModifyTalentPoint => {
-  const updateTrackingTalent = new Map(data.trackingTalent);
-  const updatePrerequisite = JSON.parse(JSON.stringify(data.prerequisite));
-  const updateTalentMap = new Map(data.talentMap);
+  const trackingTalent = data.trackingTalent; //new Map();
+  const prerequisite = data.prerequisite; //JSON.parse(JSON.stringify());
+  const talentMap = data.talentMap; //new Map();
+
+  if (
+    !isUpdatable(group, position, prerequisite) &&
+    prerequisite[group][position] > 4
+  ) {
+    return {
+      prerequisite: prerequisite,
+      trackingTalent: trackingTalent,
+      talentMap: talentMap,
+      refundPoints: 0,
+    };
+  }
 
   let refundPoints = 0;
-  if (isUpdatable(group, position, updatePrerequisite)) {
+  if (isUpdatable(group, position, prerequisite)) {
     for (let i = group + 1; i < 5; i++) {
-      if (updateTrackingTalent.has(i)) {
-        updateTrackingTalent.get(i)?.forEach((key) => {
-          const talent = updateTalentMap.get(key) as TalentEntity;
+      if (trackingTalent.has(i)) {
+        trackingTalent.get(i)?.forEach((key) => {
+          const talent = talentMap.get(key) as TalentEntity;
 
           refundPoints += talent.current_level;
-          updatePrerequisite[talent.group][talent.position] -=
-            talent.current_level;
+          prerequisite[talent.group][talent.position] -= talent.current_level;
           talent.current_level = 0;
 
-          updateTalentMap.set(key, talent);
+          talentMap.set(key, talent);
         });
 
-        updateTrackingTalent.delete(i);
+        trackingTalent.delete(i);
       }
     }
 
-    const removeList: string[] = [];
-    updateTrackingTalent.get(group)?.forEach((key) => {
-      const talent = updateTalentMap.get(key) as TalentEntity;
-      if (talent.position > position) {
-        refundPoints += talent.current_level;
-        updatePrerequisite[talent.group][talent.position] -=
-          talent.current_level;
-        talent.current_level = 0;
-        updateTalentMap.set(key, talent);
-        removeList.push(key);
-      }
-    });
-
-    removeList.forEach((key) => updateTrackingTalent.get(group)?.delete(key));
+    rollbackMap = new Map<string, TalentEntity>();
   }
 
+  const removeList: string[] = [];
+  trackingTalent.get(group)?.forEach((key) => {
+    const talent = talentMap.get(key) as TalentEntity;
+    if (talent.position > position) {
+      refundPoints += talent.current_level;
+      prerequisite[talent.group][talent.position] -= talent.current_level;
+      talent.current_level = 0;
+      talentMap.set(key, talent);
+      removeList.push(key);
+    }
+  });
+
+  removeList.forEach((key) => trackingTalent.get(group)?.delete(key));
+
   return {
-    prerequisite: updatePrerequisite,
-    trackingTalent: updateTrackingTalent,
-    talentMap: updateTalentMap,
+    prerequisite: prerequisite,
+    trackingTalent: trackingTalent,
+    talentMap: talentMap,
     refundPoints: refundPoints,
   };
 };
 
+/**
+ * Generates a unique 6-character key consisting of lowercase letters [a-z], uppercase letters [A-Z], and
+ * digits [0-9].
+ *
+ * This method creates a random string that can be used as a unique key, typically for identifying a talent
+ * core in the system.
+ *
+ * @returns A 6-character string composed of randomly selected characters from [a-z], [A-Z], and [0-9].
+ */
 const keyGenerator = (): string => {
   const chars =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -245,9 +288,10 @@ const isUpdatable = (
 ): boolean => {
   if (group === 0)
     return position === 0 ? true : prerequisite[group][position] < 3;
-  if (group === 1) return true;
-  if (position === 3) return true;
-  return prerequisite[group][position] < 5;
+  return group === 1;
+  // if (group === 1) return true;
+  // if (position === 3) return true;
+  // return prerequisite[group][position] < 5;
 };
 
 const initTalentGrid = (): number[][] => {
@@ -291,6 +335,17 @@ const isPositionExisted = (
   return true;
 };
 
+/**
+ * Finds a neighbor talent core in the same group
+ *
+ * This method finds a neighbor talent core with given group and position. Since there is only talent cores
+ *
+ * @param group
+ * @param position
+ * @param key
+ * @param talentList
+ * @returns
+ */
 const getNeighborTalent = (
   group: number,
   position: number,
@@ -300,10 +355,62 @@ const getNeighborTalent = (
   const arr = initTalentGrid();
   const row = arr[group][position];
 
-  return talentList[row][0].key === key ? {...talentList[row][1]} : {...talentList[row][0]}
+  return talentList[row][0].key === key
+    ? { ...talentList[row][1] }
+    : { ...talentList[row][0] };
 };
 
-const useTalentStore = create<TalentStore>((set) => ({
+const rollback = (talent: TalentEntity, data: AdvanceModifyTalentPoint): AdvanceModifyTalentPoint => {
+  let refundPoints = talent.current_level;
+  const updateTalent = {
+    ...talent,
+    current_level: 0,
+  };
+
+  const group = talent.group;
+  const position = talent.position;
+
+  const updatePrerequisite = JSON.parse(JSON.stringify(data.prerequisite));
+  updatePrerequisite[group][position] -= refundPoints;
+
+  const updateTalentMap = new Map(data.talentMap);
+  updateTalentMap.set(talent.key, updateTalent);
+
+  const updateTrackingTalent = new Map(data.trackingTalent);
+  updateTrackingTalent.get(group)?.delete(talent.key);
+
+  if(updatePrerequisite[group][position] > 4) {
+    return {
+      prerequisite: updatePrerequisite,
+      trackingTalent: updateTrackingTalent,
+      talentMap: updateTalentMap,
+      refundPoints: data.refundPoints +  refundPoints,
+    }
+  }
+
+  const removeList: string[] = [];
+  updateTrackingTalent.get(group)?.forEach((key) => {
+    const talent = updateTalentMap.get(key) as TalentEntity;
+    if (talent.position > position) {
+      refundPoints += talent.current_level;
+      updatePrerequisite[talent.group][talent.position] -= talent.current_level;
+      talent.current_level = 0;
+      updateTalentMap.set(key, talent);
+      removeList.push(key);
+    }
+  });
+
+  removeList.forEach((key) => updateTrackingTalent.get(group)?.delete(key));
+
+  return {
+    prerequisite: updatePrerequisite,
+    trackingTalent: updateTrackingTalent,
+    talentMap: updateTalentMap,
+    refundPoints: data.refundPoints +  refundPoints,
+  };
+}
+
+const useTalentStore = create<TalentStore>((set, get) => ({
   remainingPoints: 59,
   prerequisite: resetPrerequisiteHelper(),
   talentList: null,
@@ -316,6 +423,7 @@ const useTalentStore = create<TalentStore>((set) => ({
     const talentList = setTalentList(rawTalentList);
     const talentMap = setTalentMap(talentList);
     const resetPrerequisite = resetPrerequisiteHelper();
+    rollbackMap = new Map<string, TalentEntity>();
     set({
       remainingPoints: 59,
       prerequisite: resetPrerequisite,
@@ -379,6 +487,26 @@ const useTalentStore = create<TalentStore>((set) => ({
         position,
         updateData
       );
+
+      if (
+        updateData.selectedTalent.group !== 0 &&
+        updateData.selectedTalent.group !== 1 &&
+        rollbackMap.has(updateData.selectedTalent.key)
+      ) {
+        const talent = rollbackMap.get(updateData.selectedTalent.key) as TalentEntity;
+        rollbackMap.delete(updateData.selectedTalent.key);
+
+        const rollbackData = rollback(talent, advanceUpdateData);
+
+        return {
+          ...store,
+          remainingPoints: store.remainingPoints + 1 + rollbackData.refundPoints,
+          prerequisite: rollbackData.prerequisite,
+          talentMap: rollbackData.talentMap,
+          trackingTalent: rollbackData.trackingTalent,
+          selectedTalent: updateData.selectedTalent,
+        };
+      }
 
       return {
         ...store,
@@ -478,6 +606,93 @@ const useTalentStore = create<TalentStore>((set) => ({
       };
     });
   },
+  isQualified: (talentKey: string): boolean => {
+    const { talentMap } = get();
+    const talent = talentMap?.get(talentKey) as TalentEntity;
+    if (!talent.extra_prerequisite) return true;
+
+    const prerequisiteTalentCore = talentMap?.get(
+      talent.prerequisite_talent_key as string
+    );
+
+    // console.log(talent);
+
+    return (
+      prerequisiteTalentCore?.current_level ===
+      prerequisiteTalentCore?.max_level
+    );
+  },
+  isRollback: (talentKey: string): boolean => {
+    const { talentMap } = get();
+    const talent = talentMap?.get(talentKey);
+
+    if (!talent) return false;
+
+    const prerequisiteTalentCore = talentMap?.get(
+      talent.prerequisite_talent_key as string
+    );
+
+    if (!prerequisiteTalentCore) return false;
+
+    if (prerequisiteTalentCore.current_level < 5) return false;
+
+    return talent.current_level !== 0;
+  },
+  setRollbackTalentCore: (talentKey) => {
+    const { talentMap } = get();
+    const talent = talentMap?.get(talentKey) as TalentEntity;
+    if (!talent) return;
+
+    const prerequisiteTalentCore = talentMap?.get(
+      talent.prerequisite_talent_key as string
+    ) as TalentEntity;
+    if (!prerequisiteTalentCore) return;
+
+    rollbackMap.set(prerequisiteTalentCore.key, talent);
+  },
+  // setRollbackTalentCore: (talentKey) => {
+  //   set((store) => {
+  //     // console.log(prerequisiteTalentCore);
+  //     const talent = store.talentMap?.get(talentKey) as TalentEntity;
+
+  //     if(!talent)
+  //       return store;
+
+  //     const prerequisiteTalentCore = store.talentMap?.get(talent.prerequisite_talent_key as string) as TalentEntity;
+
+  //     if(!prerequisiteTalentCore)
+  //       return store;
+
+  //     // set current_level back 0
+  //     const refundPoints = talent.current_level;
+  //     const updateTalent: TalentEntity = {
+  //       ...talent,
+  //       current_level: 0,
+  //     };
+
+  //     // if current level > 0
+  //     // update prerequisite
+  //     const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
+  //     updatePrerequisite[talent.group][talent.position] -= refundPoints;
+
+  //     // update in the talentmap
+  //     const updateTalentMap = new Map(store.talentMap);
+  //     updateTalentMap.set(talent.key, updateTalent);
+
+  //     // remove it from tracking talent
+  //     const updateTrackingTalent = new Map(store.trackingTalent);
+  //     updateTrackingTalent.get(talent.group)?.delete(talent.key);
+
+  //     return {
+  //       ...store,
+  //       remainingPoints: store.remainingPoints + refundPoints,
+  //       prerequisite: updatePrerequisite,
+  //       talentMap: updateTalentMap,
+  //       trackingTalent: updateTrackingTalent,
+  //       selectedTalent: talent,
+  //     };
+  //   });
+  // },
   reset: () => {
     set({
       remainingPoints: 59,

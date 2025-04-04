@@ -5,7 +5,7 @@ import { GET_TALENT_CORES_FROM_HERO } from "../utils/queries";
 import useTalentStore from "../state-management/talents/store";
 
 interface Hero {
-    id: number;
+    id: string;
     name: string;
     avatar: string;
 }
@@ -13,8 +13,6 @@ interface Hero {
 interface Props {
     heroes: Hero[];
 }
-
-// BUG: farming heroes does not get a right talent cores.
 
 const HeroSelection = ({ heroes }: Props) => {
     const { initialize, reset } = useTalentStore();
