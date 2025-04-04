@@ -54,7 +54,7 @@ const resolvers = {
             for (let i = 0; i < 5; i++) {
                 let talentCores = [];
                 if (i === 0) {
-                    talentCores = roles[2].id === 10 ? ROLE_TALENT_CORE_MAP.get(19) : ROLE_TALENT_CORE_MAP.get(18);
+                    talentCores = roles[1].id === 10 ? ROLE_TALENT_CORE_MAP.get(19) : ROLE_TALENT_CORE_MAP.get(18);
                 } else if (i === 1) {
                     talentCores = MAIN_TALENT_CORE_MAP.get(roles[2].id);
                 } else {
