@@ -47,7 +47,7 @@ export const GET_TALENT_CORES_FROM_HERO = gql`
             is_secondary_core
             image
             max_level
-            prerequisite_talent_core
+            extra_prerequisite
         }
     }
 `

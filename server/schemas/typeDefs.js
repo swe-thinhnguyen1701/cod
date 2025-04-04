@@ -27,7 +27,7 @@ const typeDefs = `
         is_secondary_core: Boolean,
         image: String,
         max_level: Int,
-        prerequisite_talent_core: Boolean
+        extra_prerequisite: Boolean
     }
 
     type TalentCoreGroup {

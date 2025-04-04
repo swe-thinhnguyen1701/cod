@@ -65,7 +65,7 @@ TalentCore.init({
             max: 10
         }
     },
-    prerequisite_talent_core: {
+    extra_prerequisite: {
         type: DataTypes.BOOLEAN,
         allowNull: false
     }
