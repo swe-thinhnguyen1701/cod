@@ -27,7 +27,7 @@ const TalentCore = memo(({ talentKey }: Props) => {
 
     useEffect(() => {
         if (talent.extra_prerequisite && isRollback(talent.key)) {
-            console.log("IT SHOULD SET ROLLBACK");
+            // console.log("IT SHOULD SET ROLLBACK");
             setRollbackTalentCore(talent.key);
         }
     }, [talent.current_level]);

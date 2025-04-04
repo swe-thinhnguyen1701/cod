@@ -10,11 +10,14 @@ const STRUCTURE = [[4, 11], [12, 19], [20, 27]];
 
 const TalentGrid = () => {
     const [isBigScreen, setIsBigScreen] = useState(window.innerWidth >= 1024);
+    const [tooltopPos, setTooltipPos] = useState<{ x: number, y: number } | null>(null);
     const talentContainerRef = useRef<HTMLDivElement>(null);
     const { talentList, setSelectedTalent } = useTalentStore();
 
-    const handleTalentClick = (key: string) => {
+    const handleTalentClick = (event: React.MouseEvent, key: string) => {
+        const rect = (event.target as HTMLElement).getBoundingClientRect();
         setSelectedTalent(key);
+        setTooltipPos({x: (rect.left + rect.width) / 2, y:rect.bottom - 50 + window.scrollY});
     };
 
     const handleContainerClick = (event: React.MouseEvent) => {
@@ -48,7 +51,7 @@ const TalentGrid = () => {
 
     return (
         <>
-            <VStack onClick={handleContainerClick} ref={talentContainerRef}>
+            <VStack onClick={handleContainerClick} ref={talentContainerRef} position="relative">
                 <VStack>
                     {talentList.map((talents, rowIdx) => {
                         if (rowIdx > 2)
@@ -59,7 +62,7 @@ const TalentGrid = () => {
                                 {talents.map((talent, colIdx) =>
                                     <Box key={colIdx} onClick={(event) => {
                                         event.stopPropagation();
-                                        handleTalentClick(talent.key);
+                                        handleTalentClick(event, talent.key);
                                     }}>
                                         <TalentCore talentKey={talent.key} />
                                     </Box>
@@ -79,7 +82,7 @@ const TalentGrid = () => {
                                 {talents.map((talent, colIdx) =>
                                     <Box key={colIdx} onClick={(event) => {
                                         event.stopPropagation();
-                                        handleTalentClick(talent.key);
+                                        handleTalentClick(event, talent.key);
                                     }}>
                                         <TalentCore talentKey={talent.key} />
                                     </Box>
@@ -101,7 +104,7 @@ const TalentGrid = () => {
                                         {talents.map((talent, colIdx) =>
                                             <Box key={colIdx} onClick={(event) => {
                                                 event.stopPropagation();
-                                                handleTalentClick(talent.key);
+                                                handleTalentClick(event, talent.key);
                                             }}>
                                                 <TalentCore talentKey={talent.key} />
                                             </Box>)}
@@ -111,6 +114,9 @@ const TalentGrid = () => {
                         </VStack>
                     ))}
                 </HStack>
+                <Box maxWidth="300px" position="absolute" top={tooltopPos?.y} left={tooltopPos?.x} zIndex={3} bg="blackAlpha.800" borderRadius="10px">
+                    <TalentDescription />
+                </Box>
             </VStack>
         </>
     );

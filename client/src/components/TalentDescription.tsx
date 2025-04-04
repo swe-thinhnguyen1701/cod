@@ -1,19 +1,25 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
 import useTalentStore from "../state-management/talents/store";
-import TalentEnitity from "../entities/TalentEntity";
 
-const sample: TalentEnitity = {
-    id: 25,
-    name: "Bane of Darkness",
-    description: ["Your Legion deals ", " more Peacekeeping damage."],
-    buffValue: ["0%", "1%", "2%", "3%"],
-    preview: "Damage dealt during Peacekeeping bonus",
-    level: 0,
-    maxLevel: 5,
-    group: 2,
-    position: 6,
-    isPrimaryCore: false,
-    isSecondaryCore: false
+const Effects = (attributeNames: string[], effectValues: string[][], currentLevel: number, maxLevel: number) => {
+    return attributeNames.map((attributeName, index) =>
+        <Box key={index}>
+            <Text key={index}>
+                {attributeName}
+            </Text>
+            {effectValues[index]?.map((inflictValue, index) => {
+                if (index === 0 || index > maxLevel) return;
+                return (
+                    <Box key={index} as="span">
+                        {index !== 1 && " / "}
+                        <Text as="span" fontWeight={currentLevel === index ? "bold" : "normal"}>
+                            {inflictValue}
+                        </Text>
+                    </Box>
+                )
+            })}
+        </Box>
+    );
 }
 
 const TalentDescription = () => {
@@ -22,62 +28,93 @@ const TalentDescription = () => {
     if (!selectedTalent) return;
 
     const formatDescription = (description: string) => {
-        return description.split(/(\{green\}|\{\/green\}|\{red\}|\{\/red\})/g).map((part, index) => {
-            // Check if the previous part was an opening tag
-            const prevPart = index > 0 ? description.split(/(\{green\}|\{\/green\}|\{red\}|\{\/red\})/g)[index - 1] : null;
-            
-            if (prevPart === "{green}") {
-                return <Text as="span" fontWeight="bold" key={index} color="green">{part}</Text>;
-            } else if (prevPart === "{red}") {
-                return <Text as="span" fontWeight="bold" key={index} color="red">{part}</Text>;
-            } else if (part === "{green}" || part === "{/green}" || part === "{red}" || part === "{/red}") {
-                // Hide the tags themselves by returning an empty fragment
-                return null;
-            } else {
-                return part;
+        let buffIndex = 0;
+        let debuffIndex = 0;
+        let inflictedIndex = 0;
+
+        const currentLevel = selectedTalent.current_level;
+
+        const parts = description.split(/(\{green\}|\{\/green\}|\{red\}|\{\/red\}|\{orange\}|\{\/orange\})/g);
+        let currentColor: "green" | "red" | "orange" | null = null;
+
+        console.log(parts)
+
+        return parts.map((part, index) => {
+            switch (part) {
+                case "{green}":
+                    currentColor = "green";
+                    return null;
+                case "{/green}":
+                    currentColor = null;
+                    return null;
+                case "{red}":
+                    currentColor = "red";
+                    return null;
+                case "{/red}":
+                    currentColor = null;
+                    return null;
+                case "{orange}":
+                    currentColor = "orange";
+                    return null;
+                case "{/orange}":
+                    currentColor = null;
+                    return null;
+                default:
+                    if (currentColor === "green") {
+                        return (
+                            <Text as="span" key={index} fontWeight="bold" color="green.400">
+                                {selectedTalent.buff_values?.[buffIndex++]?.[currentLevel] ?? ""}
+                            </Text>
+                        );
+                    } else if (currentColor === "red") {
+                        return (
+                            <Text as="span" key={index} fontWeight="bold" color="red.400">
+                                {selectedTalent.debuff_values?.[debuffIndex++]?.[currentLevel] ?? ""}
+                            </Text>
+                        );
+                    } else if (currentColor === "orange") {
+                        return (
+                            <Text as="span" key={index} fontWeight="bold" color="orange">
+                                {selectedTalent.inflict_values?.[inflictedIndex++]?.[currentLevel] ?? ""}
+                            </Text>
+                        );
+                    }
+                    return <Text as="span" key={index}>{part}</Text>;
             }
-        }).filter(Boolean);
-    }
+        });
+    };
+
 
     return (
         <Box padding={4}>
             <Heading as="h3" size="md" textAlign="center">
-                <Text>Overall Attack</Text>
+                {selectedTalent.name}
             </Heading>
-            {selectedTalent.isPrimaryCore || selectedTalent.isSecondaryCore
-                ? <Box>{formatDescription(sample.description[0])}</Box>
-                : <Box>
-                    <Box mb={4}>
-                        {sample?.description[0]}
-                        <Text as="span" fontWeight="bold" color="green">
-                            {sample.buffValue[sample.level]}
-                        </Text>
-                        {sample.description[1]}
-                        <Text as="span" fontWeight="bold" color="red">
-                            {sample.debuffValue && [sample.level]}
-                        </Text>
-                    </Box>
-                    <Box>
-                        <Text fontWeight="bold" >
+            <Box>
+                {formatDescription(selectedTalent.description)}
+                {!selectedTalent.is_primary_core && !selectedTalent.is_secondary_core &&
+                    <Box mt={4}>
+                        <Text fontWeight="bold">
                             Upgrade Preview
                         </Text>
-                        <Text>
-                            {sample.preview} <br />
-                            {sample.buffValue.map((buffValue, index) => {
-                                if (index === 0) return;
-                                return (
-                                    <Box key={index} as="span">
-                                        {index !== 1 && " / "}
-                                        <Text as="span" fontWeight={sample.level === index ? "bold" : "normal"}>
-                                            {buffValue}
-                                        </Text>
-                                    </Box>
-                                )
-                            })}
-                        </Text>
-                    </Box>
-                </Box>}
-        </Box >
+                        {selectedTalent.buff_att && selectedTalent.buff_values && Effects(
+                            selectedTalent.buff_att,
+                            selectedTalent.buff_values,
+                            selectedTalent.current_level,
+                            selectedTalent.max_level)}
+                        {selectedTalent.debuff_att && selectedTalent.debuff_values && Effects(
+                            selectedTalent.debuff_att,
+                            selectedTalent.debuff_values,
+                            selectedTalent.current_level,
+                            selectedTalent.max_level)}
+                        {selectedTalent.inflict_att && selectedTalent.inflict_values && Effects(
+                            selectedTalent.inflict_att,
+                            selectedTalent.inflict_values,
+                            selectedTalent.current_level,
+                            selectedTalent.max_level)}
+                    </Box>}
+            </Box>
+        </Box>
     );
 }
 
