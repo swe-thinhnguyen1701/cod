@@ -94,3 +94,12 @@ img {
   /* background-color: darkgrey; */
   /* border-radius: 20px; */
 }
+
+.talent-description .talent-description-text {
+  opacity: 0;
+}
+
+.talent-description:hover .talent-description-text {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}

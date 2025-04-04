@@ -37,8 +37,6 @@ const TalentDescription = () => {
         const parts = description.split(/(\{green\}|\{\/green\}|\{red\}|\{\/red\}|\{orange\}|\{\/orange\})/g);
         let currentColor: "green" | "red" | "orange" | null = null;
 
-        console.log(parts)
-
         return parts.map((part, index) => {
             switch (part) {
                 case "{green}":

@@ -4,6 +4,7 @@ import { Box, HStack, VStack } from "@chakra-ui/react";
 import TalentCore from "./TalentCore";
 import TalentDescription from "./TalentDescription";
 import TalentGroupButton from "./TalentGroupButton";
+import TalentHeading from "./TalentHeading";
 
 
 const STRUCTURE = [[4, 11], [12, 19], [20, 27]];
@@ -70,6 +71,7 @@ const TalentGrid = () => {
                             </HStack>
                         )
                     })}
+                    <TalentHeading idx={-1} />
                 </VStack>
 
                 <VStack>
@@ -95,6 +97,7 @@ const TalentGrid = () => {
                 <HStack gap="80px">
                     {STRUCTURE.map((interval, index) => (
                         <VStack key={index}>
+                            <TalentHeading idx={index} />
                             {talentList.map((talents, rowIdx) => {
                                 if (rowIdx < interval[0] || rowIdx > interval[1])
                                     return null;
