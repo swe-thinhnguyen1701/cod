@@ -96,6 +96,7 @@ img {
 .talent-description .talent-description-text {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
 }
 
 .talent-description:hover .talent-description-text {

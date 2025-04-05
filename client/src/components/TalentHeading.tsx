@@ -24,11 +24,16 @@ const Heading = (data: RoleEntity) => {
             <Text
                 className="talent-description-text"
                 position="absolute"
-                bottom={data.id === "-1" ? "-80%" : "90%"}
-                left="-80%"
+                top="50px"
+                left="-50%"
                 translate="yes"
-                width={{ base: "100%", md: "400px" }}
-                zIndex={2}>{data.description}</Text>
+                width={{ base: "300px", md: "400px" }}
+                zIndex={2}
+                bg="blackAlpha.700"
+                padding={3}
+            >
+                {data.description}
+            </Text>
         </HStack>
     )
 }
