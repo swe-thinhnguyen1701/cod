@@ -12,13 +12,14 @@ const STRUCTURE = [[4, 11], [12, 19], [20, 27]];
 const TalentGrid = () => {
     const [isBigScreen, setIsBigScreen] = useState(window.innerWidth >= 1024);
     const [tooltopPos, setTooltipPos] = useState<{ x: number, y: number } | null>(null);
+    const [selectedTalentGroup, setSelectedTalentGroup] = useState<number>(1);
     const talentContainerRef = useRef<HTMLDivElement>(null);
     const { talentList, setSelectedTalent } = useTalentStore();
 
     const handleTalentClick = (event: React.MouseEvent, key: string) => {
         const rect = (event.target as HTMLElement).getBoundingClientRect();
         setSelectedTalent(key);
-        setTooltipPos({x: (rect.left + rect.width) / 2, y:rect.bottom - 50 + window.scrollY});
+        setTooltipPos({ x: (rect.left + rect.width) / 2, y: rect.bottom - 50 + window.scrollY });
     };
 
     const handleContainerClick = (event: React.MouseEvent) => {
@@ -94,9 +95,13 @@ const TalentGrid = () => {
                     })}
                 </VStack>
 
+                <Box width={{base: "250px", md: "500px"}} display={isBigScreen? "none" : "block"}>
+                    <TalentGroupButton selectedGroup={selectedTalentGroup} setSelectedGroup={setSelectedTalentGroup} />
+                </Box>
+
                 <HStack gap="80px">
                     {STRUCTURE.map((interval, index) => (
-                        <VStack key={index}>
+                        <VStack key={index} display={!isBigScreen && selectedTalentGroup !== index + 2 ? "none" : "flex"}>
                             <TalentHeading idx={index} />
                             {talentList.map((talents, rowIdx) => {
                                 if (rowIdx < interval[0] || rowIdx > interval[1])

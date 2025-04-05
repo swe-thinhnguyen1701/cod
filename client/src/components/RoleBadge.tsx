@@ -1,7 +1,8 @@
 import { Box, Text, Image } from "@chakra-ui/react";
-import sampleImg from "../assets/Rally.png";
+import useRoleStore from "../state-management/roles/store";
+// import sampleImg from "../assets/Rally.png";
 
-const ROLES = ["Infantry", "Cavalry", "Ranged"];
+// const ROLES = ["Infantry", "Cavalry", "Ranged"];
 const ROLE_BORDER_COLORS = ["#961212", "#ac5e04", "#088db2"];
 const ROLE_BG_COLORS = ["#200000", "#3a1c0d", "#0d2f3a"];
 const BG_COLORS = ["rgb(133, 23, 23)", "rgb(172, 94, 4)", "rgb(8, 141, 178)"];
@@ -12,6 +13,10 @@ interface Props {
 }
 
 const RoleBadge = ({ idx }: Props) => {
+    const {roles} = useRoleStore();
+
+    if(!roles) return null;
+
     return (
         <>
             <Box
@@ -34,9 +39,9 @@ const RoleBadge = ({ idx }: Props) => {
                     position="absolute"
                     top="-4px"
                     left="-13px">
-                    <Image transform="scale(2.2)" className="role-icon-image" src={sampleImg} height={ROLE_ICON_SIZE} />
+                    <Image transform="scale(2.2)" className="role-icon-image" src={roles[idx].image} height={ROLE_ICON_SIZE} />
                 </Box>
-                <Text fontWeight="bold" fontSize={{ base: "xs", md: "sm" }} color="#fff">{ROLES[idx]}</Text>
+                <Text fontWeight="bold" fontSize={{ base: "xs", md: "sm" }} color="#fff">{roles[idx].name}</Text>
 
             </Box>
         </>
