@@ -34,7 +34,7 @@ const TalentDescription = () => {
 
         const currentLevel = selectedTalent.current_level;
 
-        const parts = description.split(/(\{green\}|\{\/green\}|\{red\}|\{\/red\}|\{orange\}|\{\/orange\})/g);
+        const parts = description.split(/(\{green\}|\{\/green\}|\{red\}|\{\/red\}|\{orange\}|\{\/orange\}|\{newline\}|\{\/newline\}|\{newlinex2\}|\{\/newlinex2\})/g);
         let currentColor: "green" | "red" | "orange" | null = null;
 
         return parts.map((part, index) => {
@@ -57,6 +57,19 @@ const TalentDescription = () => {
                 case "{/orange}":
                     currentColor = null;
                     return null;
+                case "{newlinex2}":
+                    return (
+                        <Box key={index} as="span">
+                            <br />
+                            <br />
+                        </Box>
+                    );
+                case "{/newlinex2}":
+                    return null;
+                case "{newline}":
+                    return <br key={index} />;
+                case "{/newline}":
+                    return;
                 default:
                     if (currentColor === "green") {
                         return (

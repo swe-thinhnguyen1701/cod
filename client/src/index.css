@@ -91,15 +91,13 @@ img {
 .line {
   width: 6px;
   height: 35px;
-  /* background-color: darkgrey; */
-  /* border-radius: 20px; */
 }
 
 .talent-description .talent-description-text {
   opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .talent-description:hover .talent-description-text {
   opacity: 1;
-  transition: opacity 0.3s ease-in-out;
 }

@@ -21,7 +21,14 @@ const Heading = (data: RoleEntity) => {
                 <Image src={data.image} alt="role" width="100%" />
             </Box>
             <Text fontSize="lg" fontWeight="bold">{data.name}</Text>
-            <Text className="talent-description-text" position="absolute" bottom="0">{data.description}</Text>
+            <Text
+                className="talent-description-text"
+                position="absolute"
+                bottom={data.id === "-1" ? "-80%" : "90%"}
+                left="-80%"
+                translate="yes"
+                width={{ base: "100%", md: "400px" }}
+                zIndex={2}>{data.description}</Text>
         </HStack>
     )
 }

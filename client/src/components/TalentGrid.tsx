@@ -74,7 +74,7 @@ const TalentGrid = () => {
                     <TalentHeading idx={-1} />
                 </VStack>
 
-                <VStack>
+                <VStack margin={8}>
                     {talentList.map((talents, rowIdx) => {
                         if (rowIdx !== 3)
                             return null;
