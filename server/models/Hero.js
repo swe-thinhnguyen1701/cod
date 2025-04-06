@@ -35,6 +35,10 @@ Hero.init({
     image: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    rarity_id: {
+        type: DataTypes.SMALLINT,
+        allowNull: true
     }
 }, {
     sequelize,

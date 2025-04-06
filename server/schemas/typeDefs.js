@@ -4,6 +4,8 @@ const typeDefs = `
         name: String
         title: String
         avatar: String
+        image: String
+        rarity_id: Int
     }
 
     type Role {

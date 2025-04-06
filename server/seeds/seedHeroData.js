@@ -2,13 +2,15 @@ const { Hero } = require("../models");
 const heroData = require("../db/heroes");
 
 const seedHeros = async () => {
-    const heroAvatarUrlLink = `https://d3bhl6gkk81cq1.cloudfront.net/hero-images/`
+    const heroImageURL = `https://d3bhl6gkk81cq1.cloudfront.net/hero-images/`
     try {
         const modifyHeroData = heroData.map(hero => {
-            const heroAvatar = `${heroAvatarUrlLink}${hero.name}-avatar.webp`;
+            const heroAvatar = `${heroImageURL}${hero.name}-avatar.webp`;
+            const heroImage = `${heroImageURL}${hero.name}-full.webp`;
             return {
                 ...hero,
-                avatar: heroAvatar
+                avatar: heroAvatar,
+                image: heroImage
             }
         });
         console.log("🌱 Seeding heroes...");
