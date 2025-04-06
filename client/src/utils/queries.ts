@@ -6,6 +6,8 @@ export const GET_ALL_HEROES = gql`
             id
             name
             avatar
+            image
+            rarity_id
         }
     }
 `

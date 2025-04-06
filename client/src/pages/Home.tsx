@@ -5,6 +5,7 @@ const HomePage = () => {
     return (
         <Box>
             <Link to="/hero-talent">Talent</Link>
+            <Link to="/heroes">Heroes</Link>
         </Box>
     )
 }

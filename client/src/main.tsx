@@ -8,6 +8,7 @@ import './index.css'
 
 import HomePage from './pages/Home.tsx';
 import HeroTalentPage from './pages/HeroTalent.tsx';
+import HeroPage from "./pages/Hero.tsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "/hero-talent",
         element: <HeroTalentPage />
+      },
+      {
+        path: "/heroes",
+        element: <HeroPage />
       }
     ]
   }
