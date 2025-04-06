@@ -11,7 +11,7 @@ interface Props {
 const TalentGroupButton = ({selectedGroup, setSelectedGroup}: Props) => {
     return (
         <>
-            <HStack margin="30px 0" justifyContent="space-between">
+            <HStack margin="30px 0" justifyContent="space-between" width={{base: "270px", md: "400px"}}>
                 {GROUPS.map((group) => (
                     <Box transform={selectedGroup === group ? "scale(1.2)" : "unset"} className="hover-scale-up" key={group} onClick={() => setSelectedGroup(group)}>
                         <RoleBadge idx={group - 2} />

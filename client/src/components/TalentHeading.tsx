@@ -27,7 +27,7 @@ const Heading = (data: RoleEntity) => {
                 top="50px"
                 left="-50%"
                 translate="yes"
-                width={{ base: "300px", md: "400px" }}
+                width={{ base: "250px", md: "400px" }}
                 zIndex={2}
                 bg="blackAlpha.700"
                 padding={3}

@@ -12,7 +12,7 @@ const STRUCTURE = [[4, 11], [12, 19], [20, 27]];
 const TalentGrid = () => {
     const [isBigScreen, setIsBigScreen] = useState(window.innerWidth >= 1024);
     const [tooltopPos, setTooltipPos] = useState<{ x: number, y: number } | null>(null);
-    const [selectedTalentGroup, setSelectedTalentGroup] = useState<number>(1);
+    const [selectedTalentGroup, setSelectedTalentGroup] = useState<number>(2);
     const talentContainerRef = useRef<HTMLDivElement>(null);
     const { talentList, setSelectedTalent } = useTalentStore();
 
@@ -95,7 +95,7 @@ const TalentGrid = () => {
                     })}
                 </VStack>
 
-                <Box width={{base: "250px", md: "500px"}} display={isBigScreen? "none" : "block"}>
+                <Box display={isBigScreen? "none" : "block"}>
                     <TalentGroupButton selectedGroup={selectedTalentGroup} setSelectedGroup={setSelectedTalentGroup} />
                 </Box>
 

@@ -6,7 +6,7 @@ import useRoleStore from "../state-management/roles/store";
 const ROLE_BORDER_COLORS = ["#961212", "#ac5e04", "#088db2"];
 const ROLE_BG_COLORS = ["#200000", "#3a1c0d", "#0d2f3a"];
 const BG_COLORS = ["rgb(133, 23, 23)", "rgb(172, 94, 4)", "rgb(8, 141, 178)"];
-const ROLE_ICON_SIZE = "33px";
+const ROLE_ICON_SIZE = "28px";
 
 interface Props {
     idx: number;
@@ -22,11 +22,9 @@ const RoleBadge = ({ idx }: Props) => {
             <Box
                 bg={`linear-gradient(90deg, ${BG_COLORS[idx]} 0%, rgba(0,0,0,1) 70%)`}
                 borderRadius="4px"
-                width={{base: "80px", md: "100px"}}
+                width={{base: "70px", md: "100px"}} //reduce 30px
                 position="relative"
-                pl={7}
-                paddingTop="3px"
-                paddingBottom="5px"
+                padding="3px 0 3px 15px"
                 className="role-badge"
                 cursor="default">
                 <Box
@@ -37,7 +35,7 @@ const RoleBadge = ({ idx }: Props) => {
                     width={ROLE_ICON_SIZE}
                     height={ROLE_ICON_SIZE}
                     position="absolute"
-                    top="-4px"
+                    top="-2px"
                     left="-13px">
                     <Image transform="scale(2.2)" className="role-icon-image" src={roles[idx].image} height={ROLE_ICON_SIZE} />
                 </Box>
