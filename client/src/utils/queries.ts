@@ -22,6 +22,18 @@ export const GET_HERO_BY_ID = gql`
     }
 `
 
+export const GET_HERO_BY_NAME = gql`
+    query getHeroByName($heroName: String!) {
+        getHeroByName(heroName: $heroName) {
+            id
+            name
+            avatar
+            image
+            rarity_id
+        }
+    }
+`
+
 export const GET_ROLES_FROM_HERO = gql`
     query getRolesFromHero($heroId: ID!) {
         getRolesFromHero(heroId: $heroId) {

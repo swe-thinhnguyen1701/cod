@@ -39,6 +39,7 @@ const typeDefs = `
     type Query {
         getAllHeroes: [Hero]
         getHeroById(id: ID!): Hero
+        getHeroByName(heroName: String): Hero
         getRolesFromHero(heroId: ID!): [Role]
         getTalentCoresFromHero(heroId: ID!): [[TalentCore]]
     }

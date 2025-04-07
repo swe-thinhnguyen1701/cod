@@ -26,6 +26,18 @@ const resolvers = {
 
             return hero;
         },
+        getHeroByName: async (_parent, {heroName}) => {
+            const hero = await Hero.findOne({
+                where: {
+                    name: heroName
+                }
+            });
+
+            if(!hero)
+                throw new Error(`Hero not found with given name: ${heroName}`);
+
+            return hero;
+        },
         getRolesFromHero: async (_parent, { heroId }) => {
             if (!heroId)
                 throw new Error("No hero ID provided");
