@@ -3,6 +3,7 @@ import { GET_ALL_HEROES } from "../utils/queries";
 import { Heading, HStack, Spinner } from "@chakra-ui/react";
 import HeroCard from "../components/HeroCard"
 import HeroIntity from "../entities/HeroEntity";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
     const {data, error, loading} = useQuery(GET_ALL_HEROES);
@@ -18,7 +19,11 @@ const Hero = () => {
 
     return (
         <HStack wrap="wrap" gap={8} margin="0 auto" width="100%" justifyContent="center">
-            {heroes.map((hero, index) => (<HeroCard key={index} hero={hero} />))}
+            {heroes.map((hero, index) => (
+                <Link to={`/heroes/${hero.name}`} key={index}>
+                    <HeroCard hero={hero} />
+                </Link>
+            ))}
         </HStack>
     )
 }
