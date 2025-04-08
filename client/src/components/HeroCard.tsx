@@ -1,8 +1,8 @@
 import { Card, VStack, Image, Text, Box } from "@chakra-ui/react"
-import HeroIntity from "../entities/HeroEntity"
+import HeroEntity from "../entities/HeroEntity"
 
 interface Props {
-    hero: HeroIntity
+    hero: HeroEntity
 }
 
 const HeroCard = ({hero} : Props) => {
@@ -21,7 +21,7 @@ const HeroCard = ({hero} : Props) => {
                      textAlign="center"
                       borderRadius="0 0 10px 10px"
                       color="white">
-                    {hero.name}
+                    {hero.name.toUpperCase()}
                 </Text>
             </VStack>
         </Card>

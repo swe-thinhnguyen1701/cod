@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_HEROES } from "../utils/queries";
 import { Heading, HStack, Spinner } from "@chakra-ui/react";
 import HeroCard from "../components/HeroCard"
-import HeroIntity from "../entities/HeroEntity";
+import HeroEntity from "../entities/HeroEntity";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
@@ -15,7 +15,7 @@ const Hero = () => {
         return (<Heading as="h2">Something went wrong</Heading>);
 
     
-    const heroes: HeroIntity[] = data.getAllHeroes;
+    const heroes: HeroEntity[] = data.getAllHeroes;
 
     return (
         <HStack wrap="wrap" gap={8} margin="0 auto" width="100%" justifyContent="center">

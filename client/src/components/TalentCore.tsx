@@ -70,7 +70,7 @@ const TalentCore = memo(({ talentKey }: Props) => {
                     >
                     </Box>
                     <VStack
-                        className="talent talent-layer-2"
+                        className="hexagon talent-layer-2"
                         justifyContent="center"
                         bg={
                             !isActive
@@ -81,7 +81,7 @@ const TalentCore = memo(({ talentKey }: Props) => {
                         transform={isScaled ? "scale(0.9)" : "scale(1)"}
                         transition="transform 0.2s">
                         <VStack
-                            className="talent talent-layer-3"
+                            className="hexagon talent-layer-3"
                             justifyContent="center"
                             bg={
                                 !isActive

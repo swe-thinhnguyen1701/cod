@@ -1,4 +1,4 @@
-export default interface HeroIntity {
+export default interface HeroEntity {
     id: string,
     name: string,
     avatar: string,
