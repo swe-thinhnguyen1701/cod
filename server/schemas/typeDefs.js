@@ -32,6 +32,16 @@ const typeDefs = `
         extra_prerequisite: Boolean
     }
 
+    type HeroDetail {
+        id: ID!
+        name: String
+        title: String
+        avatar: String
+        image: String
+        rarity_id: Int
+        Roles: [Role]
+    }
+
     type TalentCoreGroup {
         talentCores: [TalentCore]
     }
@@ -39,7 +49,7 @@ const typeDefs = `
     type Query {
         getAllHeroes: [Hero]
         getHeroById(id: ID!): Hero
-        getHeroByName(heroName: String): Hero
+        getHeroByName(heroName: String): HeroDetail
         getRolesFromHero(heroId: ID!): [Role]
         getTalentCoresFromHero(heroId: ID!): [[TalentCore]]
     }

@@ -16,12 +16,12 @@ Role.belongsToMany(Hero, {
     onDelete: "CASCADE"
 });
 
-// Role.belongsToMany(TalentCore, {
-//     through: "role_talent_cores",
-//     foreignKey: "role_id",
-//     otherKey: "talent_core_id",
-//     onDelete: "CASCADE"
-// });
+Role.belongsToMany(TalentCore, {
+    through: "role_talent_cores",
+    foreignKey: "role_id",
+    otherKey: "talent_core_id",
+    onDelete: "CASCADE"
+});
 
 // TalentCore.belongsToMany(Role, {
 //     through: "role_talent_cores",

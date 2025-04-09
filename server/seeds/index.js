@@ -2,7 +2,7 @@ const sequelize = require("../config/connection");
 const seedHeros = require("./seedHeroData");
 const seedRoles = require("./seedRoleData");
 const seedTalentCores = require("./seedTalentCoreData");
-// const seedHeroRoles = require("./seedHeroRole");
+const seedHeroRoles = require("./seedHeroRole");
 
 const seedAll = async () => {
     try {
@@ -18,7 +18,7 @@ const seedAll = async () => {
         await seedTalentCores();
         console.log("🌱 Users seeded!");
 
-        // await seedHeroRoles();
+        await seedHeroRoles();
         console.log("🌱 Hero-role relationships seeded!");
 
         process.exit(0);

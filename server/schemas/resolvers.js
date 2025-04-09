@@ -30,11 +30,21 @@ const resolvers = {
             const hero = await Hero.findOne({
                 where: {
                     name: heroName
-                }
+                },
+                include: [
+                    {
+                        model: Role,
+                        throught: {
+                            attributes: []
+                        }
+                    }
+                ]
             });
 
             if(!hero)
                 throw new Error(`Hero not found with given name: ${heroName}`);
+
+            console.log(hero);
 
             return hero;
         },
