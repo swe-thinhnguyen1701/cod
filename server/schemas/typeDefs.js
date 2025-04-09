@@ -38,7 +38,6 @@ const typeDefs = `
         title: String
         avatar: String
         image: String
-        title: String
         rarity_id: Int
         Roles: [Role]
     }
