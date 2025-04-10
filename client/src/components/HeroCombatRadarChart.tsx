@@ -1,5 +1,4 @@
 import React from 'react';
-import { useColorMode } from '@chakra-ui/react';
 import { Radar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -46,21 +45,19 @@ const HeroCombatRadarChart: React.FC<HeroCombatRadarChartProps> = ({ data }) => 
     ]
   };
 
-  const isDarkMode = useColorMode().colorMode === 'dark';
-
   const options = {
     responsive: true,
     scales: {
       r: {
         angleLines: {
           display: true,
-          color: isDarkMode ? "#fff" : "#ccc"
+          color: "#ccc"
         },
         grid: {
-          color: isDarkMode ? "#fff" : "#ccc"
+          color: "#ccc"
         },
         pointLabels: {
-          color: isDarkMode ? "#fff" : "#000"
+          color: "#fff"
         },
         suggestedMin: 0,
         suggestedMax: 100,

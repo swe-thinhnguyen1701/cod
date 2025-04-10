@@ -29,7 +29,13 @@ export const GET_HERO_BY_NAME = gql`
             name
             avatar
             image
-            rarity_id
+            description
+            title            
+            Roles {
+                name
+                image
+                description    
+            }
         }
     }
 `
