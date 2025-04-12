@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { GET_ALL_HEROES } from "../utils/queries";
+import { GET_ALL_HEROES } from "../graphql/queries";
 import { Heading, HStack, Spinner } from "@chakra-ui/react";
 import HeroCard from "../components/HeroCard"
 import HeroEntity from "../entities/HeroEntity";

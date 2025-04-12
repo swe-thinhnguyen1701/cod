@@ -9,5 +9,6 @@ server/db/roleCombinations.js
 server/db/talentCores.js
 server/db/roleTalentCore.js
 server/db/mainTalentCores.js
+server/db/skills.js
 
 .DS_Store

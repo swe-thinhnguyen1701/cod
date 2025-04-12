@@ -3,7 +3,7 @@ import useTalentStore from "../state-management/talents/store";
 import TalentGrid from './TalentGrid'
 import HeroSelection from "./HeroSelection";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_HEROES } from "../utils/queries";
+import { GET_ALL_HEROES } from "../graphql/queries";
 
 const HeroTalents = () => {
     const { loading, error, data } = useQuery(GET_ALL_HEROES);

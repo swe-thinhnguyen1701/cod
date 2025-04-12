@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Image, HStack, Text, Menu, MenuButton, MenuItem, Button, MenuList } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { GET_TALENT_CORES_FROM_HERO, GET_ROLES_FROM_HERO } from "../utils/queries";
+import { GET_TALENT_CORES_FROM_HERO, GET_ROLES_FROM_HERO } from "../graphql/queries";
 import useTalentStore from "../state-management/talents/store";
 import useRoleStore from "../state-management/roles/store";
+import { getHeroAvatar } from "../services/getImages";
 
 interface Hero {
     id: string;
@@ -57,7 +58,7 @@ const HeroSelection = ({ heroes }: Props) => {
                     <HStack>
                         {selectedHero && (
                             <Image
-                                src={selectedHero.avatar}
+                                src={getHeroAvatar(selectedHero.name)}
                                 alt="hero"
                                 width="30px"
                                 height="30px"
@@ -71,7 +72,7 @@ const HeroSelection = ({ heroes }: Props) => {
                     {heroes.map((hero) => (
                         <MenuItem key={hero.name} onClick={() => handleClick(hero)}>
                             <HStack>
-                                <Image src={hero.avatar} alt="hero" width={"30px"} height={"30px"} />
+                                <Image src={getHeroAvatar(hero.name)} alt="hero" width={"30px"} height={"30px"} />
                                 <Text>{hero.name}</Text>
                             </HStack>
                         </MenuItem>

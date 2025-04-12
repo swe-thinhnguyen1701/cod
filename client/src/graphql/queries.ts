@@ -5,8 +5,6 @@ export const GET_ALL_HEROES = gql`
         getAllHeroes {
             id
             name
-            avatar
-            image
             rarity_id
         }
     }
@@ -17,7 +15,6 @@ export const GET_HERO_BY_ID = gql`
         getHeroById(id: $id) {
             id
             name
-            avatar
         }
     }
 `
@@ -27,8 +24,6 @@ export const GET_HERO_BY_NAME = gql`
         getHeroByName(heroName: $heroName) {
             id
             name
-            avatar
-            image
             description
             title            
             Roles {

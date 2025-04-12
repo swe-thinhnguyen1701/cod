@@ -1,5 +1,6 @@
 import { Card, VStack, Image, Text, Box } from "@chakra-ui/react"
 import HeroEntity from "../entities/HeroEntity"
+import {getGeneralHeroImage} from "../services/getImages"
 
 interface Props {
     hero: HeroEntity
@@ -11,7 +12,7 @@ const HeroCard = ({hero} : Props) => {
         <Card className={`hero-card ${hero.rarity_id === 1 ? "legend" : hero.rarity_id === 2 ? "epic" : "common"}`} borderRadius="10px">
             <VStack>
                 <Box width="300px" height="290px">
-                    <Image src={hero.image} alt={hero.name} className="hero-image" />
+                    <Image src={getGeneralHeroImage(hero.name)} alt={hero.name} className="hero-image" />
                 </Box>
                 <Text
                  fontWeight="bold"

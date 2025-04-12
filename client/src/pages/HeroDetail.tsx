@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { Heading, HStack, Spinner } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { GET_HERO_BY_NAME } from "../utils/queries";
+import { GET_HERO_BY_NAME } from "../graphql/queries";
 import HeroProfile from "../components/HeroProfile";
 import { useEffect } from "react";
 import useHeroStore from "../state-management/heroes/store";

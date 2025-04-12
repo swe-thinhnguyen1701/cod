@@ -1,9 +1,11 @@
-import { Box, Flex, Grid, GridItem, Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { Box, Grid, GridItem, Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
+import {getZoomHeroImage} from "../services/getImages"
 import HeroCombatRadarChart from "./HeroCombatRadarChart";
 import useHeroStore from "../state-management/heroes/store";
-import { useEffect, useState } from "react";
 import useRoleStore from "../state-management/roles/store";
 import RoleBadge from "./RoleBadge";
+
 
 const sampleData = {
     tank: 20,
@@ -17,30 +19,17 @@ const sampleData = {
 const BACKGROUND_URL = "https://d3bhl6gkk81cq1.cloudfront.net/hero-images/background.webp";
 const GOLD_COLOR = "#c8a565";
 
-
-// TITLE, NAME, DESCRIPTION, ROLES, AND COMBAT DATA
-
 const HeroProfile = () => {
     const { hero } = useHeroStore();
-    const {setRoles} = useRoleStore();
-    const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth >= 768);
+    const { setRoles } = useRoleStore();
 
     useEffect(() => {
-        if(hero?.Roles)
+        if (hero?.Roles)
             setRoles(hero.Roles);
 
-        const updateMediumScreen = () => {
-            setIsMediumScreen(window.innerWidth >= 768);
-        }
-
-        window.addEventListener("resize", updateMediumScreen);
-        updateMediumScreen();
-        return () => {
-            window.removeEventListener("resize", updateMediumScreen);
-        }
     }, [hero]);
 
-    if(!hero)
+    if (!hero)
         return null;
 
     return (
@@ -52,23 +41,20 @@ const HeroProfile = () => {
                 templateColumns={{
                     base: "1fr",
                     sm: "1fr 250px",
-                    md: "1fr 39.06vw",
+                    md: "1fr 300px",
                     lg: "1fr 500px"
                 }}
+                alignItems="center"
                 bgImage={BACKGROUND_URL}
-                bgSize={{base: "cover", md: "100% 400px", lg: "100% 600px" }}
+                bgSize="100% 100%"
                 bgRepeat="no-repeat"
                 width="100%"
                 maxWidth="1400px"
                 gap={4}
                 padding={4}
             >
-                <GridItem area="image">
-                    <Flex justifyContent="center" >
-                        <Box width="100%" maxWidth="500px">
-                            <Image src={hero?.image} width="100%" />
-                        </Box>
-                    </Flex>
+                <GridItem area="image" display="flex" justifyContent="center">
+                    <Image src={getZoomHeroImage(hero.name)} height={{base: "300px", md: "350px", xl:"420px"}} width="auto" />
                 </GridItem>
                 <GridItem area="profile">
                     <VStack alignItems="flex-start">
@@ -76,7 +62,7 @@ const HeroProfile = () => {
                             <Text fontWeight="bold" color={GOLD_COLOR} fontSize="1.4rem">
                                 {hero?.title.toUpperCase()}
                             </Text>
-                            <Heading as="h1" color="#fff" fontSize={{base: "2.986rem", md: "3.815rem", xl: "4.61rem"}}>
+                            <Heading as="h1" color="#fff" fontSize={{ base: "2.986rem", md: "3.815rem", xl: "4.61rem" }}>
                                 {hero?.name.toUpperCase()}
                             </Heading>
                         </Box>
