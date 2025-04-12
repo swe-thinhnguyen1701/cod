@@ -3,8 +3,6 @@ const typeDefs = `
         id: ID!
         name: String
         title: String
-        avatar: String
-        image: String
         rarity_id: Int
     }
 
@@ -36,9 +34,7 @@ const typeDefs = `
         id: ID!
         name: String
         title: String
-        avatar: String
         description: String
-        image: String
         rarity_id: Int
         Roles: [Role]
     }

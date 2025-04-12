@@ -28,14 +28,6 @@ Hero.init({
         type: DataTypes.TEXT,
         allowNull: true
     },
-    avatar: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    image: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
     rarity_id: {
         type: DataTypes.SMALLINT,
         allowNull: true

@@ -44,8 +44,6 @@ const resolvers = {
             if(!hero)
                 throw new Error(`Hero not found with given name: ${heroName}`);
 
-            console.log(hero);
-
             return hero;
         },
         getRolesFromHero: async (_parent, { heroId }) => {
