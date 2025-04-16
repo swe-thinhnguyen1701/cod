@@ -1,4 +1,4 @@
-const { Hero, Role, TalentCore } = require("../models");
+const { Hero, Role, TalentCore, Skill } = require("../models");
 const { HERO_ROLE_MAP } = require("../utils/heroRoleMap");
 const { ROLE_TALENT_CORE_MAP, MAIN_TALENT_CORE_MAP } = require("../utils/roleTalentCoreMap");
 
@@ -34,6 +34,12 @@ const resolvers = {
                 include: [
                     {
                         model: Role,
+                        throught: {
+                            attributes: []
+                        },
+                    },
+                    {
+                        model: Skill,
                         throught: {
                             attributes: []
                         }
