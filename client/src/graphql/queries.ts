@@ -31,6 +31,12 @@ export const GET_HERO_BY_NAME = gql`
                 image
                 description    
             }
+            Skills {
+                name
+                description
+                isRage
+                isUltimate
+            }
         }
     }
 `
