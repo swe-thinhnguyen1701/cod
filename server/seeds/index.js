@@ -3,6 +3,7 @@ const seedHeros = require("./seedHeroData");
 const seedRoles = require("./seedRoleData");
 const seedTalentCores = require("./seedTalentCoreData");
 const seedHeroRoles = require("./seedHeroRole");
+const seedSkills = require("./seedSkillData");
 
 const seedAll = async () => {
     try {
@@ -20,6 +21,9 @@ const seedAll = async () => {
 
         await seedHeroRoles();
         console.log("🌱 Hero-role relationships seeded!");
+
+        await seedSkills();
+        console.log("🌱 Skills seeded!");
 
         process.exit(0);
     } catch (error) {

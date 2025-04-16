@@ -1,11 +1,22 @@
 const Hero = require("./Hero");
 const Role = require("./Role");
 const TalentCore = require("./TalentCore");
+const Skill = require("./Skill");
 
 Hero.belongsToMany(Role, {
     through: "hero_roles",
     foreignKey: "hero_id",
     otherKey: "role_id",
+    onDelete: "CASCADE"
+});
+
+Hero.hasMany(Skill, {
+    foreignKey: "hero_id",
+    onDelete: "CASCADE"
+})
+
+Skill.belongsTo(Hero, {
+    foreignKey: "hero_id",
     onDelete: "CASCADE"
 });
 
@@ -30,4 +41,4 @@ Role.belongsToMany(TalentCore, {
 //     onDelete: "CASCADE"
 // });
 
-module.exports = {Hero, Role, TalentCore};
+module.exports = {Hero, Role, TalentCore, Skill};
