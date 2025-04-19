@@ -131,3 +131,12 @@ img {
 .hero-card:hover .hero-image{
   transform: scale(1.2);
 }
+
+.hero-skill {
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.hero-skill:hover {
+  transform: scale(1.2);
+}

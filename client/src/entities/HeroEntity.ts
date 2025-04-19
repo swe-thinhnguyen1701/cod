@@ -1,4 +1,5 @@
 import RoleEntity from "./RoleEntity"
+import HeroSkillEntity from "./HeroSkillEntity"
 
 export default interface HeroEntity {
     id: string,
@@ -9,4 +10,5 @@ export default interface HeroEntity {
     title: string,
     rarity_id: number
     Roles: [RoleEntity]
+    Skills: [HeroSkillEntity]
 }

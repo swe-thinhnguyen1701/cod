@@ -1,42 +1,42 @@
+import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { Heading, HStack, Spinner } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { GET_HERO_BY_NAME } from "../graphql/queries";
 import HeroProfile from "../components/HeroProfile";
-import { useEffect } from "react";
+import HeroSkill from "../components/HeroSkill";
 import useHeroStore from "../state-management/heroes/store";
+import { Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
 
 const HeroDetailPage = () => {
-    const {heroName: heroName} = useParams();
-    const {loading, error, data} = useQuery(GET_HERO_BY_NAME, {
-        variables: {heroName: heroName}
+    const { heroName: heroName } = useParams();
+    const { loading, error, data } = useQuery(GET_HERO_BY_NAME, {
+        variables: { heroName: heroName }
     });
-    const {setHero} = useHeroStore();
-
-    // console.log(heroName);
+    const { setHero } = useHeroStore();
 
     useEffect(() => {
-        // console.log(data);
-        if(data?.getHeroByName){
+        if (data?.getHeroByName) {
             setHero(data.getHeroByName);
-            // console.log(data.getHeroByName);
         }
     }, [data]);
 
-    if(loading) {
+    if (loading) {
         return <Spinner />
     }
 
-    if(error) {
+    if (error) {
         return <Heading as="h2">Something went wrong!</Heading>
     }
 
-    
+
 
     return (
-        <HStack justifyContent="center">
+        <VStack justifyContent="center" gap={8}>
             <HeroProfile />
-        </HStack>
+            <HStack width="100%" justifyContent="center" bg="#1b202b">
+                <HeroSkill />
+            </HStack>
+        </VStack>
     )
 
 }

@@ -21,7 +21,7 @@ const Hero = () => {
         <HStack wrap="wrap" gap={8} margin="0 auto" width="100%" justifyContent="center">
             {heroes.map((hero, index) => (
                 <Link to={`/heroes/${hero.name}`} key={index}>
-                    <HeroCard hero={hero} />
+                    <HeroCard heroName={hero.name} rairtyId={hero.rarity_id} />
                 </Link>
             ))}
         </HStack>

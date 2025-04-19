@@ -1,18 +1,18 @@
 import { Card, VStack, Image, Text, Box } from "@chakra-ui/react"
-import HeroEntity from "../entities/HeroEntity"
 import {getGeneralHeroImage} from "../services/getImages"
 
 interface Props {
-    hero: HeroEntity
+    heroName: string,
+    rairtyId: number
 }
 
-const HeroCard = ({hero} : Props) => {
+const HeroCard = ({heroName, rairtyId} : Props) => {
 
     return (
-        <Card className={`hero-card ${hero.rarity_id === 1 ? "legend" : hero.rarity_id === 2 ? "epic" : "common"}`} borderRadius="10px">
+        <Card className={`hero-card ${rairtyId === 1 ? "legend" : rairtyId === 2 ? "epic" : "common"}`} borderRadius="10px">
             <VStack>
                 <Box width="300px" height="290px">
-                    <Image src={getGeneralHeroImage(hero.name)} alt={hero.name} className="hero-image" />
+                    <Image src={getGeneralHeroImage(heroName)} alt={heroName} className="hero-image" />
                 </Box>
                 <Text
                  fontWeight="bold"
@@ -22,7 +22,7 @@ const HeroCard = ({hero} : Props) => {
                      textAlign="center"
                       borderRadius="0 0 10px 10px"
                       color="white">
-                    {hero.name.toUpperCase()}
+                    {heroName.toUpperCase()}
                 </Text>
             </VStack>
         </Card>
