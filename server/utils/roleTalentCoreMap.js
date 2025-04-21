@@ -36,11 +36,4 @@ const populateRoleTalentCoreMap = async () => {
     }
 }
 
-// const test = async() => {
-//     await populateRoleTalentCoreMap();
-//     console.log(ROLE_TALENT_CORE_MAP.get(3));
-// }
-
-// test();
-
 module.exports = { ROLE_TALENT_CORE_MAP, MAIN_TALENT_CORE_MAP, populateRoleTalentCoreMap };

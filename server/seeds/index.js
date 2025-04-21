@@ -12,12 +12,12 @@ const seedAll = async () => {
 
         await sequelize.sync({ force: true });
         console.log("🌱 Database synced!");
+        
+        await seedHeros(heroData);
+        console.log("🌱 Heroes seeded!");
 
         await seedRoles(roleData);
         console.log("🌱 Roles seeded!");
-
-        await seedHeros(heroData);
-        console.log("🌱 Heroes seeded!");
 
         await seedTalentCores(talentCoreData);
         console.log("🌱 Users seeded!");
