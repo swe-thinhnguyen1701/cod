@@ -1,11 +1,10 @@
 const { Role } = require("../models");
-const roleData = require("../db/roles");
 
-const seedRoles = async () => {
+const seedRoles = async (data) => {
     const roleUrlLink = `https://d3bhl6gkk81cq1.cloudfront.net/hero-roles/`
 
     try {
-        const modifyRoleData = roleData.map(role => {
+        const modifyRoleData = data.map(role => {
             const roleImage = `${roleUrlLink}${role.name}.webp`;
             return {
                 ...role,

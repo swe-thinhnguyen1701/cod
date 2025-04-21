@@ -1,10 +1,9 @@
 const { Hero } = require("../models");
-const heroData = require("../db/heroes");
 
-const seedHeros = async () => {
+const seedHeros = async (data) => {
     try {
         console.log("🌱 Seeding heroes...");
-        await Hero.bulkCreate(heroData, { returning: true });
+        await Hero.bulkCreate(data, { returning: true });
         console.log("✅ Seeding complete!");
         // return heroes;
     } catch (error) {

@@ -1,11 +1,11 @@
 const { TalentCore } = require("../models");
-const talentCoreData = require("../db/talentCores");
+// const talentCoreData = require("../db/talentCores");
 
-const seedTalentCores = async () => {
+const seedTalentCores = async (data) => {
     const talentCoreUrlLink = `https://d3bhl6gkk81cq1.cloudfront.net/talent-cores/`
     
     try {
-        const modifyTalentCoreData = talentCoreData.map(talentCore => {
+        const modifyTalentCoreData = data.map(talentCore => {
             const talentCoreImage = `${talentCoreUrlLink}${talentCore.image}`;
             return {
                 ...talentCore,

@@ -1,10 +1,9 @@
 const {Skill} = require("../models");
-const skillData = require("../db/skills");
 
-const seedSkills = async () => {
+const seedSkills = async (data) => {
     try {
         console.log("🌱 Seeding skills...");
-        await Skill.bulkCreate(skillData, { returning: true });
+        await Skill.bulkCreate(data, { returning: true });
         console.log("✅ Seeding complete!");
         // return skills;
     } catch (error) {

@@ -10,10 +10,18 @@ Hero.belongsToMany(Role, {
     onDelete: "CASCADE"
 });
 
+Hero.belongsToMany(Hero, {
+    as: "Pairings",
+    through: "hero_pairings",
+    foreignKey: "hero_id",
+    otherKey: "paired_hero_id",
+    onDelete: "CASCADE"
+})
+
 Hero.hasMany(Skill, {
     foreignKey: "hero_id",
     onDelete: "CASCADE"
-})
+});
 
 Skill.belongsTo(Hero, {
     foreignKey: "hero_id",

@@ -1,8 +1,8 @@
 const { Hero, Role } = require("../models");
-const heroRoleData = require("../db/heroRoles");
-const roleCombinationData = require("../db/roleCombinations");
+// const heroRoleData = require("../db/heroRoles");
+// const roleCombinationData = require("../db/roleCombinations");
 
-const seedHeroRoles = async () => {
+const seedHeroRoles = async (heroRoleData, roleCombinationData) => {
     try {
         const heroes = await Hero.findAll();
         const roles = await Role.findAll();
