@@ -140,3 +140,22 @@ img {
 .hero-skill:hover {
   transform: scale(1.2);
 }
+
+/* LINK LIST */
+.list-item {
+  cursor: pointer;
+}
+
+.list-item:hover {
+  background-color: #323232;
+  color: #c3ab76;
+}
+
+/* nav bar */
+.menu-btn {
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background-color: #323232;
+}
