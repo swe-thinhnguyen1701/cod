@@ -140,3 +140,44 @@ img {
 .hero-skill:hover {
   transform: scale(1.2);
 }
+
+/* LINK LIST */
+.list-item {
+  cursor: pointer;
+}
+
+.list-item:hover {
+  background-color: #323232;
+  color: #c3ab76;
+}
+
+/* nav bar */
+.menu-btn {
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background-color: #323232;
+}
+
+/* download link */
+.download-link {
+  transition: color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.download-link:hover{
+  color: white;
+}
+
+/* page */
+.page {
+  padding-top: 28px;
+  transition: padding-top 0.3s ease-in-out;
+}
+
+@media screen and (min-width: 64em) {
+  .page {
+    padding-top: 0;
+  }
+}

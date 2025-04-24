@@ -31,7 +31,7 @@ const HeroDetailPage = () => {
 
 
     return (
-        <VStack justifyContent="center" gap={8}>
+        <VStack justifyContent="center" gap={8} className="page">
             <HeroProfile />
             <HStack width="100%" justifyContent="center" bg="#1b202b">
                 <HeroSkill />

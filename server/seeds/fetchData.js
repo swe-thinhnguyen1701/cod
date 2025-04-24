@@ -9,7 +9,7 @@ const fetchDataHelper = async (fileName) => {
         Bucket: process.env.BUCKET_NAME,
         Key: `${fileName}`
     });
-    const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 60 });
     const res = await fetch(url);
     return await res.json();
 }

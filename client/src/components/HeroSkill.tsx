@@ -64,7 +64,7 @@ const HeroSkill = () => {
                 overflowX={{ base: "auto", md: "visible" }}>
                 {heroSkills.map((skill, index) => (
                     <VStack key={index} width="70px"className="hero-skill">
-                        <Box opacity={selectedSkill === index ? "1" : "0.7"} onClick={() => handleSkillClick(index)} width={{ base: "30px", md: "40px", xl: "50px" }}>
+                        <Box opacity={selectedSkill === index ? "1" : "0.5"} onClick={() => handleSkillClick(index)} width={{ base: "30px", md: "40px", xl: "50px" }}>
                             <Image src={getHeroSkillImage(skill.name)} alt={`${skill.name} image`} />
                         </Box>
                         <Text textAlign="center" fontWeight="bold" fontSize={{ base: "8px", md: "10px", xl: "12px" }}>{skill.name.toUpperCase()}</Text>
