@@ -1,10 +1,10 @@
 const { Hero, Role } = require("../models");
-const heroRoles = require("../db/heroRoles");
-const roleCombinations = require("../db/roleCombinations");
+// const heroRoles = require("../db/heroRoles");
+// const roleCombinations = require("../db/roleCombinations");
 
 const HERO_ROLE_MAP = new Map();
 
-const populateHeroRolesMap = async () => {
+const populateHeroRolesMap = async (heroRoles, roleCombinations) => {
     for (let i = 0; i < heroRoles.length; i++) {
         const name = heroRoles[i].name;
         const roleCombinationId = heroRoles[i].roleCombinationId;

@@ -1,6 +1,6 @@
 const { TalentCore, Role } = require("../models");
-const roleTalentCoreData = require("../db/roleTalentCore");
-const mainTalentCoreData = require("../db/mainTalentCores");
+// const roleTalentCoreData = require("../db/roleTalentCore");
+// const mainTalentCoreData = require("../db/mainTalentCores");
 // 17, and 3 roles
 // 0: 1, 2, 3
 // role id: []
@@ -8,7 +8,7 @@ const mainTalentCoreData = require("../db/mainTalentCores");
 const MAIN_TALENT_CORE_MAP = new Map();
 const ROLE_TALENT_CORE_MAP = new Map();
 
-const populateRoleTalentCoreMap = async () => {
+const populateRoleTalentCoreMap = async (roleTalentCoreData, mainTalentCoreData) => {
     try {
         for (let i = 0; i < roleTalentCoreData.length; i++) {
             const roleName = roleTalentCoreData[i].name;
