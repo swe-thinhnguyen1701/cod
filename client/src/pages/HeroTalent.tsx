@@ -4,7 +4,7 @@ import HeroTalents from "../components/HeroTalents";
 const HeroTalentPage = () => {
     return (
         <>
-            <Box width="100%" mt={10}>
+            <Box width="100%" className="page">
                 {/* <Talent isSelected={false} isActive={true} /> */}
                 <HeroTalents />
                 {/* <RoleBadge /> */}

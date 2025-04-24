@@ -18,7 +18,7 @@ const Hero = () => {
     const heroes: HeroEntity[] = data.getAllHeroes;
 
     return (
-        <HStack wrap="wrap" gap={8} margin="0 auto" width="100%" justifyContent="center">
+        <HStack wrap="wrap" gap={8} margin="0 auto" width="100%" justifyContent="center" className="page">
             {heroes.map((hero, index) => (
                 <Link to={`/heroes/${hero.name}`} key={index}>
                     <HeroCard heroName={hero.name} rairtyId={hero.rarity_id} />

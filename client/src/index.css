@@ -159,3 +159,25 @@ img {
 .menu-btn:hover {
   background-color: #323232;
 }
+
+/* download link */
+.download-link {
+  transition: color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.download-link:hover{
+  color: white;
+}
+
+/* page */
+.page {
+  padding-top: 28px;
+  transition: padding-top 0.3s ease-in-out;
+}
+
+@media screen and (min-width: 64em) {
+  .page {
+    padding-top: 0;
+  }
+}

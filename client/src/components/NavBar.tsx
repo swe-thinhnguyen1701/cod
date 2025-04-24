@@ -6,7 +6,7 @@ import DeskTopMenu from "./DesktopMenu";
 
 const NavBar = () => {
     return (
-        <Box bg="rgba(17, 17, 17, 0.91)" width="100%">
+        <Box bg="rgba(17, 17, 17, .99)" width="100%">
             <Flex maxWidth="1400px" margin="0 auto" justifyContent="space-between" alignItems="center" padding={4}>
                 <Box width={{ base: "100px", md: "150px", lg: "200px" }}>
                     <Link to="/">
