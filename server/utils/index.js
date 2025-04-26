@@ -24,7 +24,7 @@ const populateData = async () => {
             fetchDataHelper("role-combination-db.json"),
             fetchDataHelper("role-talent-core-db.json"),
             fetchDataHelper("main-talent-core-db.json")
-        ])
+        ]);
         await populateHeroRolesMap(heroRoleData, roleCombinationData);
         await populateRoleTalentCoreMap(roleTalentCoreData, mainTalentCoreData);
     } catch (error) {

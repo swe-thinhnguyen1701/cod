@@ -4,6 +4,7 @@ import { Heading, HStack, Spinner } from "@chakra-ui/react";
 import HeroCard from "../components/HeroCard"
 import HeroEntity from "../entities/HeroEntity";
 import { Link } from "react-router-dom";
+import { setPageTitle } from "../services/setTitlePage";
 
 const Hero = () => {
     const {data, error, loading} = useQuery(GET_ALL_HEROES);
@@ -14,8 +15,9 @@ const Hero = () => {
     if(error)
         return (<Heading as="h2">Something went wrong</Heading>);
 
-    
     const heroes: HeroEntity[] = data.getAllHeroes;
+
+    setPageTitle("Heroes")
 
     return (
         <HStack wrap="wrap" gap={8} margin="0 auto" width="100%" justifyContent="center" className="page">

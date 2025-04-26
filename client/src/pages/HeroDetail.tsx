@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { GET_HERO_BY_NAME } from "../graphql/queries";
+import {setPageTitle} from "../services/setTitlePage";
 import HeroProfile from "../components/HeroProfile";
 import HeroSkill from "../components/HeroSkill";
 import useHeroStore from "../state-management/heroes/store";
@@ -28,7 +29,7 @@ const HeroDetailPage = () => {
         return <Heading as="h2">Something went wrong!</Heading>
     }
 
-
+    setPageTitle(heroName ? heroName : "Hero Detail");
 
     return (
         <VStack justifyContent="center" gap={8} className="page">
