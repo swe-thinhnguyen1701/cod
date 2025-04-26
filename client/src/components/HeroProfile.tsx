@@ -8,12 +8,12 @@ import RoleBadge from "./RoleBadge";
 
 
 const sampleData = {
-    tank: 20,
-    skills: 70,
-    mobility: 30,
-    control: 80,
+    skill: 20,
+    normalAtk: 70,
+    openField: 90,
+    tank: 30,
+    survivability: 80,
     support: 82,
-    precision: 84
 }
 
 const BACKGROUND_URL = "https://d3bhl6gkk81cq1.cloudfront.net/hero-images/background.webp";
@@ -40,11 +40,10 @@ const HeroProfile = () => {
                 width="100%">
                 <Grid templateAreas={{
                     base: `"image" "profile"`,
-                    sm: `"profile image"`
+                    md: `"profile image"`
                 }}
                     templateColumns={{
                         base: "1fr",
-                        sm: "1fr 250px",
                         md: "1fr 300px",
                         lg: "1fr 500px"
                     }}
@@ -77,7 +76,7 @@ const HeroProfile = () => {
                                     </Box>
                                 ))}
                             </HStack>
-                            <Box width="150px" height="150px">
+                            <Box>
                                 <HeroCombatRadarChart data={sampleData} />
                             </Box>
                         </VStack>

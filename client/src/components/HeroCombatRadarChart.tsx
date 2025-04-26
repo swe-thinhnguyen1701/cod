@@ -14,32 +14,42 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, 
 
 interface HeroCombatRadarChartProps {
   data: {
+    skill: number;
+    normalAtk: number;
+    openField: number;
     tank: number;
-    skills: number;
-    mobility: number;
-    control: number;
+    survivability: number;
     support: number;
-    precision: number;
   };
 }
 
+const descriptions: Record<string, string[]> = {
+  SKILL: ["","High skill damage"],
+  "NORMAL ATTACK": ["","Improve on-hit attacks", "(i.e. double hits, crit rate, crit damage)"],
+  "OPEN FIELD": ["","Performance in open field combat"],
+  TANK: ["","HP / DEF / Damage reduction"],
+  SURVIVABILITY: ["","Healing / Shielding / Lifesteal on-hit"],
+  SUPPORT: ["","Buffs / Debuffs / Crowd control"]
+};
+
+
 const HeroCombatRadarChart: React.FC<HeroCombatRadarChartProps> = ({ data }) => {
   const chartData = {
-    labels: ['Tank', 'Skills', 'Mobility', 'Control', 'Support', 'Precision'],
+    labels: ['SKILL', 'NORMAL ATTACK', 'OPEN FIELD', 'TANK', 'SURVIVABILITY', 'SUPPORT'],
     datasets: [
       {
         data: [
+          data.skill,
+          data.normalAtk,
+          data.openField,
           data.tank,
-          data.skills,
-          data.mobility,
-          data.control,
-          data.support,
-          data.precision
+          data.survivability,
+          data.support
         ],
         backgroundColor: "rgba(230, 175, 74, 0.5)",
         borderColor: "rgba(230, 175, 74, 0.5)",
         pointBackgroundColor: "rgb(230, 175, 74)",
-        pointRadius: 1,
+        pointRadius: 3,
         borderWidth: 2
       }
     ]
@@ -69,6 +79,17 @@ const HeroCombatRadarChart: React.FC<HeroCombatRadarChartProps> = ({ data }) => 
     },
     plugins: {
       legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            const label = context.label;
+            const value = context.formattedValue;
+            const description = descriptions[label] || '';
+            return [`Score: ${value}/100`, ...description];
+          }
+        },
+        displayColors: false,
+      }
     }
   };
 
