@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { GET_HERO_BY_NAME } from "../graphql/queries";
-import {setPageTitle} from "../services/setTitlePage";
+import { Helmet } from "react-helmet";
+import { setPageTitle } from "../services/setTitlePage";
 import HeroProfile from "../components/HeroProfile";
 import HeroSkill from "../components/HeroSkill";
 import useHeroStore from "../state-management/heroes/store";
@@ -32,12 +33,21 @@ const HeroDetailPage = () => {
     setPageTitle(heroName ? heroName : "Hero Detail");
 
     return (
-        <VStack justifyContent="center" gap={8} className="page">
-            <HeroProfile />
-            <HStack width="100%" justifyContent="center" bg="#1b202b">
-                <HeroSkill />
-            </HStack>
-        </VStack>
+        <>
+            <Helmet>
+                <title>{heroName} | Hero Detail</title>
+                <meta
+                    name="description"
+                    content={`View ${heroName}'s skills, strengths, and battle stats. Master ${heroName} to dominate the battlefield!`}
+                />
+            </Helmet>
+            <VStack justifyContent="center" gap={8} className="page">
+                <HeroProfile />
+                <HStack width="100%" justifyContent="center" bg="#1b202b">
+                    <HeroSkill />
+                </HStack>
+            </VStack>
+        </>
     )
 
 }
