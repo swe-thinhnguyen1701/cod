@@ -105,30 +105,30 @@ img {
 }
 
 .hero-card:hover.legend {
-  background: radial-gradient(circle, rgba(255,229,92,1) 35%, rgba(245,206,0,1) 61%);
+  background: radial-gradient(circle, rgba(255, 229, 92, 1) 35%, rgba(245, 206, 0, 1) 61%);
 }
 
 .hero-card:hover.epic {
-  background: radial-gradient(circle, rgba(255,92,255,1) 35%, rgba(209,0,209,1) 61%);
+  background: radial-gradient(circle, rgba(255, 92, 255, 1) 35%, rgba(209, 0, 209, 1) 61%);
 }
 
 .hero-card:hover.common {
-  background: radial-gradient(circle, rgba(98,184,252,1) 35%, rgba(4,129,228,1) 61%);
+  background: radial-gradient(circle, rgba(98, 184, 252, 1) 35%, rgba(4, 129, 228, 1) 61%);
 }
 
 .hero-name {
   background-color: #0a1428;
 }
 
-.hero-card:hover .hero-name{
+.hero-card:hover .hero-name {
   background-color: #3b4353;
 }
 
-.hero-image{
+.hero-image {
   transition: transform 0.3s ease-in-out;
 }
 
-.hero-card:hover .hero-image{
+.hero-card:hover .hero-image {
   transform: scale(1.2);
 }
 
@@ -163,10 +163,11 @@ img {
 /* download link */
 .download-link {
   transition: color 0.3s ease-in-out;
+  color: "black";
   cursor: pointer;
 }
 
-.download-link:hover{
+.download-link:hover {
   color: white;
 }
 
@@ -180,4 +181,26 @@ img {
   .page {
     padding-top: 0;
   }
+}
+
+/* discover hero link */
+.discover-hero-link {
+  cursor: pointer;
+  background-color: rgb(230, 175, 74);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.discover-hero-link:hover {
+  background-color: rgb(226, 193, 130);
+}
+
+/* hero introduction */
+.hero-role-item {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.hero-role-item:hover {
+  transform: scale(1.2);
+  color: #f8d375;
 }
