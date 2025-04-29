@@ -26,31 +26,24 @@ const resolvers = {
 
             return hero;
         },
-        getHeroByName: async (_parent, {heroName}) => {
-            const hero = await Hero.findOne({
+        getHeroDetailByName: async (_parent, { heroName }) => {
+            let hero = await Hero.findOne({
                 where: {
                     name: heroName
                 },
                 include: [
                     {
-                        model: Role,
-                        throught: {
-                            attributes: []
-                        },
-                    },
-                    {
                         model: Skill,
-                        throught: {
-                            attributes: []
-                        }
                     }
-                ]
+                ],
             });
 
-            if(!hero)
-                throw new Error(`Hero not found with given name: ${heroName}`);
-
-            return hero;
+            const heroWithRoles = {
+                ...hero.toJSON(),
+                roles: HERO_ROLE_MAP.get(hero.id)
+            };
+        
+            return heroWithRoles;
         },
         getRolesFromHero: async (_parent, { heroId }) => {
             if (!heroId)
@@ -70,7 +63,7 @@ const resolvers = {
                 throw new Error("No role ID provided");
 
             const key = parseInt(heroId);
-            
+
             if (!HERO_ROLE_MAP.has(key))
                 throw new Error(`Hero is not found with gieven ID: ${key}`);
 

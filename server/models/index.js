@@ -7,16 +7,17 @@ Hero.belongsToMany(Role, {
     through: "hero_roles",
     foreignKey: "hero_id",
     otherKey: "role_id",
-    onDelete: "CASCADE"
+    onDelete: "CASCADE",
+    as: "roles"
 });
 
-Hero.belongsToMany(Hero, {
-    as: "Pairings",
-    through: "hero_pairings",
-    foreignKey: "hero_id",
-    otherKey: "paired_hero_id",
-    onDelete: "CASCADE"
-})
+// Hero.belongsToMany(Hero, {
+//     as: "Pairings",
+//     through: "hero_pairings",
+//     foreignKey: "hero_id",
+//     otherKey: "paired_hero_id",
+//     onDelete: "CASCADE",
+// })
 
 Hero.hasMany(Skill, {
     foreignKey: "hero_id",
@@ -32,7 +33,8 @@ Role.belongsToMany(Hero, {
     through: "hero_roles",
     foreignKey: "role_id",
     otherKey: "hero_id",
-    onDelete: "CASCADE"
+    onDelete: "CASCADE",
+    as: "heroes"
 });
 
 Role.belongsToMany(TalentCore, {

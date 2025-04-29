@@ -44,7 +44,7 @@ const typeDefs = `
         title: String
         description: String
         rarity_id: Int
-        Roles: [Role]
+        roles: [Role]
         Skills: [Skill]
     }
 
@@ -55,7 +55,7 @@ const typeDefs = `
     type Query {
         getAllHeroes: [Hero]
         getHeroById(id: ID!): Hero
-        getHeroByName(heroName: String): HeroDetail
+        getHeroDetailByName(heroName: String): HeroDetail
         getRolesFromHero(heroId: ID!): [Role]
         getTalentCoresFromHero(heroId: ID!): [[TalentCore]]
     }
