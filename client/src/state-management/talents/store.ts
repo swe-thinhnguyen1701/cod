@@ -650,49 +650,6 @@ const useTalentStore = create<TalentStore>((set, get) => ({
 
     rollbackMap.set(prerequisiteTalentCore.key, talent);
   },
-  // setRollbackTalentCore: (talentKey) => {
-  //   set((store) => {
-  //     // console.log(prerequisiteTalentCore);
-  //     const talent = store.talentMap?.get(talentKey) as TalentEntity;
-
-  //     if(!talent)
-  //       return store;
-
-  //     const prerequisiteTalentCore = store.talentMap?.get(talent.prerequisite_talent_key as string) as TalentEntity;
-
-  //     if(!prerequisiteTalentCore)
-  //       return store;
-
-  //     // set current_level back 0
-  //     const refundPoints = talent.current_level;
-  //     const updateTalent: TalentEntity = {
-  //       ...talent,
-  //       current_level: 0,
-  //     };
-
-  //     // if current level > 0
-  //     // update prerequisite
-  //     const updatePrerequisite = JSON.parse(JSON.stringify(store.prerequisite));
-  //     updatePrerequisite[talent.group][talent.position] -= refundPoints;
-
-  //     // update in the talentmap
-  //     const updateTalentMap = new Map(store.talentMap);
-  //     updateTalentMap.set(talent.key, updateTalent);
-
-  //     // remove it from tracking talent
-  //     const updateTrackingTalent = new Map(store.trackingTalent);
-  //     updateTrackingTalent.get(talent.group)?.delete(talent.key);
-
-  //     return {
-  //       ...store,
-  //       remainingPoints: store.remainingPoints + refundPoints,
-  //       prerequisite: updatePrerequisite,
-  //       talentMap: updateTalentMap,
-  //       trackingTalent: updateTrackingTalent,
-  //       selectedTalent: talent,
-  //     };
-  //   });
-  // },
   reset: () => {
     set({
       remainingPoints: 59,
