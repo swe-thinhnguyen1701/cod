@@ -1,22 +1,23 @@
 import { Box, Image, VStack } from "@chakra-ui/react";
-import { Helmet } from "react-helmet";
 import logo from "../assets/cod-logo-2.webp"
 import codPhoneBackground from "../assets/cod-phone-background.jpg"
 import DownloadLink from "../components/DownloadLink";
 import HeroIntroduction from "../components/HeroIntroduction";
-import { setPageTitle } from "../services/setTitlePage";
+import SEO from "../components/SEO";
 
 const videoUrl = "https://d3bhl6gkk81cq1.cloudfront.net/videos/intro.webm"
 
+const homePageSEO = {
+    title: "Call of Dragons Wiki - Explore Heroes, Artifacts, and Pets",
+    description: "Welcome to the Call of Dragons Wiki where you can discover all heroes, pets, artifacts, and more!",
+    keywords: "Call of Dragons, heroes, pets, wiki, artifacts",
+    type: "website"
+}
+
 const HomePage = () => {
-    setPageTitle("Call of Dragons Wiki");
     return (
         <>
-            <Helmet>
-                <title>Call of Dragons Wiki - Explore Heroes, Artifacts, and Pets</title>
-                <meta name="description" content="Welcome to the Call of Dragons Wiki where you can discover all heroes, pets, artifacts, and more!" />
-                <meta name="keywords" content="Call of Dragons, heroes, pets, wiki, artifacts" />
-            </Helmet>
+            <SEO page={homePageSEO}/>
             <Box>
                 <Box position="relative" mb={10}>
                     <Box>

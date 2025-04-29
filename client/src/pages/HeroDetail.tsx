@@ -1,24 +1,23 @@
 import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { GET_HERO_BY_NAME } from "../graphql/queries";
-import { Helmet } from "react-helmet";
-import { setPageTitle } from "../services/setTitlePage";
+import { GET_HERO_DETAIL_BY_NAME } from "../graphql/queries";
 import HeroProfile from "../components/HeroProfile";
 import HeroSkill from "../components/HeroSkill";
+import SEO from "../components/SEO";
 import useHeroStore from "../state-management/heroes/store";
-import { Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
+import { HStack, Spinner, VStack } from "@chakra-ui/react";
 
 const HeroDetailPage = () => {
     const { heroName: heroName } = useParams();
-    const { loading, error, data } = useQuery(GET_HERO_BY_NAME, {
+    const { loading, error, data } = useQuery(GET_HERO_DETAIL_BY_NAME, {
         variables: { heroName: heroName }
     });
     const { setHero } = useHeroStore();
 
     useEffect(() => {
-        if (data?.getHeroByName) {
-            setHero(data.getHeroByName);
+        if (data?.getHeroDetailByName) {
+            setHero(data.getHeroDetailByName);
         }
     }, [data]);
 
@@ -27,20 +26,19 @@ const HeroDetailPage = () => {
     }
 
     if (error) {
-        return <Heading as="h2">Something went wrong!</Heading>
+        throw new Response("Hero not found", {status: 404});
     }
 
-    setPageTitle(heroName ? heroName : "Hero Detail");
+    const heroDetailSEO = {
+        title: `${heroName} - CoD Wiki`,
+        description: `View ${heroName}'s skills, strengths, and battle stats. Master ${heroName} to dominate the battlefield!`,
+        keywords: `Call of Dragons, ${heroName}, hero detail, skills, strengths`,
+        type: "website"
+    }
 
     return (
         <>
-            <Helmet>
-                <title>{heroName} | Hero Detail</title>
-                <meta
-                    name="description"
-                    content={`View ${heroName}'s skills, strengths, and battle stats. Master ${heroName} to dominate the battlefield!`}
-                />
-            </Helmet>
+            <SEO page={heroDetailSEO}/>
             <VStack justifyContent="center" gap={8} className="page">
                 <HeroProfile />
                 <HStack width="100%" justifyContent="center" bg="#1b202b">

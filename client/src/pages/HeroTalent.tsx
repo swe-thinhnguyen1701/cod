@@ -1,24 +1,24 @@
 import { Box } from "@chakra-ui/react";
 import HeroTalents from "../components/HeroTalents";
-import { setPageTitle } from "../services/setTitlePage";
-import { Helmet } from "react-helmet";
+import SEO from "../components/SEO";
 import useTalentStore from "../state-management/talents/store";
 import { useEffect } from "react";
 
+const heroTalentPage = {
+    title: "Hero Talents - CoD Wiki",
+    description: "Explore the hero talents in the Call of Dragons Wiki. Discover the best talents for your favorite heroes.",
+    keywords: "Call of Dragons, hero talents, wiki, best talents",
+    type: "website"
+}
+
 const HeroTalentPage = () => {
-    setPageTitle("Hero Talents");
     const { reset } = useTalentStore();
     useEffect(() => {
         reset();
     }, []);
     return (
         <>
-            <Helmet>
-                <title>Hero Talents</title>
-                <meta
-                    name="description"
-                    content="Hero talent simulation tool to build the best talents for your favorite heroes in Call of Dragons." />
-            </Helmet>
+            <SEO page={heroTalentPage}/>
             <Box width="100%" className="page">
                 <HeroTalents />
             </Box>
