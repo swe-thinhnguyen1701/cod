@@ -10,11 +10,14 @@ import HomePage from './pages/Home.tsx';
 import HeroTalentPage from './pages/HeroTalent.tsx';
 import HeroPage from "./pages/Hero.tsx";
 import HeroDetailPage from "./pages/HeroDetail.tsx"
+import Error from './pages/Error.tsx';
+import { HelmetProvider } from 'react-helmet-async';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <Error />,
     children: [
       {
         index: true,
@@ -38,9 +41,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <RouterProvider router={router} />
-    </ChakraProvider>
+    <HelmetProvider>
+      <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <RouterProvider router={router} />
+      </ChakraProvider>
+    </HelmetProvider>
   </StrictMode>
 )

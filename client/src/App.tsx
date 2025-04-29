@@ -16,14 +16,14 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <Box position="relative">
-        <Box position="fixed" top={0} zIndex="100" width="100%">
-          <NavBar />
+        <Box position="relative">
+          <Box position="fixed" top={0} zIndex="100" width="100%">
+            <NavBar />
+          </Box>
+          <Box mt={{ base: "50px", lg: "90px" }}>
+            <Outlet />
+          </Box>
         </Box>
-        <Box mt={{base: "50px", lg: "90px"}}>
-          <Outlet />
-        </Box>
-      </Box>
     </ApolloProvider>
   )
 }
