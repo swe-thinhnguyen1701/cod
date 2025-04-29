@@ -19,14 +19,14 @@ export const GET_HERO_BY_ID = gql`
     }
 `
 
-export const GET_HERO_BY_NAME = gql`
-    query getHeroByName($heroName: String!) {
-        getHeroByName(heroName: $heroName) {
+export const GET_HERO_DETAIL_BY_NAME = gql`
+    query getHeroDetailByName($heroName: String!) {
+        getHeroDetailByName(heroName: $heroName) {
             id
             name
             description
             title            
-            Roles {
+            roles {
                 name
                 image
                 description    

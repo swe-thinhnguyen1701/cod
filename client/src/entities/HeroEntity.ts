@@ -9,6 +9,6 @@ export default interface HeroEntity {
     description: string,
     title: string,
     rarity_id: number
-    Roles: [RoleEntity]
+    roles: [RoleEntity]
     Skills: [HeroSkillEntity]
 }

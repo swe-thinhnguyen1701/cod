@@ -24,8 +24,8 @@ const HeroProfile = () => {
     const { setRoles } = useRoleStore();
 
     useEffect(() => {
-        if (hero?.Roles)
-            setRoles(hero.Roles);
+        if (hero?.roles)
+            setRoles(hero.roles);
 
     }, [hero]);
 
@@ -70,7 +70,7 @@ const HeroProfile = () => {
                                 {hero?.description}
                             </Text>
                             <HStack justifyContent="start" gap={2}>
-                                {hero?.Roles.map((_role, index) => (
+                                {hero?.roles.map((_role, index) => (
                                     <Box key={index}>
                                         <RoleBadge idx={index} />
                                     </Box>
