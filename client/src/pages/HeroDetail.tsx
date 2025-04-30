@@ -6,7 +6,7 @@ import HeroProfile from "../components/HeroProfile";
 import HeroSkill from "../components/HeroSkill";
 import SEO from "../components/SEO";
 import useHeroStore from "../state-management/heroes/store";
-import { HStack, Spinner, VStack } from "@chakra-ui/react";
+import { Spinner, VStack } from "@chakra-ui/react";
 
 const HeroDetailPage = () => {
     const { heroName: heroName } = useParams();
@@ -26,7 +26,7 @@ const HeroDetailPage = () => {
     }
 
     if (error) {
-        throw new Response("Hero not found", {status: 404});
+        throw new Response("Hero not found", { status: 404 });
     }
 
     const heroDetailSEO = {
@@ -38,12 +38,10 @@ const HeroDetailPage = () => {
 
     return (
         <>
-            <SEO page={heroDetailSEO}/>
+            <SEO page={heroDetailSEO} />
             <VStack justifyContent="center" gap={8} className="page">
                 <HeroProfile />
-                <HStack width="100%" justifyContent="center" bg="#1b202b">
-                    <HeroSkill />
-                </HStack>
+                <HeroSkill />
             </VStack>
         </>
     )
