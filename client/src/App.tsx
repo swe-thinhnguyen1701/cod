@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from "@ap
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import { Box } from "@chakra-ui/react";
+import Footer from "./components/Footer";
 
 const httpLink = createHttpLink({
   uri: "/graphql"
@@ -20,9 +21,10 @@ function App() {
           <Box position="fixed" top={0} zIndex="100" width="100%">
             <NavBar />
           </Box>
-          <Box mt={{ base: "50px", lg: "90px" }}>
+          <Box mt={{ base: "50px", lg: "90px" }} mb={10}>
             <Outlet />
           </Box>
+          <Footer />
         </Box>
     </ApolloProvider>
   )
