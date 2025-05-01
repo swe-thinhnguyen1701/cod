@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Box, Grid, GridItem, Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
-import { getZoomHeroImage } from "../services/getImages"
+import { getGeneralHeroImage } from "../services/getImages"
 import HeroCombatRadarChart from "./HeroCombatRadarChart";
 import useHeroStore from "../state-management/heroes/store";
 import useRoleStore from "../state-management/roles/store";
@@ -54,7 +54,7 @@ const HeroProfile = () => {
                     margin="0 auto"
                 >
                     <GridItem area="image" display="flex" justifyContent="center">
-                        <Image src={getZoomHeroImage(hero.name)} height={{ base: "300px", md: "350px", xl: "420px" }} width="auto" />
+                        <Image src={getGeneralHeroImage(hero.name)} height={{ base: "300px", md: "350px", xl: "auto" }} width="auto" />
                     </GridItem>
                     <GridItem area="profile">
                         <VStack alignItems="flex-start">

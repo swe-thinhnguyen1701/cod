@@ -191,7 +191,7 @@ img {
 }
 
 .discover-hero-link:hover {
-  background-color: rgb(226, 193, 130);
+  background-color: #e2c182;
 }
 
 /* hero introduction */
@@ -203,4 +203,9 @@ img {
 .hero-role-item:hover {
   transform: scale(1.2);
   color: #f8d375;
+}
+
+/* footer */
+.sub-link:hover{
+  text-decoration: underline;
 }
