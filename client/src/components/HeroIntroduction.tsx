@@ -1,6 +1,7 @@
 import { Heading, ListItem, Text, UnorderedList, VStack, Box, Image, HStack, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { getGeneralHeroImage } from "../services/getImages";
 
 const HERO_TYPES = ["Infantry", "Cavalry", "Marksman", "Magic", "Overall"];
 const HERO_ROLE_URL = "https://d3bhl6gkk81cq1.cloudfront.net/hero-roles/"
@@ -61,7 +62,7 @@ const HeroIntroduction = () => {
                 </VStack>
                 <VStack paddingBottom={10}>
                     <Box width={{ base: "100%", md: "500px", lg: "39.06vw" }} maxWidth="800px" height={{ base: "97.19vw", md: "486px", lg: "auto" }}>
-                        <Image src={`https://d3bhl6gkk81cq1.cloudfront.net/hero-images/${ICONIC_HEROES[selectedType].name}-full.webp`} alt={`${ICONIC_HEROES[selectedType].name} hero image`} width="100%" />
+                        <Image src={getGeneralHeroImage(ICONIC_HEROES[selectedType].name)} alt={`${ICONIC_HEROES[selectedType].name} hero image`} width="100%" />
                     </Box>
                     <Heading as="h4">{ICONIC_HEROES[selectedType].name.toUpperCase()}</Heading>
                     <Text>{ICONIC_HEROES[selectedType].title}</Text>

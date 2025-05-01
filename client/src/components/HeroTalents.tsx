@@ -7,24 +7,28 @@ import { GET_ALL_HEROES } from "../graphql/queries";
 
 const HeroTalents = () => {
     const { loading, error, data } = useQuery(GET_ALL_HEROES);
-    
+
     const { remainingPoints, isHeroSelected } = useTalentStore();
 
-    if(loading)
+    if (loading)
         return <Spinner />
 
-    if(error)
+    if (error)
         return <Heading as="h2">Something went wrong!</Heading>
 
     return (
         <>
             <Box position="relative">
                 <Box mb={4}>
-                    <HeroSelection heroes={data.getAllHeroes}/>
+                    <HeroSelection heroes={data.getAllHeroes} />
                 </Box>
-                <Badge padding={2} position="fixed" right={2} colorScheme={remainingPoints > 10 ? "green" : remainingPoints > 0 ? "yellow" : "red"} zIndex="3">
+                {isHeroSelected && <Badge
+                    padding={2}
+                    position="fixed"
+                    right={{ base: 2, md: 20, lg: "25vw" }}
+                    colorScheme={remainingPoints > 10 ? "green" : remainingPoints > 0 ? "yellow" : "red"} zIndex="3">
                     <Text fontWeight="bold" fontSize="20px">{remainingPoints}</Text>
-                </Badge>
+                </Badge>}
                 {isHeroSelected && <TalentGrid />}
             </Box>
         </>
