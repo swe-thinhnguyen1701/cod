@@ -3,6 +3,10 @@ const { HERO_ROLE_MAP } = require("../utils/heroRoleMap");
 const { ROLE_TALENT_CORE_MAP, MAIN_TALENT_CORE_MAP } = require("../utils/roleTalentCoreMap");
 const { validateMessage } = require("../utils/resolver_helper_methods/validateMessage");
 
+const rateLimitMap = new Map();
+const RATE_LIMIT = 5; // 5 requests
+const RATE_LIMIT_TIME = 15 * 60 * 1000; // 15 minute
+
 const resolvers = {
     Query: {
         getAllHeroes: async () => {

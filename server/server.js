@@ -6,7 +6,7 @@ const path = require("path");
 const { resolvers, typeDefs } = require("./schemas");
 
 const sequelize = require("./config/connection");
-const messageDB = require("./config/mongodbConnection");
+const connectMongo = require("./config/mongodbConnection");
 
 const { populateData } = require("./utils");
 
@@ -20,13 +20,9 @@ const PORT = process.env.PORT || 3001;
 
 const startApolloServer = async () => {
     try {
-        messageDB.once("open", () => {
-            console.log("connected to MongoDB");
-        });
-
+        await connectMongo();
         await sequelize.sync({ force: false });
         await populateData();
-
         await server.start();
 
         app.use(express.urlencoded({ extended: false }));
