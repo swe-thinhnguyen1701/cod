@@ -1,6 +1,11 @@
-const { Hero, Role, TalentCore, Skill } = require("../models");
+const { Hero, Role, TalentCore, Skill, Message } = require("../models");
 const { HERO_ROLE_MAP } = require("../utils/heroRoleMap");
 const { ROLE_TALENT_CORE_MAP, MAIN_TALENT_CORE_MAP } = require("../utils/roleTalentCoreMap");
+const { validateMessage } = require("../utils/resolver_helper_methods/validateMessage");
+
+const rateLimitMap = new Map();
+const RATE_LIMIT = 5; // 5 requests
+const RATE_LIMIT_TIME = 15 * 60 * 1000; // 15 minute
 
 const resolvers = {
     Query: {
@@ -42,7 +47,7 @@ const resolvers = {
                 ...hero.toJSON(),
                 roles: HERO_ROLE_MAP.get(hero.id)
             };
-        
+
             return heroWithRoles;
         },
         getRolesFromHero: async (_parent, { heroId }) => {
@@ -84,7 +89,68 @@ const resolvers = {
 
             return roleTalentCores;
         }
+    },
+
+    Mutation: {
+        addMessage: async (_parent, { name, email, message }, context) => {
+            const isMessageExist = await Message.findOne({name, email, message});
+            if(isMessageExist){
+                return {
+                    code: 429,
+                    success: false,
+                    message: "Message has already been sent!"
+                }
+            }
+
+            const ip = context.req.ip;
+
+            const now = Date.now();
+            const entry = rateLimitMap.get(ip) || { count: 0, timestamp: now };
+
+            if (now - entry.timestamp > RATE_LIMIT_TIME) {
+                rateLimitMap.set(ip, { count: 1, timestamp: now });
+            } else {
+                if (entry.count >= RATE_LIMIT) {
+                    return {
+                        code: 429,
+                        success: false,
+                        message: "Too many requests. Please try again later."
+                    };
+                }
+
+                rateLimitMap.set(ip, { count: entry.count + 1, timestamp: entry.timestamp });
+            }
+
+            const error = validateMessage({ name, email, message });
+            if (error) {
+                return {
+                    code: 400,
+                    success: false,
+                    message: error
+                };
+            }
+
+            await Message.create({
+                name,
+                email,
+                message
+            });
+
+            return {
+                code: 200,
+                success: true,
+                message: "Message sent successfully"
+            };
+        }
     }
 }
+
+// function validateMessage({name, email, message}) {
+//     if (!name || !email || !message) return "Please fill in all fields";
+//     if (name.length > 32) return "Name cannot exceed 32 characters";
+//     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) return "Please enter a valid email address";
+//     if (message.length > 2000) return "Message cannot exceed 2000 characters";
+//     return null;
+// }
 
 module.exports = resolvers;

@@ -52,12 +52,22 @@ const typeDefs = `
         talentCores: [TalentCore]
     }
 
+    type Response {
+        code: Int
+        success: Boolean
+        message: String
+    }
+
     type Query {
         getAllHeroes: [Hero]
         getHeroById(id: ID!): Hero
         getHeroDetailByName(heroName: String): HeroDetail
         getRolesFromHero(heroId: ID!): [Role]
         getTalentCoresFromHero(heroId: ID!): [[TalentCore]]
+    }
+
+    type Mutation {
+        addMessage(name: String!, email: String!, message: String!): Response
     }
 `;
 
