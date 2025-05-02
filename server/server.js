@@ -6,7 +6,7 @@ const path = require("path");
 const { resolvers, typeDefs } = require("./schemas");
 
 const sequelize = require("./config/connection");
-const messageDB = require("./config/mongoDB-connection");
+const messageDB = require("./config/mongodbConnection");
 
 const { populateData } = require("./utils");
 

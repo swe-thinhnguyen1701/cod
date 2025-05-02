@@ -1,6 +1,4 @@
 const { Hero, Role } = require("../models");
-// const heroRoleData = require("../db/heroRoles");
-// const roleCombinationData = require("../db/roleCombinations");
 
 const seedHeroRoles = async (heroRoleData, roleCombinationData) => {
     try {

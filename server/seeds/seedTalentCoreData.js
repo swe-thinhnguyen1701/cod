@@ -1,5 +1,4 @@
 const { TalentCore } = require("../models");
-// const talentCoreData = require("../db/talentCores");
 
 const seedTalentCores = async (data) => {
     const talentCoreUrlLink = `https://d3bhl6gkk81cq1.cloudfront.net/talent-cores/`
