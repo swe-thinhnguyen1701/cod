@@ -99,7 +99,7 @@ const resolvers = {
                 body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`
             });
 
-            const data = await response.json();
+            let data = await response.json();
 
             if (!data.success || data.score < 0.5) {
                 return {
@@ -113,14 +113,13 @@ const resolvers = {
 
             const isMessageExist = await Message.findOne({ name, email, message });
             if (isMessageExist) {
-                data = {
+                return {
                     response: {
                         code: 429,
                         success: false,
                         message: "Message has already been sent!"
                     }
-                }
-                return data;
+                };
             }
 
             const ip = context.req.ip;
@@ -132,14 +131,13 @@ const resolvers = {
                 rateLimitMap.set(ip, { count: 1, timestamp: now });
             } else {
                 if (entry.count >= RATE_LIMIT) {
-                    data = {
+                    return {
                         response: {
                             code: 429,
                             success: false,
                             message: "Too many requests. Please try again later."
                         }
-                    }
-                    return data;
+                    };
                 }
 
                 rateLimitMap.set(ip, { count: entry.count + 1, timestamp: entry.timestamp });
@@ -147,15 +145,14 @@ const resolvers = {
 
             const error = validateMessage({ name, email, message });
             if (error) {
-                data = {
+
+                return {
                     response: {
                         code: 400,
                         success: false,
                         message: error
                     }
-                }
-
-                return data;
+                };
             }
 
             await Message.create({
@@ -164,15 +161,13 @@ const resolvers = {
                 message
             });
 
-            data = {
+            return {
                 response: {
                     code: 200,
                     success: true,
                     message: "Message sent successfully"
                 }
-            }
-
-            return data;
+            };
         }
     }
 }
