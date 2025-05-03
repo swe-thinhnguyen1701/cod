@@ -1,7 +1,10 @@
-import { Formik, Form, Field, FieldProps, FormikHelpers } from 'formik';
-import * as Yup from 'yup';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text, Textarea } from '@chakra-ui/react';
+import { useMutation } from "@apollo/client";
+import { ADD_MESSAGE } from "../graphql/mutations";
+import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
+import * as Yup from "yup";
+import { Flex, Button, FormControl, FormErrorMessage, FormLabel, Input, Text, Textarea, Alert, AlertIcon } from "@chakra-ui/react";
 import { IoIosSend } from "react-icons/io";
+import { useState } from "react";
 
 interface FormValues {
     name: string;
@@ -9,9 +12,11 @@ interface FormValues {
     message: string;
 }
 
-const formspreeURL = "https://formspree.io/f/xrbqevkd";
-
 const ContactForm = () => {
+    const [addMessage] = useMutation(ADD_MESSAGE);
+    const [alert, setAlert] = useState<{ message: string; status: "success" | "warning" | "error" } | null>(null);
+
+
     const initialValues: FormValues = {
         name: "",
         email: "",
@@ -30,57 +35,70 @@ const ContactForm = () => {
 
     const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
         try {
-            await fetch(formspreeURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(values)
+            const recaptchaToken = await window.grecaptcha.execute("6LeeFy0rAAAAAPr2xCyI4QoONM2Wdj5uguZ0lVff", { action: "submit" });
+
+            const { data } = await addMessage({
+                variables: { ...values, recaptchaToken }
             });
-            actions.resetForm();
-            alert("Message sent successfully!");
+
+            if (data.addMessage.response.success) {
+                actions.resetForm();
+                setAlert({message: data.addMessage.response.message, status: "success"});
+            } else {
+                setAlert({message: data.addMessage.response.message, status: "warning"});
+            }
         } catch (error) {
             console.error("Error sending message:", error);
-            alert("Error sending message. Please try again.");
+            setAlert({message: "Something went wrong. Please try again later.", status: "error"});
         } finally {
             actions.setSubmitting(false);
         }
     };
 
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-        >
-            {({ errors, touched, isSubmitting }) => (
-                <Form>
-                    <FormControl isInvalid={!!errors.email && touched.email}>
-                        <FormLabel>Email</FormLabel>
-                        <Field as={Input} name="email" type="email" placeholder="Enter your email" />
-                        <FormErrorMessage>{errors.message}</FormErrorMessage>
-                    </FormControl>
-                    <FormControl isInvalid={!!errors.name && touched.name}>
-                        <FormLabel>Name</FormLabel>
-                        <Field as={Input} name="name" type="text" placeholder="Enter your name" />
-                        <FormErrorMessage>{errors.name}</FormErrorMessage>
-                    </FormControl>
-                    <FormControl isInvalid={!!errors.message && touched.message}>
-                        <FormLabel>Message</FormLabel>
-                        <Field name="message">
-                            {({ field }: FieldProps) => (
-                                <Textarea {...field} placeholder="Enter your message" resize="none" />
-                            )}
-                        </Field>
-                        <FormErrorMessage>{errors.message}</FormErrorMessage>
-                    </FormControl>
-
-                    <Button type="submit" colorScheme="teal" isLoading={isSubmitting} mt={4}>
-                        Send <Text paddingLeft={2} as="span"><IoIosSend /></Text>
-                    </Button>
-                </Form>
+        <>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+                {({ errors, touched, isSubmitting, values }) => (
+                    <Form>
+                        <FormControl isInvalid={!!errors.email && touched.email}>
+                            <FormLabel>Email</FormLabel>
+                            <Field as={Input} name="email" type="email" placeholder="Enter your email" />
+                            <FormErrorMessage>{errors.message}</FormErrorMessage>
+                        </FormControl>
+                        <FormControl isInvalid={!!errors.name && touched.name}>
+                            <FormLabel>Name</FormLabel>
+                            <Field as={Input} name="name" type="text" placeholder="Enter your name" />
+                            <FormErrorMessage>{errors.name}</FormErrorMessage>
+                        </FormControl>
+                        <FormControl isInvalid={!!errors.message && touched.message}>
+                            <FormLabel>Message</FormLabel>
+                            <Field name="message">
+                                {({ field }: FieldProps) => (
+                                    <Textarea {...field} placeholder="Enter your message" resize="none" rows={10} />
+                                )}
+                            </Field>
+                            <Flex justifyContent="flex-end" mt={2}>
+                                <Text color="grey">{values.message.length}/2,000 characters</Text>
+                            </Flex>
+                            <FormErrorMessage>{errors.message}</FormErrorMessage>
+                        </FormControl>
+                        <Button type="submit" colorScheme="teal" isLoading={isSubmitting} mt={4}>
+                            Send <Text paddingLeft={2} as="span"><IoIosSend /></Text>
+                        </Button>
+                    </Form>
+                )}
+            </Formik>
+            {alert && (
+                <Alert status={alert.status} mt={4}>
+                    <AlertIcon />
+                    {alert.message}
+                </Alert>
             )}
-        </Formik>
+        </>
     )
 }
 
