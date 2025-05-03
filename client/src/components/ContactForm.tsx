@@ -4,7 +4,7 @@ import { Formik, Form, Field, FieldProps, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { Flex, Button, FormControl, FormErrorMessage, FormLabel, Input, Text, Textarea, Alert, AlertIcon } from "@chakra-ui/react";
 import { IoIosSend } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FormValues {
     name: string;
@@ -16,6 +16,15 @@ const ContactForm = () => {
     const [addMessage] = useMutation(ADD_MESSAGE);
     const [alert, setAlert] = useState<{ message: string; status: "success" | "warning" | "error" } | null>(null);
 
+    useEffect(() => {
+        if (alert) {
+            const timer = setTimeout(() => {
+                setAlert(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [alert]);
 
     const initialValues: FormValues = {
         name: "",
@@ -43,13 +52,13 @@ const ContactForm = () => {
 
             if (data.addMessage.response.success) {
                 actions.resetForm();
-                setAlert({message: data.addMessage.response.message, status: "success"});
+                setAlert({ message: data.addMessage.response.message, status: "success" });
             } else {
-                setAlert({message: data.addMessage.response.message, status: "warning"});
+                setAlert({ message: data.addMessage.response.message, status: "warning" });
             }
         } catch (error) {
             console.error("Error sending message:", error);
-            setAlert({message: "Something went wrong. Please try again later.", status: "error"});
+            setAlert({ message: "Something went wrong. Please try again later.", status: "error" });
         } finally {
             actions.setSubmitting(false);
         }
