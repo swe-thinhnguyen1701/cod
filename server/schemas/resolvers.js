@@ -92,14 +92,35 @@ const resolvers = {
     },
 
     Mutation: {
-        addMessage: async (_parent, { name, email, message }, context) => {
-            const isMessageExist = await Message.findOne({name, email, message});
-            if(isMessageExist){
+        addMessage: async (_parent, { name, email, message, recaptchaToken }, context) => {
+            const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`
+            });
+
+            const data = await response.json();
+
+            if (!data.success || data.score < 0.5) {
                 return {
-                    code: 429,
-                    success: false,
-                    message: "Message has already been sent!"
+                    response: {
+                        code: 403,
+                        success: false,
+                        message: "Failed reCAPTCHA verification"
+                    }
+                };
+            }
+
+            const isMessageExist = await Message.findOne({ name, email, message });
+            if (isMessageExist) {
+                data = {
+                    response: {
+                        code: 429,
+                        success: false,
+                        message: "Message has already been sent!"
+                    }
                 }
+                return data;
             }
 
             const ip = context.req.ip;
@@ -111,11 +132,14 @@ const resolvers = {
                 rateLimitMap.set(ip, { count: 1, timestamp: now });
             } else {
                 if (entry.count >= RATE_LIMIT) {
-                    return {
-                        code: 429,
-                        success: false,
-                        message: "Too many requests. Please try again later."
-                    };
+                    data = {
+                        response: {
+                            code: 429,
+                            success: false,
+                            message: "Too many requests. Please try again later."
+                        }
+                    }
+                    return data;
                 }
 
                 rateLimitMap.set(ip, { count: entry.count + 1, timestamp: entry.timestamp });
@@ -123,11 +147,15 @@ const resolvers = {
 
             const error = validateMessage({ name, email, message });
             if (error) {
-                return {
-                    code: 400,
-                    success: false,
-                    message: error
-                };
+                data = {
+                    response: {
+                        code: 400,
+                        success: false,
+                        message: error
+                    }
+                }
+
+                return data;
             }
 
             await Message.create({
@@ -136,11 +164,15 @@ const resolvers = {
                 message
             });
 
-            return {
-                code: 200,
-                success: true,
-                message: "Message sent successfully"
-            };
+            data = {
+                response: {
+                    code: 200,
+                    success: true,
+                    message: "Message sent successfully"
+                }
+            }
+
+            return data;
         }
     }
 }

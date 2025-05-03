@@ -58,6 +58,10 @@ const typeDefs = `
         message: String
     }
 
+    type Data {
+        response: Response
+    }
+
     type Query {
         getAllHeroes: [Hero]
         getHeroById(id: ID!): Hero
@@ -67,7 +71,7 @@ const typeDefs = `
     }
 
     type Mutation {
-        addMessage(name: String!, email: String!, message: String!): Response
+        addMessage(name: String!, email: String!, message: String!, recaptchaToken: String!): Data
     }
 `;
 
