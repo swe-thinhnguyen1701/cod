@@ -26,6 +26,31 @@ const ContactForm = () => {
         }
     }, [alert]);
 
+    useEffect(() => {
+        const scriptId = "recaptcha-script";
+
+        if (!document.getElementById(scriptId)) {
+            const script = document.createElement("script");
+            script.id = scriptId;
+            script.src = "https://www.google.com/recaptcha/api.js?render=6LeeFy0rAAAAAPr2xCyI4QoONM2Wdj5uguZ0lVff";
+            script.async = true;
+            script.defer = true;
+            document.body.appendChild(script);
+        }
+
+        return () => {
+            const existingScript = document.getElementById(scriptId);
+            if (existingScript) {
+                existingScript.remove();
+            }
+
+            const badge = document.querySelector('.grecaptcha-badge') as HTMLElement;
+            if (badge) {
+                badge.remove();
+            }
+        };
+    }, []);
+
     const initialValues: FormValues = {
         name: "",
         email: "",
