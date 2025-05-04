@@ -20,13 +20,8 @@ const Footer = () => {
                                 <ListItem>
                                     <Link to="/contact" className="sub-link">Contact</Link>
                                 </ListItem>
-                            </UnorderedList>
-                        </Box>
-                        <Box>
-                            <Heading as="h4" fontSize="1.1rem" mb={2}>Support</Heading>
-                            <UnorderedList listStyleType="none" padding={0} margin={0}>
                                 <ListItem>
-                                    <Link to="/donation" className="sub-link">Donation</Link>
+                                    <Link to="https://ko-fi.com/codwiki" className="sub-link">Support Us</Link>
                                 </ListItem>
                             </UnorderedList>
                         </Box>

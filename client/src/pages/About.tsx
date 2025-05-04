@@ -16,7 +16,7 @@ const About = () => {
 
             <Text>
                 If you enjoy using the Wiki and want to support continued updates and development, consider supporting us{" "}
-                <Link as={RouterLink} to="/donation" color="teal.500" fontWeight="bold">here</Link>.
+                <Link as={RouterLink} to="https://ko-fi.com/codwiki" target="_blank" color="teal.500" fontWeight="bold">here</Link>.
             </Text>
 
             <Text>

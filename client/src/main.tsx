@@ -15,7 +15,6 @@ import TermsOfUse from "./pages/TermsOfUse.tsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 import About from "./pages/About.tsx";
 import Contact from "./pages/Contact.tsx";
-import Donation from "./pages/Donation.tsx";
 import Error from "./pages/Error.tsx";
 
 const router = createBrowserRouter([
@@ -56,10 +55,6 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <Contact />
       },
-      {
-        path: "/donation",
-        element: <Donation />
-      }
     ]
   }
 ])
