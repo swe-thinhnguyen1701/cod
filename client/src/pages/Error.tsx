@@ -21,7 +21,7 @@ const Error = () => {
 
     return (
         <>
-        <SEO page={errorPageSEO} />
+            <SEO page={errorPageSEO} />
             <NavBar />
             <Flex minHeight="90vh" flexDirection="column" alignItems="center" padding={8}>
                 <Box width={{ base: "200px", md: "250px" }}>

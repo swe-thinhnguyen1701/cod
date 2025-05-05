@@ -1,7 +1,17 @@
 import { Box, Heading, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
+import SEO from "../components/SEO";
+
+const termOfUsePageSEO = {
+    title: "Term of Use - CoD Wiki",
+    description: "Call of Dragons Wiki term of use",
+    keywords: "CoD Wiki term of use, Call of Dragons wiki term of use, call of dragons wiki term of use, cod term of use, call of dragons term of use",
+    type: "article"
+}
 
 const TermsOfUse = () => {
     return (
+        <>
+        <SEO page={termOfUsePageSEO} />
         <VStack width="100%">
             <VStack alignItems="flex-start" mt={8} maxWidth={"900px"} width="100%" padding={4}>
                 <Heading as="h1" size="h1" textAlign="center" mb={8}>Call of Dragons Wiki Terms of Use</Heading>
@@ -66,6 +76,7 @@ const TermsOfUse = () => {
                 </Box>
             </VStack>
         </VStack>
+        </>
     )
 }
 

@@ -1,8 +1,18 @@
 import { Box, Heading, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import SEO from "../components/SEO";
+
+const privacyPolicyPageSEO = {
+    title: "Privacy Policy - CoD Wiki",
+    description: "Call of Dragons Wiki privact policy",
+    keywords: "CoD Wiki privacy policy, Call of Dragons wiki privacy policy, call of dragons wiki privacy policy, cod privacy policy, call of dragons privacy policy",
+    type: "article"
+}
 
 const PrivacyPolicy = () => {
     return (
+        <>
+        <SEO page={privacyPolicyPageSEO} />
         <VStack width="100%">
             <VStack alignItems="flex-start" mt={8} maxWidth={"900px"} width="100%" padding={4}>
                 <Heading as="h1" size="h1" textAlign="center" mb={8}>Call of Dragons Wiki Privacy Policy</Heading>
@@ -135,6 +145,7 @@ const PrivacyPolicy = () => {
                 </Box>
             </VStack>
         </VStack>
+        </>
     )
 }
 

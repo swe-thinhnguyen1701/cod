@@ -28,9 +28,6 @@ const Footer = () => {
                     </Flex>
                 </Flex>
                 <Flex flexDirection={{ base: "column", md: "row" }} gap={{base: 2, md: 8}}>
-                    <Text fontSize="12px" color="#c8a565">
-                        Copyright © {new Date().getFullYear()} Call of Dragons Wiki.
-                    </Text>
                     <UnorderedList listStyleType="none" padding={0} margin={0} display="flex" gap={4} fontSize="11px">
                         <ListItem>
                             <Link to="/privacy-policy" className="sub-link">Privacy Policy</Link>

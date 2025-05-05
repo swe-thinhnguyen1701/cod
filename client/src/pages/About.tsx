@@ -1,11 +1,20 @@
 import { Heading, Text, VStack, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
+import SEO from "../components/SEO";
+
+const aboutPageSEO = {
+    title: "About - CoD Wiki",
+    description: "Welcome to Call of Dragons Wiki (CoD Wiki) — a community-driven fan site dedicated to exploring and organizing everything related to the game Call of Dragons...",
+    keywords: "CoD Wiki, Call of Dragons wiki, call of dragons wiki, call of dragons",
+    type: "website"
+}
 
 const About = () => {
     return (
+        <>
+        <SEO page={aboutPageSEO} />
         <VStack maxW="900px" w="100%" p={4} m="0 auto" minH="80vh" align="start" spacing={6}>
             <Heading as="h1" size="xl">About Us</Heading>
-
             <Text>
                 Welcome to Call of Dragons Wiki (CoD Wiki) — a community-driven fan site dedicated to exploring and organizing everything related to the game Call of Dragons. Whether you're a new player or a seasoned veteran, our goal is to provide a helpful and creative space to discover hero talents, build guides, and learn game mechanics.
             </Text>
@@ -28,6 +37,7 @@ const About = () => {
                 Thank you for being a part of our community!{"\n"}{"\n"}- The CoD Wiki Team
             </Text>
         </VStack>
+        </>
     );
 };
 
