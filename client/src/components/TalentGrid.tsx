@@ -1,30 +1,34 @@
 import useTalentStore from "../state-management/talents/store";
 import { useState, useRef, useEffect } from "react";
-import { Box, HStack, VStack } from "@chakra-ui/react";
+import { Box, HStack, Popover, PopoverContent, PopoverTrigger, VStack } from "@chakra-ui/react";
 import TalentCore from "./TalentCore";
 import TalentDescription from "./TalentDescription";
 import TalentGroupButton from "./TalentGroupButton";
 import TalentHeading from "./TalentHeading";
 
-
 const STRUCTURE = [[4, 11], [12, 19], [20, 27]];
+
+interface TalentCoreDescription {
+    row: number,
+    col: number
+}
 
 const TalentGrid = () => {
     const [isBigScreen, setIsBigScreen] = useState(window.innerWidth >= 1024);
-    const [tooltopPos, setTooltipPos] = useState<{ x: number, y: number } | null>(null);
     const [selectedTalentGroup, setSelectedTalentGroup] = useState<number>(2);
+    const [showDescription, setShowDescription] = useState<TalentCoreDescription | null>(null);
     const talentContainerRef = useRef<HTMLDivElement>(null);
     const { talentList, setSelectedTalent } = useTalentStore();
 
-    const handleTalentClick = (event: React.MouseEvent, key: string) => {
-        const rect = (event.target as HTMLElement).getBoundingClientRect();
+    const handleTalentClick = (key: string, row: number, col: number) => {
         setSelectedTalent(key);
-        setTooltipPos({ x: (rect.left + rect.width) / 2, y: rect.bottom - 50 + window.scrollY });
+        setShowDescription({ row: row, col: col });
     };
 
     const handleContainerClick = (event: React.MouseEvent) => {
         if (!(event.target as HTMLElement).closest(".talent-box")) {
             setSelectedTalent(null);
+            setShowDescription(null);
         }
     };
 
@@ -32,6 +36,7 @@ const TalentGrid = () => {
         const handleClickOutside = (event: MouseEvent) => {
             if (talentContainerRef.current && !talentContainerRef.current.contains(event.target as Node)) {
                 setSelectedTalent(null);
+                setShowDescription(null);
             }
         };
 
@@ -62,12 +67,20 @@ const TalentGrid = () => {
                         return (
                             <HStack key={rowIdx} gap={4}>
                                 {talents.map((talent, colIdx) =>
-                                    <Box key={colIdx} onClick={(event) => {
-                                        event.stopPropagation();
-                                        handleTalentClick(event, talent.key);
-                                    }}>
-                                        <TalentCore talentKey={talent.key} />
-                                    </Box>
+                                    <Popover key={colIdx} isOpen={showDescription?.row == rowIdx && showDescription?.col == colIdx}>
+                                        <Box onClick={(event) => {
+                                            event.stopPropagation();
+                                            handleTalentClick(talent.key, rowIdx, colIdx);
+                                        }}>
+                                            <TalentCore talentKey={talent.key} />
+                                        </Box>
+                                        <PopoverTrigger>
+                                            <Box minHeight="80px"></Box>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <TalentDescription />
+                                        </PopoverContent>
+                                    </Popover>
                                 )}
                             </HStack>
                         )
@@ -83,19 +96,27 @@ const TalentGrid = () => {
                         return (
                             <HStack key={rowIdx} gap={4}>
                                 {talents.map((talent, colIdx) =>
-                                    <Box key={colIdx} onClick={(event) => {
-                                        event.stopPropagation();
-                                        handleTalentClick(event, talent.key);
-                                    }}>
-                                        <TalentCore talentKey={talent.key} />
-                                    </Box>
+                                    <Popover key={colIdx} isOpen={showDescription?.row == rowIdx && showDescription?.col == colIdx}>
+                                        <Box onClick={(event) => {
+                                            event.stopPropagation();
+                                            handleTalentClick(talent.key, rowIdx, colIdx);
+                                        }}>
+                                            <TalentCore talentKey={talent.key} />
+                                        </Box>
+                                        <PopoverTrigger>
+                                            <Box minHeight="80px"></Box>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <TalentDescription />
+                                        </PopoverContent>
+                                    </Popover>
                                 )}
                             </HStack>
                         )
                     })}
                 </VStack>
 
-                <Box display={isBigScreen? "none" : "block"}>
+                <Box display={isBigScreen ? "none" : "block"}>
                     <TalentGroupButton selectedGroup={selectedTalentGroup} setSelectedGroup={setSelectedTalentGroup} />
                 </Box>
 
@@ -110,21 +131,27 @@ const TalentGrid = () => {
                                 return (
                                     <HStack key={rowIdx} gap={4}>
                                         {talents.map((talent, colIdx) =>
-                                            <Box key={colIdx} onClick={(event) => {
-                                                event.stopPropagation();
-                                                handleTalentClick(event, talent.key);
-                                            }}>
-                                                <TalentCore talentKey={talent.key} />
-                                            </Box>)}
+                                            <Popover key={colIdx} isOpen={showDescription?.row == rowIdx && showDescription?.col == colIdx}>
+                                                <Box onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    handleTalentClick(talent.key, rowIdx, colIdx);
+                                                }}>
+                                                    <TalentCore talentKey={talent.key} />
+                                                </Box>
+                                                <PopoverTrigger>
+                                                    <Box minHeight="80px"></Box>
+                                                </PopoverTrigger>
+                                                <PopoverContent>
+                                                    <TalentDescription />
+                                                </PopoverContent>
+                                            </Popover>
+                                        )}
                                     </HStack>
                                 )
                             })}
                         </VStack>
                     ))}
                 </HStack>
-                <Box maxWidth="300px" position="absolute" top={tooltopPos?.y} left={tooltopPos?.x} zIndex={3} bg="blackAlpha.800" borderRadius="10px">
-                    <TalentDescription />
-                </Box>
             </VStack>
         </>
     );

@@ -19,7 +19,7 @@ const HeroTalentPage = () => {
     return (
         <>
             <SEO page={heroTalentPage} />
-            <VStack>
+            <VStack className="page">
                 <Box width="100%" maxWidth={"1400px"}>
                     <VStack mb={8}>
                         <Heading as="h1" size="h1">Hero Talents</Heading>
@@ -39,7 +39,7 @@ const HeroTalentPage = () => {
                             </Text>
                         </VStack>
                     </Box>
-                    <Box width="100%" className="page">
+                    <Box width="100%">
                         <HeroTalents />
                     </Box>
                 </Box>

@@ -97,7 +97,7 @@ const TalentDescription = () => {
 
 
     return (
-        <Box padding={4}>
+        <Box padding={3}>
             <Heading as="h3" size="md" textAlign="center">
                 {selectedTalent.name}
             </Heading>

@@ -21,7 +21,7 @@ const Footer = () => {
                                     <Link to="/contact" className="sub-link">Contact</Link>
                                 </ListItem>
                                 <ListItem>
-                                    <Link to="https://ko-fi.com/codwiki" className="sub-link">Support Us</Link>
+                                    <Link to="https://ko-fi.com/codwiki" target="_blank" className="sub-link">Support Us</Link>
                                 </ListItem>
                             </UnorderedList>
                         </Box>
