@@ -21,6 +21,6 @@ export const getZoomHeroImage = (heroName: string): string => {
   return `${ZOOM_HERO_IMAGE_URL}${heroName}-full.webp`;
 };
 
-export const getHeroSkillImage = (skillName: string): string => {
-  return `${SKILL_IMAGE_URL}${skillName}.png`;
+export const getHeroSkillImage = (skillImage: string): string => {
+  return `${SKILL_IMAGE_URL}${skillImage}`;
 };

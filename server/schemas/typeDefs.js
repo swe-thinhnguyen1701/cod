@@ -36,6 +36,7 @@ const typeDefs = `
         description: String,
         isRage: Boolean,
         isUltimate: Boolean
+        skill_image: String
     }
 
     type HeroDetail {

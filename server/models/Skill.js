@@ -29,6 +29,10 @@ Skill.init({
         type: DataTypes.BOOLEAN,
         allowNull: false
     },
+    skill_image: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     hero_id: {
         type: DataTypes.INTEGER,
         allowNull: true,

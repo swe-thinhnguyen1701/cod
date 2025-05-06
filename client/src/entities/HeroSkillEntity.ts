@@ -4,4 +4,5 @@ export default interface HeroSkillEntity {
     description: string,
     isRage: boolean,
     isUltimate: boolean
+    skill_image: string
 }

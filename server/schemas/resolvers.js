@@ -41,6 +41,7 @@ const resolvers = {
                         model: Skill,
                     }
                 ],
+                order: [[Skill, 'id', 'ASC']]
             });
 
             const heroWithRoles = {

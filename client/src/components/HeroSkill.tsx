@@ -57,7 +57,7 @@ const HeroSkill = () => {
     return (
         <>
             <HStack width="100%" bg="#1b202b" justifyContent="center">
-                <Box width="100%" padding={{base: 4, xl: 8}} maxWidth="1400px">
+                <Box width="100%" padding={{ base: 4, xl: 8 }} maxWidth="1400px">
                     <Heading as="h2" color="white" mb={8}>SKILLS</Heading>
                     <Flex
                         flexDirection={{ base: "column", md: "row" }}
@@ -69,15 +69,25 @@ const HeroSkill = () => {
                             gap={4}
                             width={{ base: "100%", md: "100px" }}>
                             {heroSkills.map((skill, index) => (
-                                <VStack key={index} width="100px" className="hero-skill">
-                                    <Box opacity={selectedSkill === index ? "1" : "0.5"} onClick={() => handleSkillClick(index)} width={{ base: "30px", md: "40px", xl: "50px" }}>
-                                        <Image src={getHeroSkillImage(skill.name)} alt={`${skill.name} image`} />
+                                <VStack
+                                    key={index}
+                                    width="100px"
+                                    className="hero-skill"
+                                    cursor="pointer"
+                                    opacity={selectedSkill === index ? "1" : "0.5"}
+                                    transform={selectedSkill === index ? "scale(1.15)" : "none"}
+                                    onClick={() => handleSkillClick(index)}
+                                    transition={"transform 0.3s ease-in-out"}
+                                    _hover={{transform: "scale(1.15)"}}
+                                >
+                                    <Box width={{ base: "30px", md: "40px", xl: "50px" }}>
+                                        <Image src={getHeroSkillImage(skill.skill_image)} alt={`${skill.name} hero image`} />
                                     </Box>
                                     <Text textAlign="center" fontWeight="bold" fontSize={{ base: "8px", md: "10px", xl: "12px" }}>{skill.name.toUpperCase()}</Text>
                                 </VStack>
                             ))}
                         </Flex>
-                        <VStack alignItems="flex-start" height={{ base: "650px", sm: "550px", md: "530px", xl: "100%" }}>
+                        <VStack alignItems="flex-start" height={{ base: "650px", sm: "550px", md: "530px", xl: "100%" }} padding={{base: 0, lg: "20px"}}>
                             <Heading as="h4">
                                 {heroSkills[selectedSkill].name}
                             </Heading>

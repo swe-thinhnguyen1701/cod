@@ -36,6 +36,7 @@ export const GET_HERO_DETAIL_BY_NAME = gql`
                 description
                 isRage
                 isUltimate
+                skill_image
             }
         }
     }
