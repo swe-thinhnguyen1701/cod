@@ -104,15 +104,15 @@ img {
   opacity: 1;
 }
 
-.hero-card:hover.legend {
+.item-card:hover.legend {
   background: radial-gradient(circle, rgba(255, 229, 92, 1) 35%, rgba(245, 206, 0, 1) 61%);
 }
 
-.hero-card:hover.epic {
+.item-card:hover.epic {
   background: radial-gradient(circle, rgba(255, 92, 255, 1) 35%, rgba(209, 0, 209, 1) 61%);
 }
 
-.hero-card:hover.common {
+.item-card:hover.common {
   background: radial-gradient(circle, rgba(98, 184, 252, 1) 35%, rgba(4, 129, 228, 1) 61%);
 }
 
@@ -120,15 +120,15 @@ img {
   background-color: #0a1428;
 }
 
-.hero-card:hover .hero-name {
+.item-card:hover .hero-name {
   background-color: #3b4353;
 }
 
-.hero-image {
+.item-image {
   transition: transform 0.3s ease-in-out;
 }
 
-.hero-card:hover .hero-image {
+.item-card:hover .item-image {
   transform: scale(1.2);
 }
 

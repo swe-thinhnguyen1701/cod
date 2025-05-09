@@ -2,10 +2,9 @@ const GENERAL_HERO_IMAGE_URL =
   "https://d3bhl6gkk81cq1.cloudfront.net/hero-full/";
 const ZOOM_HERO_IMAGE_URL =
   "https://d3bhl6gkk81cq1.cloudfront.net/modified-hero-images/";
-
 const SKILL_IMAGE_URL = "https://d3bhl6gkk81cq1.cloudfront.net/hero-skills/";
-
 const HERO_AVATAR_URL = "https://d3bhl6gkk81cq1.cloudfront.net/hero-avatar/";
+const ARTIFACT_IMAGE_URL = "https://d3bhl6gkk81cq1.cloudfront.net/artifacts/"
 
 // const heroImageVersion = "v2";
 
@@ -23,4 +22,8 @@ export const getZoomHeroImage = (heroName: string): string => {
 
 export const getHeroSkillImage = (skillImage: string): string => {
   return `${SKILL_IMAGE_URL}${skillImage}`;
+};
+
+export const getArtifactImage = (artifactName: string): string => {
+  return `${ARTIFACT_IMAGE_URL}${artifactName}.webp`;
 };
