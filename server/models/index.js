@@ -20,16 +20,6 @@ Hero.belongsToMany(Role, {
 //     onDelete: "CASCADE",
 // })
 
-Hero.hasMany(Skill, {
-    foreignKey: "hero_id",
-    onDelete: "CASCADE"
-});
-
-Skill.belongsTo(Hero, {
-    foreignKey: "hero_id",
-    onDelete: "CASCADE"
-});
-
 Role.belongsToMany(Hero, {
     through: "hero_roles",
     foreignKey: "role_id",

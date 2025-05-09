@@ -30,12 +30,10 @@ const typeDefs = `
         extra_prerequisite: Boolean
     }
 
-    type Skill {
-        id: ID!
+    type HeroSkill {
         name: String,
         description: String,
-        isRage: Boolean,
-        isUltimate: Boolean
+        rage_cost: Int,
         skill_image: String
     }
 
@@ -46,7 +44,7 @@ const typeDefs = `
         description: String
         rarity_id: Int
         roles: [Role]
-        Skills: [Skill]
+        skills: [HeroSkill]
     }
 
     type TalentCoreGroup {

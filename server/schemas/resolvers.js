@@ -35,18 +35,22 @@ const resolvers = {
             let hero = await Hero.findOne({
                 where: {
                     name: heroName
+                }
+            });
+            const limit = hero.rarity_id < 3 ? 5 : 4; 
+            const skills = await Skill.findAll({
+                where: {
+                    source_id: hero.id,
+                    source_type: "hero"
                 },
-                include: [
-                    {
-                        model: Skill,
-                    }
-                ],
-                order: [[Skill, 'id', 'ASC']]
+                limit: limit,
+                order: [["id", "ASC"]]
             });
 
             const heroWithRoles = {
                 ...hero.toJSON(),
-                roles: HERO_ROLE_MAP.get(hero.id)
+                roles: HERO_ROLE_MAP.get(hero.id),
+                skills: skills
             };
 
             return heroWithRoles;

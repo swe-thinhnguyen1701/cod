@@ -31,12 +31,11 @@ export const GET_HERO_DETAIL_BY_NAME = gql`
                 image
                 description    
             }
-            Skills {
+            skills {
                 name
                 description
-                isRage
-                isUltimate
                 skill_image
+                rage_cost
             }
         }
     }

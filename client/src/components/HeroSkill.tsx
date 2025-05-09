@@ -4,7 +4,7 @@ import { Box, Flex, Image, Heading, VStack, Text, HStack } from "@chakra-ui/reac
 import { getHeroSkillImage } from "../services/getImages";
 
 const HeroSkill = () => {
-    const heroSkills = useHeroStore((state) => state.hero?.Skills);
+    const heroSkills = useHeroStore((state) => state.hero?.skills);
     const [selectedSkill, setSelectedSkill] = useState(0);
 
     const handleSkillClick = (index: number) => {
@@ -91,10 +91,10 @@ const HeroSkill = () => {
                             <Heading as="h4">
                                 {heroSkills[selectedSkill].name}
                             </Heading>
-                            {heroSkills[selectedSkill].isRage
+                            {heroSkills[selectedSkill].rage_cost
                                 ? <Box>
                                     <Text fontWeight="bold">Rage Skill</Text>
-                                    <Text color="red">Rage Cost: 1,000</Text>
+                                    <Text color="red" fontWeight="bold">Rage Cost: {heroSkills[selectedSkill].rage_cost}</Text>
                                 </Box>
                                 : <Text fontWeight="bold">Passive Skill</Text>}
                             <Text>

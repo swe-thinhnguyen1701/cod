@@ -21,26 +21,25 @@ Skill.init({
         type: DataTypes.TEXT,
         allowNull: false
     },
-    isRage: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-    },
-    isUltimate: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
+    rage_cost: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
     skill_image: {
         type: DataTypes.STRING,
+        allowNull: true
+    },
+    cooldown: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    source_id: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    hero_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: "heroes",
-            key: "id"
-        },
-        onDelete: "CASCADE"
+    source_type: {
+        type: DataTypes.ENUM("hero", "artifact", "pet"),
+        allowNull: false
     }
 }, {
     sequelize,

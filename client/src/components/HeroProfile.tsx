@@ -5,7 +5,7 @@ import HeroCombatRadarChart from "./HeroCombatRadarChart";
 import useHeroStore from "../state-management/heroes/store";
 import useRoleStore from "../state-management/roles/store";
 import RoleBadge from "./RoleBadge";
-
+import background from "../assets/background.png"
 
 const sampleData = {
     skill: 20,
@@ -15,8 +15,6 @@ const sampleData = {
     survivability: 80,
     support: 82,
 }
-
-const BACKGROUND_URL = "https://d3bhl6gkk81cq1.cloudfront.net/hero-images/background.webp";
 const GOLD_COLOR = "#c8a565";
 
 const HeroProfile = () => {
@@ -34,7 +32,7 @@ const HeroProfile = () => {
 
     return (
         <>
-            <Box bgImage={BACKGROUND_URL}
+            <Box bgImage={background}
                 bgSize="100% 100%"
                 bgRepeat="no-repeat"
                 width="100%">
