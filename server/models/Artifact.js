@@ -17,10 +17,6 @@ Artifact.init({
             len: [1, 50]
         }
     },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    },
     rarity_id: {
         type: DataTypes.SMALLINT,
         allowNull: true

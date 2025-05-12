@@ -1,4 +1,4 @@
-const { Hero, Role, TalentCore, Skill, Message } = require("../models");
+const { Hero, Artifact, Skill, Message } = require("../models");
 const { HERO_ROLE_MAP } = require("../utils/heroRoleMap");
 const { ROLE_TALENT_CORE_MAP, MAIN_TALENT_CORE_MAP } = require("../utils/roleTalentCoreMap");
 const { validateMessage } = require("../utils/resolver_helper_methods/validateMessage");
@@ -18,6 +18,18 @@ const resolvers = {
             } catch (error) {
                 console.error("Error fetching heroes:", error);
                 throw new Error("Failed to fetch heroes.");
+            }
+        },
+        getAllArtifacts: async() => {
+            try {
+                const allArtifacts = await Artifact.findAll({
+                    order: [["name", "ASC"]]
+                });
+
+                return allArtifacts;
+            } catch (error) {
+                console.error("Error fetching artifacts:", error);
+                throw new Error("Failed to fetch artifacts.");
             }
         },
         getHeroById: async (_parent, { id }) => {

@@ -6,6 +6,12 @@ const typeDefs = `
         rarity_id: Int
     }
 
+    type Artifact {
+        id: ID!,
+        name: String
+        rarity_id: Int    
+    }
+
     type Role {
         id: ID!
         name: String
@@ -75,6 +81,7 @@ const typeDefs = `
 
     type Query {
         getAllHeroes: [Hero]
+        getAllArtifacts: [Artifact]
         getHeroById(id: ID!): Hero
         getHeroDetailByName(heroName: String): HeroDetail
         getRolesFromHero(heroId: ID!): [Role]

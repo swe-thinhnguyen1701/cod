@@ -1,4 +1,5 @@
 const Hero = require("./Hero");
+const Artifact = require("./Artifact");
 const Role = require("./Role");
 const TalentCore = require("./TalentCore");
 const Skill = require("./Skill");
@@ -42,4 +43,4 @@ Role.belongsToMany(TalentCore, {
 //     onDelete: "CASCADE"
 // });
 
-module.exports = {Hero, Role, TalentCore, Skill, Message};
+module.exports = {Hero, Artifact, Role, TalentCore, Skill, Message};
