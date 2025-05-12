@@ -4,7 +4,7 @@ export const NAV_LINKS = [
     path: "/heroes",
   },
   {
-    name: "TALENT",
+    name: "HERO TALENTS",
     path: "/hero-talent",
   },
 ];
