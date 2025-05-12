@@ -7,6 +7,7 @@ import HeroSkill from "../components/HeroSkill";
 import SEO from "../components/SEO";
 import useHeroStore from "../state-management/heroes/store";
 import { Spinner, VStack } from "@chakra-ui/react";
+import HeroRecommendation from "../components/HeroRecommendation";
 
 const HeroDetailPage = () => {
     const { heroName: heroName } = useParams();
@@ -39,9 +40,10 @@ const HeroDetailPage = () => {
     return (
         <>
             <SEO page={heroDetailSEO} />
-            <VStack justifyContent="center" gap={8} className="page">
+            <VStack justifyContent="center" gap={10} className="page">
                 <HeroProfile />
                 <HeroSkill />
+                <HeroRecommendation />
             </VStack>
         </>
     )

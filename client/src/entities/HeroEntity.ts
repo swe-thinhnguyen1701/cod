@@ -21,4 +21,5 @@ export default interface HeroEntity {
     roles: [RoleEntity]
     skills: [HeroSkillEntity]
     stats: HeroStats
+    pairings: [string]
 }

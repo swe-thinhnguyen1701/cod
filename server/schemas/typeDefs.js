@@ -56,6 +56,7 @@ const typeDefs = `
         roles: [Role]
         skills: [HeroSkill]
         stats: HeroStat
+        pairings: [String]
     }
 
     type TalentCoreGroup {

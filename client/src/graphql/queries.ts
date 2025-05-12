@@ -46,6 +46,7 @@ export const GET_HERO_DETAIL_BY_NAME = gql`
                 survivability
                 support
             }
+            pairings
         }
     }
 `
