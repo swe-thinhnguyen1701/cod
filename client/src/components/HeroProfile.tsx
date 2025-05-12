@@ -7,14 +7,6 @@ import useRoleStore from "../state-management/roles/store";
 import RoleBadge from "./RoleBadge";
 import background from "../assets/background.png"
 
-const sampleData = {
-    skill: 20,
-    normalAtk: 70,
-    openField: 90,
-    tank: 30,
-    survivability: 80,
-    support: 82,
-}
 const GOLD_COLOR = "#c8a565";
 
 const HeroProfile = () => {
@@ -75,7 +67,7 @@ const HeroProfile = () => {
                                 ))}
                             </HStack>
                             <Box>
-                                <HeroCombatRadarChart data={sampleData} />
+                                <HeroCombatRadarChart data={hero.stats} />
                             </Box>
                         </VStack>
                     </GridItem>

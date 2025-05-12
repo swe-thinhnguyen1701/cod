@@ -9,18 +9,12 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import HeroStats from '../entities/HeroEntity';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 interface HeroCombatRadarChartProps {
-  data: {
-    skill: number;
-    normalAtk: number;
-    openField: number;
-    tank: number;
-    survivability: number;
-    support: number;
-  };
+  data: HeroStats;
 }
 
 const descriptions: Record<string, string[]> = {
@@ -40,8 +34,8 @@ const HeroCombatRadarChart: React.FC<HeroCombatRadarChartProps> = ({ data }) => 
       {
         data: [
           data.skill,
-          data.normalAtk,
-          data.openField,
+          data.normal_attack,
+          data.open_field,
           data.tank,
           data.survivability,
           data.support
@@ -81,6 +75,7 @@ const HeroCombatRadarChart: React.FC<HeroCombatRadarChartProps> = ({ data }) => 
       legend: { display: false },
       tooltip: {
         callbacks: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           label: function (context: any) {
             const label = context.label;
             const value = context.formattedValue;

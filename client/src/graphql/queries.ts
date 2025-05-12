@@ -38,6 +38,14 @@ export const GET_HERO_DETAIL_BY_NAME = gql`
                 skill_image
                 rage_cost
             }
+            stats {
+                skill
+                normal_attack
+                open_field
+                tank
+                survivability
+                support
+            }
         }
     }
 `
