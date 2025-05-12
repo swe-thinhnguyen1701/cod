@@ -54,8 +54,6 @@ const HeroSkill = () => {
         });
     };
 
-    console.log(heroSkills[selectedSkill]);
-
     return (
         <>
             <HStack width="100%" bg="#1b202b" justifyContent="center">

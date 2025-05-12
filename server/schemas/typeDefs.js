@@ -38,6 +38,15 @@ const typeDefs = `
         skill_image: String
     }
 
+    type HeroStat {
+        skill: Float,
+        normal_attack: Float,
+        open_field: Float,
+        tank: Float,
+        survivability: Float,
+        support: Float
+    }
+
     type HeroDetail {
         id: ID!
         name: String
@@ -46,6 +55,7 @@ const typeDefs = `
         rarity_id: Int
         roles: [Role]
         skills: [HeroSkill]
+        stats: HeroStat
     }
 
     type TalentCoreGroup {

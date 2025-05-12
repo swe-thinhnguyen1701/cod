@@ -31,6 +31,14 @@ Hero.init({
     rarity_id: {
         type: DataTypes.SMALLINT,
         allowNull: true
+    },
+    pairings: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true
+    },
+    stats: {
+        type: DataTypes.JSON,
+        allowNull: true
     }
 }, {
     sequelize,
