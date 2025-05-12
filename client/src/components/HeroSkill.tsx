@@ -54,6 +54,8 @@ const HeroSkill = () => {
         });
     };
 
+    console.log(heroSkills[selectedSkill]);
+
     return (
         <>
             <HStack width="100%" bg="#1b202b" justifyContent="center">
@@ -78,7 +80,7 @@ const HeroSkill = () => {
                                     transform={selectedSkill === index ? "scale(1.15)" : "none"}
                                     onClick={() => handleSkillClick(index)}
                                     transition={"transform 0.3s ease-in-out"}
-                                    _hover={{transform: "scale(1.15)"}}
+                                    _hover={{ transform: "scale(1.15)" }}
                                 >
                                     <Box width={{ base: "30px", md: "40px", xl: "50px" }}>
                                         <Image src={getHeroSkillImage(skill.skill_image)} alt={`${skill.name} hero image`} />
@@ -87,7 +89,7 @@ const HeroSkill = () => {
                                 </VStack>
                             ))}
                         </Flex>
-                        <VStack alignItems="flex-start" height={{ base: "650px", sm: "550px", md: "530px", xl: "100%" }} padding={{base: 0, lg: "20px"}}>
+                        <VStack alignItems="flex-start" height={{ base: "650px", sm: "550px", md: "530px", xl: "100%" }} padding={{ base: 0, lg: "20px" }}>
                             <Heading as="h4">
                                 {heroSkills[selectedSkill].name}
                             </Heading>
@@ -100,6 +102,12 @@ const HeroSkill = () => {
                             <Text>
                                 {formatDescription(heroSkills[selectedSkill].description)}
                             </Text>
+                            {heroSkills[selectedSkill].upgrade_preview &&
+                                <Box mt={4}>
+                                    <Text fontWeight="bold" mb={2}>Upgrade Preview</Text>
+                                    <Text>{formatDescription(heroSkills[selectedSkill].upgrade_preview)}</Text>
+                                </Box>
+                            }
                             <Text color="red" fontWeight="bold">
                                 {selectedSkill > 0 && selectedSkill < 4
                                     ? `Unlocks at Hero level ${selectedSkill * 10} and ${selectedSkill + 1} Stars.`

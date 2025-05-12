@@ -34,6 +34,7 @@ export const GET_HERO_DETAIL_BY_NAME = gql`
             skills {
                 name
                 description
+                upgrade_preview
                 skill_image
                 rage_cost
             }
