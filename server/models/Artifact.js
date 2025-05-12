@@ -1,9 +1,9 @@
 const sequelize = require("../config/connection");
 const { Model, DataTypes } = require("sequelize");
 
-class Hero extends Model { }
+class Artifact extends Model { }
 
-Hero.init({
+Artifact.init({
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -11,13 +11,6 @@ Hero.init({
         autoIncrement: true,
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            len: [1, 50]
-        }
-    },
-    title: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -34,9 +27,9 @@ Hero.init({
     }
 }, {
     sequelize,
-    modelName: "Hero",
-    tableName: "heroes",
+    modelName: "Artifact",
+    tableName: "artifacts",
     timestamps: false,
 });
 
-module.exports = Hero;
+module.exports = Artifact;

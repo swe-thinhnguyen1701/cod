@@ -1,9 +1,9 @@
 const sequelize = require("../config/connection");
 const { Model, DataTypes } = require("sequelize");
 
-class Hero extends Model { }
+class Stat extends Model { }
 
-Hero.init({
+Stat.init({
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -17,26 +17,23 @@ Hero.init({
             len: [1, 50]
         }
     },
-    title: {
+    initial_value: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    max_value: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    image: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            len: [1, 50]
-        }
-    },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    },
-    rarity_id: {
-        type: DataTypes.SMALLINT,
         allowNull: true
     }
 }, {
     sequelize,
-    modelName: "Hero",
-    tableName: "heroes",
+    modelName: "Stat",
+    tableName: "stats",
     timestamps: false,
 });
 
-module.exports = Hero;
+module.exports = Stat;

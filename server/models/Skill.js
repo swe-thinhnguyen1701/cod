@@ -1,5 +1,5 @@
 const sequelize = require("../config/connection");
-const {Model, DataTypes} = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 
 class Skill extends Model { }
 
@@ -21,21 +21,29 @@ Skill.init({
         type: DataTypes.TEXT,
         allowNull: false
     },
-    rage_cost: {
-        type: DataTypes.INTEGER,
+    additional_effect: {
+        type: DataTypes.TEXT,
         allowNull: true
     },
-    skill_image: {
-        type: DataTypes.STRING,
+    upgrade_preview: {
+        type: DataTypes.TEXT,
         allowNull: true
     },
     cooldown: {
         type: DataTypes.STRING,
         allowNull: true
     },
+    rage_cost: {
+        type: DataTypes.SMALLINT,
+        allowNull: true
+    },
+    skill_image: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     source_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     source_type: {
         type: DataTypes.ENUM("hero", "artifact", "pet"),
@@ -45,7 +53,10 @@ Skill.init({
     sequelize,
     modelName: "Skill",
     tableName: "skills",
-    timestamps: false
+    timestamps: false,
+    indexes: [
+        { fields: ["source_id", "source_type"] }
+    ]
 });
 
 module.exports = Skill;

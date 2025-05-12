@@ -33,6 +33,7 @@ const typeDefs = `
     type HeroSkill {
         name: String,
         description: String,
+        upgrade_preview: String
         rage_cost: Int,
         skill_image: String
     }
