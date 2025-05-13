@@ -3,13 +3,13 @@ import ItemCard from "./ItemCard";
 
 
 interface Props {
-    name: string,
+    artifactName: string,
     rarityId: number,
 }
 
-const ArtifactCard = ({name, rarityId}: Props) => {
+const ArtifactCard = ({artifactName, rarityId}: Props) => {
     return (
-        <ItemCard itemName={name} itemRarityId={rarityId} itemImageUrl={getArtifactImage(name)} />
+        <ItemCard itemName={artifactName} itemRarityId={rarityId} itemImageUrl={getArtifactImage(artifactName)} />
     )
 }
 

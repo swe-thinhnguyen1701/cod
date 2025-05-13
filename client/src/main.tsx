@@ -11,17 +11,18 @@ import HomePage from "./pages/Home.tsx";
 import HeroTalentPage from "./pages/HeroTalent.tsx";
 import HeroPage from "./pages/Hero.tsx";
 import HeroDetailPage from "./pages/HeroDetail.tsx"
-import TermsOfUse from "./pages/TermsOfUse.tsx";
-import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
-import About from "./pages/About.tsx";
-import Contact from "./pages/Contact.tsx";
-import Error from "./pages/Error.tsx";
+import TermsOfUsePage from "./pages/TermsOfUse.tsx";
+import PrivacyPolicyPage from "./pages/PrivacyPolicy.tsx";
+import AboutPage from "./pages/About.tsx";
+import ContactPage from "./pages/Contact.tsx";
+import ArtifactPage from "./pages/Artifact.tsx";
+import ErrorPage from "./pages/Error.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <Error />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -41,19 +42,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/terms-of-use",
-        element: <TermsOfUse />
+        element: <TermsOfUsePage />
       },
       {
         path: "/privacy-policy",
-        element: <PrivacyPolicy />
+        element: <PrivacyPolicyPage />
       },
       {
         path: "/about",
-        element: <About />
+        element: <AboutPage />
       },
       {
         path: "/contact",
-        element: <Contact />
+        element: <ContactPage />
+      },
+      {
+        path: "/artifacts",
+        element: <ArtifactPage />
       },
     ]
   }

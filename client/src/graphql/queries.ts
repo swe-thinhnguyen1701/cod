@@ -10,6 +10,16 @@ export const GET_ALL_HEROES = gql`
     }
 `
 
+export const GET_ALL_ARTIFACTS = gql`
+    query getAllArtifacts {
+        getAllArtifacts {
+            id
+            name
+            rarity_id
+        }
+    }
+`
+
 export const GET_HERO_BY_ID = gql`
     query getHeroById($id: ID!) {
         getHeroById(id: $id) {
