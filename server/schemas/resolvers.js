@@ -1,4 +1,4 @@
-const { Hero, Artifact, Skill, Message } = require("../models");
+const { Hero, Artifact, Skill, Message, Stat } = require("../models");
 const { HERO_ROLE_MAP } = require("../utils/heroRoleMap");
 const { ROLE_TALENT_CORE_MAP, MAIN_TALENT_CORE_MAP } = require("../utils/roleTalentCoreMap");
 const { validateMessage } = require("../utils/resolver_helper_methods/validateMessage");
@@ -49,6 +49,10 @@ const resolvers = {
                     name: heroName
                 }
             });
+
+            if(!hero)
+                throw new Error(`Hero not found with given name: ${heroName}`);
+
             const limit = hero.rarity_id < 3 ? 5 : 4; 
             const skills = await Skill.findAll({
                 where: {
@@ -66,6 +70,37 @@ const resolvers = {
             };
 
             return heroWithRoles;
+        },
+        getArtifactDetailByName: async (_parent, { artifactName}) => {
+            let artifact = await Artifact.findOne({
+                where: {
+                    name: artifactName
+                },
+                include: {
+                    model: Stat,
+                    as: "stats",
+                    // attributes: ["id", "name", "value"]
+                }
+            });
+            
+            if(!artifact)
+                throw new Error(`Artifact not found with given name: ${artifactName}`);
+
+            const artifactSkill = await Skill.findOne({
+                where: {
+                    source_id: artifact.id,
+                    source_type: "artifact"
+                }
+            });
+
+            artifact  = {
+                ...artifact.toJSON(),
+                skill: artifactSkill
+            };
+
+            console.log(artifact);
+
+            return artifact;
         },
         getRolesFromHero: async (_parent, { heroId }) => {
             if (!heroId)

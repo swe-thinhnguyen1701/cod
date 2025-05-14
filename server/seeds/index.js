@@ -5,11 +5,13 @@ const seedRoles = require("./seedRoleData");
 const seedTalentCores = require("./seedTalentCoreData");
 const seedHeroRoles = require("./seedHeroRole");
 const seedSkills = require("./seedSkillData");
+const seedStats = require("./seedStatData");
+const seedArtifactStats = require("./seedArtifactStat");
 const fetchData = require("./fetchData");
 
 const seedAll = async () => {
     try {
-        const {heroData, artifactData, heroSkillData, heroRoleData, roleCombinationData, roleData, talentCoreData} = await fetchData();
+        const {heroData, artifactData, heroSkillData, heroRoleData, roleCombinationData, roleData, talentCoreData, statData, artifactStatData} = await fetchData();
 
         await sequelize.sync({ force: true });
         console.log("🌱 Database synced!");
@@ -26,8 +28,14 @@ const seedAll = async () => {
         await seedTalentCores(talentCoreData);
         console.log("🌱 Users seeded!");
 
+        await seedStats(statData);
+        console.log("🌱 Stats seeded!");
+
         await seedHeroRoles(heroRoleData, roleCombinationData);
         console.log("🌱 Hero-role relationships seeded!");
+
+        await seedArtifactStats(artifactStatData);
+        console.log("🌱 Artifact-stats seeded!");
 
         await seedSkills(heroSkillData);
         console.log("🌱 Skills seeded!");

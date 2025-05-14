@@ -132,6 +132,10 @@ img {
   transform: scale(1.2);
 }
 
+.item-card.zoom-out:hover .item-image {
+  transform: scale(0.7);
+}
+
 /* LINK LIST */
 .list-item {
   cursor: pointer;

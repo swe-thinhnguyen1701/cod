@@ -16,17 +16,19 @@ const fetchDataHelper = async (fileName) => {
 
 const fetchData = async () => {
     try {
-        const [heroData, artifactData, heroSkillData, heroRoleData, roleCombinationData, roleData, talentCoreData] = await Promise.all([
+        const [heroData, artifactData, heroSkillData, heroRoleData, roleCombinationData, roleData, talentCoreData, statData, artifactStatData] = await Promise.all([
             fetchDataHelper("hero-db.json"),
             fetchDataHelper("artifact-db.json"),
             fetchDataHelper("skill-db.json"),
             fetchDataHelper("hero-role-db.json"),
             fetchDataHelper("role-combination-db.json"),
             fetchDataHelper("role-db.json"),
-            fetchDataHelper("talent-core-db.json")
+            fetchDataHelper("talent-core-db.json"),
+            fetchDataHelper("stat-db.json"),
+            fetchDataHelper("artifact-stat-db.json")
         ]);
 
-        return { heroData, artifactData, heroSkillData, heroRoleData, roleCombinationData, roleData, talentCoreData };
+        return { heroData, artifactData, heroSkillData, heroRoleData, roleCombinationData, roleData, talentCoreData, statData, artifactStatData };
     } catch (error) {
         console.error("❌ Error fetching data:", error);
     }

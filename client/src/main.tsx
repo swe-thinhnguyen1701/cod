@@ -16,6 +16,7 @@ import PrivacyPolicyPage from "./pages/PrivacyPolicy.tsx";
 import AboutPage from "./pages/About.tsx";
 import ContactPage from "./pages/Contact.tsx";
 import ArtifactPage from "./pages/Artifact.tsx";
+import ArtifactDetailPage from "./pages/ArtifactDetail.tsx";
 import ErrorPage from "./pages/Error.tsx";
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
         path: "/artifacts",
         element: <ArtifactPage />
       },
+      {
+        path: "/artifacts/:artifactName",
+        element: <ArtifactDetailPage />
+      }
     ]
   }
 ])

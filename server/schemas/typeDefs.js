@@ -65,6 +65,28 @@ const typeDefs = `
         pairings: [String]
     }
 
+    type ArtifactStat {
+        name: String,
+        initial_value: Float,
+        max_value: Float
+    }
+
+    type ArtifactSkill {
+        name: String,
+        description: String,
+        additional_effect: String,
+        upgrade_preview: String,
+        cooldown: String,
+        rage_cost: Int,
+    }
+
+    type ArtifactDetail {
+        name: String,
+        rarity_id: Int,
+        stats: [ArtifactStat]
+        skill: ArtifactSkill
+    }
+
     type TalentCoreGroup {
         talentCores: [TalentCore]
     }
@@ -84,6 +106,7 @@ const typeDefs = `
         getAllArtifacts: [Artifact]
         getHeroById(id: ID!): Hero
         getHeroDetailByName(heroName: String): HeroDetail
+        getArtifactDetailByName(artifactName: String): ArtifactDetail
         getRolesFromHero(heroId: ID!): [Role]
         getTalentCoresFromHero(heroId: ID!): [[TalentCore]]
     }

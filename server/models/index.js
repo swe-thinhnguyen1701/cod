@@ -4,6 +4,7 @@ const Role = require("./Role");
 const TalentCore = require("./TalentCore");
 const Skill = require("./Skill");
 const Message = require("./Message");
+const Stat = require("./Stat");
 
 Hero.belongsToMany(Role, {
     through: "hero_roles",
@@ -12,14 +13,6 @@ Hero.belongsToMany(Role, {
     onDelete: "CASCADE",
     as: "roles"
 });
-
-// Hero.belongsToMany(Hero, {
-//     as: "Pairings",
-//     through: "hero_pairings",
-//     foreignKey: "hero_id",
-//     otherKey: "paired_hero_id",
-//     onDelete: "CASCADE",
-// })
 
 Role.belongsToMany(Hero, {
     through: "hero_roles",
@@ -36,11 +29,20 @@ Role.belongsToMany(TalentCore, {
     onDelete: "CASCADE"
 });
 
-// TalentCore.belongsToMany(Role, {
-//     through: "role_talent_cores",
-//     foreignKey: "talent_core_id",
-//     otherKey: "role_id",
-//     onDelete: "CASCADE"
-// });
+Stat.belongsToMany(Artifact, {
+    through: "artifact_stats",
+    foreignKey: "stat_id",
+    otherKey: "artifact_id",
+    onDelete: "CASCADE",
+    as: "artifacts"
+});
 
-module.exports = {Hero, Artifact, Role, TalentCore, Skill, Message};
+Artifact.belongsToMany(Stat, {
+    through: "artifact_stats",
+    foreignKey: "artifact_id",
+    otherKey: "stat_id",
+    onDelete: "CASCADE",
+    as: "stats"
+});
+
+module.exports = {Hero, Artifact, Role, TalentCore, Skill, Stat, Message};

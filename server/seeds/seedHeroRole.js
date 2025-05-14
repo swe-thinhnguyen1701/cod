@@ -21,6 +21,4 @@ const seedHeroRoles = async (heroRoleData, roleCombinationData) => {
     }
 };
 
-seedHeroRoles();
-
 module.exports = seedHeroRoles;

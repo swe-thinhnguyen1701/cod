@@ -9,7 +9,7 @@ interface Props {
 
 const ArtifactCard = ({artifactName, rarityId}: Props) => {
     return (
-        <ItemCard itemName={artifactName} itemRarityId={rarityId} itemImageUrl={getArtifactImage(artifactName)} />
+        <ItemCard itemName={artifactName} itemRarityId={rarityId} itemImageUrl={getArtifactImage(artifactName)} isZoomOut={true}/>
     )
 }
 
