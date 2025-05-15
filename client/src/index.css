@@ -205,3 +205,17 @@ img {
 .sub-link:hover{
   text-decoration: underline;
 }
+
+.artifact-img {
+  animation: 3s ease-in-out infinite alternate breath;
+}
+
+@keyframes breath {
+  from {
+    transform: translateY(20px);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}

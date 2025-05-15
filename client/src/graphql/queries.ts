@@ -61,6 +61,28 @@ export const GET_HERO_DETAIL_BY_NAME = gql`
     }
 `
 
+export const GET_ARTIFACT_DETAIL_BY_NAME = gql`
+    query getArtifactDetailByName($artifactName: String!) {
+        getArtifactDetailByName(artifactName: $artifactName) {
+            name
+            rarity_id
+            stats {
+                name
+                initial_value
+                max_value
+            }
+            skill {
+                name
+                description
+                additional_effect
+                upgrade_preview
+                cooldown
+                rage_cost
+            }
+        }
+    }
+`
+
 export const GET_ROLES_FROM_HERO = gql`
     query getRolesFromHero($heroId: ID!) {
         getRolesFromHero(heroId: $heroId) {

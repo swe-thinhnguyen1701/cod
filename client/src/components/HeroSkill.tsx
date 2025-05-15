@@ -2,6 +2,7 @@ import { useState } from "react";
 import useHeroStore from "../state-management/heroes/store";
 import { Box, Flex, Image, Heading, VStack, Text, HStack } from "@chakra-ui/react";
 import { getHeroSkillImage } from "../services/getImages";
+import TextFormat from "./TextFormat";
 
 const HeroSkill = () => {
     const heroSkills = useHeroStore((state) => state.hero?.skills);
@@ -13,46 +14,6 @@ const HeroSkill = () => {
 
     if (!heroSkills)
         return null;
-
-    const formatDescription = (description: string) => {
-
-        const parts = description.split(/(\{bold\}|\{\/bold\}|\{newline\}|\{lightgrey\}|\{\/lightgrey\})/g);
-        let currentColor: "bold" | "lightgrey" | null = null;
-
-        return parts.map((part, index) => {
-            switch (part) {
-                case "{bold}":
-                    currentColor = "bold";
-                    return null;
-                case "{/bold}":
-                    currentColor = null;
-                    return null;
-                case "{lightgrey}":
-                    currentColor = "lightgrey";
-                    return null;
-                case "{/lightgrey}":
-                    currentColor = null;
-                    return null;
-                case "{newline}":
-                    return <br key={index} />;
-                default:
-                    if (currentColor === "bold") {
-                        return (
-                            <Text as="span" key={index} fontWeight="bold">
-                                {part}
-                            </Text>
-                        );
-                    } else if (currentColor === "lightgrey") {
-                        return (
-                            <Text as="span" key={index} color="gray.500">
-                                {part}
-                            </Text>
-                        );
-                    }
-                    return <Text as="span" key={index}>{part}</Text>;
-            }
-        });
-    };
 
     return (
         <>
@@ -97,13 +58,11 @@ const HeroSkill = () => {
                                     <Text color="red" fontWeight="bold">Rage Cost: {heroSkills[selectedSkill].rage_cost}</Text>
                                 </Box>
                                 : <Text fontWeight="bold">Passive Skill</Text>}
-                            <Text>
-                                {formatDescription(heroSkills[selectedSkill].description)}
-                            </Text>
+                            <TextFormat text={heroSkills[selectedSkill].description} />
                             {heroSkills[selectedSkill].upgrade_preview &&
                                 <Box mt={4}>
                                     <Text fontWeight="bold" mb={2}>Upgrade Preview</Text>
-                                    <Text>{formatDescription(heroSkills[selectedSkill].upgrade_preview)}</Text>
+                                    <TextFormat text={heroSkills[selectedSkill].upgrade_preview} />
                                 </Box>
                             }
                             <Text color="red" fontWeight="bold">
