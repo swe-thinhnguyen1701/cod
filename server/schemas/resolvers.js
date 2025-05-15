@@ -98,8 +98,6 @@ const resolvers = {
                 skill: artifactSkill
             };
 
-            console.log(artifact);
-
             return artifact;
         },
         getRolesFromHero: async (_parent, { heroId }) => {

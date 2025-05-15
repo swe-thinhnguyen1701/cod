@@ -10,8 +10,6 @@ const ArtifactProfile = () => {
     if (!artifact)
         return null;
 
-    console.log(artifact);
-
     return (
         <VStack pt={4}>
             <Box width={{ base: "200px" }}>
