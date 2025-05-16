@@ -2,13 +2,12 @@ node_modules/
 
 .env
 
-server/db/heroes.js
-server/db/roles.js
-server/db/heroRoles.js
 server/db/roleCombinations.js
-server/db/talentCores.js
-server/db/roleTalentCore.js
-server/db/mainTalentCores.js
-server/db/skills.js
+server/db/artifact-db.json
+server/db/artifact-stat-db.json
+server/db/stat-db.json
+server/db/skill-db.json
+server/db/hero-role-db.json
+server/db/hero-db.json
 
 .DS_Store

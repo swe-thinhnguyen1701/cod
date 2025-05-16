@@ -1,7 +1,6 @@
 const { Artifact, Stat } = require("../models");
 
 const seedArtifactStats = async (artifactStatsData) => {
-    console.log("artifact stat is running");
     try {
         for (let i = 0; i < artifactStatsData.length; i++) {
             const { artifact_id, stat_id } = artifactStatsData[i];
@@ -15,8 +14,6 @@ const seedArtifactStats = async (artifactStatsData) => {
 
             await artifact.addStats(statInstances, { through: { setGranted: false } });
         }
-
-        console.log("Artifact-stat relationships seeded successfully");
     } catch (error) {
         console.error("Error seeding artifact-stat relationships", error);
     }
