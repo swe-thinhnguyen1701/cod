@@ -2,6 +2,7 @@ import { useState } from "react";
 import { getArtifactImage } from "../services/getImages";
 import { VStack, Box, Text, Heading, UnorderedList, ListItem, HStack, Checkbox, Image } from "@chakra-ui/react";
 import useArtifactStore from "../state-management/artifacts/store";
+import starImg from "../assets/star.webp";
 
 const ArtifactProfile = () => {
     const [isMaxLevel, setIsMaxLevel] = useState(false);
@@ -16,6 +17,23 @@ const ArtifactProfile = () => {
                 <Image src={getArtifactImage(artifact.name)} alt={`${artifact.name} image`} className="artifact-img" />
             </Box>
             <Box width={{ base: "100vw" }} maxWidth="450px" padding={4}>
+                <UnorderedList
+                    display="flex"
+                    justifyContent="center"
+                    width="100%"
+                    gap={4}
+                    listStyleType="none" 
+                    ml={0}
+                    mb={4}
+                >
+                    {Array(isMaxLevel ? 6 - (artifact.rarity_id - 1) : 1)
+                        .fill(null)
+                        .map((_, index) => (
+                            <ListItem key={index} width="25px">
+                                <Image src={starImg} alt="star icon" />
+                            </ListItem>
+                        ))}
+                </UnorderedList>
                 <Heading
                     as="h1"
                     fontSize={{ base: "1.79rem", md: "2.02rem" }}

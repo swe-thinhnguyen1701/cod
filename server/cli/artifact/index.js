@@ -1,6 +1,8 @@
 const artifactData = require("../../db/artifact-db.json");
 const { select } = require("@inquirer/prompts");
 const addNewArtifact = require("./addNewArtifact");
+const addArtifactStat = require("./addArtifactStat");
+const addArtifactSkill = require("./addArtifactSkill");
 
 const OPTIONS = [
     {
@@ -34,7 +36,9 @@ const artifactMenu = async () => {
         });
 
         if (answer === 0) await addNewArtifact();
-        else if (answer === -1) return;
+        else if (answer === 1) await addArtifactStat();
+        else if (answer === 2) await addArtifactSkill();
+        else return
     }
 }
 
