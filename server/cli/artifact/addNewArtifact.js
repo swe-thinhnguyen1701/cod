@@ -1,5 +1,5 @@
 const { input, select } = require("@inquirer/prompts");
-const fs = require("fs");
+const saveFile = require("../FileIO/saveFile");
 const artifactData = require("../../db/artifact-db.json");
 
 const addNewArtifact = async () => {
@@ -24,20 +24,9 @@ const addNewArtifact = async () => {
             name: artifactName,
             rarity_id: parseInt(aritfactRarityId),
         }
-    )
-
-    fs.writeFileSync(
-        "./db/artifact-db.json",
-        JSON.stringify(artifactData),
-        (err) => {
-            if (err) {
-                console.error(err);
-                return;
-            } else {
-                console.log("Artifact added successfully");
-            }
-        }
     );
+
+    saveFile("artifact-db.json", artifactData);
 }
 
 module.exports = addNewArtifact;
