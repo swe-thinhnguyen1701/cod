@@ -3,6 +3,7 @@ const saveFile = require("../FileIO/saveFile");
 const artifactData = require("../../db/artifact-db.json");
 const statData = require("../../db/stat-db.json");
 const artifactStatDAta = require("../../db/artifact-stat-db.json");
+const { Artifact } = require("../../models");
 
 const ARTIFACT_OPTIONS = [];
 const STAT_OPTIONS = [];
@@ -34,8 +35,16 @@ const addArtifactStat = async () => {
         |            ADD ARTIFACT STAT         |
         \`--------------------------------------'`);
 
+    const artifaceId = await select({
+        message: "Select an artifact",
+        choices: ARTIFACT_OPTIONS
+    });
+
+    const artifact = await Artifact.findByPk(artifaceId);
+    const numOfStats = artifact.rarity_id === 1 ? 4 : artifact.rarity_id === 2 ? 3 : 2;
+
     const statsId = [];
-    for(let i = 0; i < 4; i++){
+    for (let i = 0; i < numOfStats; i++) {
         const answer = await select({
             message: `Select stat ${i + 1}:`,
             choices: STAT_OPTIONS,
@@ -43,11 +52,7 @@ const addArtifactStat = async () => {
 
         statsId.push(answer);
     }
-    
-    const artifaceId = await select({
-        message: "Select an artifact",
-        choices: ARTIFACT_OPTIONS
-    });
+
 
     artifactStatDAta.push(
         {

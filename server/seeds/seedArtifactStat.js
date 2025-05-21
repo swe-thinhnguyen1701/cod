@@ -7,7 +7,8 @@ const seedArtifactStats = async (artifactStatsData) => {
             const artifact = await Artifact.findByPk(artifact_id);
 
             const statInstances = [];
-            for (let j = 0; j < 4; j++) {
+            const numOfStats = artifact.rarity_id === 1 ? 4 : artifact.rarity_id === 2 ? 3 : 2;
+            for (let j = 0; j < numOfStats; j++) {
                 const stat = await Stat.findByPk(stat_id[j]);
                 statInstances.push(stat);
             }

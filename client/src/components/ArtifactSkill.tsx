@@ -19,7 +19,7 @@ const ArtifactSkill = () => {
                     >
                         Cooldown:
                     </Text>
-                    <Text>{artifact.skill.cooldown}</Text>
+                    <Text>{artifact.skill.cooldown ? artifact.skill.cooldown : "None"}</Text>
                 </HStack>
                 <HStack>
                     <Text

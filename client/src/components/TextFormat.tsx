@@ -46,7 +46,7 @@ const formatDescription = (description: string) => {
                     );
                 } else if (effect === "green") {
                     return (
-                        <Text as="span" key={index} fontWeight="bold" color="green">
+                        <Text as="span" key={index} fontWeight="bold" color="teal.300">
                             {part}
                         </Text>
                     );
